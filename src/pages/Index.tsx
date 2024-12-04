@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Upload, Search, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [isDragging, setIsDragging] = useState(false);
@@ -22,6 +24,12 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-white">
       <div className="container px-4 py-16 mx-auto">
+        <nav className="flex justify-end mb-8">
+          <Link to="/data">
+            <Button variant="outline">View Documents</Button>
+          </Link>
+        </nav>
+
         <header className="text-center mb-16 animate-fade-in">
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-medium rounded-full bg-accent text-foreground">
             Document Management System
