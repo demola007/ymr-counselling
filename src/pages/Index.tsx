@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Upload, Search, FileText } from "lucide-react";
+import { Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -88,28 +88,12 @@ const Index = () => {
           </p>
         </header>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16 animate-fade-in-up">
+        <div className="grid gap-8 md:grid-cols-1 mb-16 animate-fade-in-up">
           <div className="glass-panel rounded-2xl p-6 hover-scale">
             <Upload className="w-8 h-8 mb-4 text-primary" />
             <h3 className="font-display text-xl font-semibold mb-2">Easy Upload</h3>
             <p className="text-muted-foreground">
               Drag and drop your files or browse to upload documents securely.
-            </p>
-          </div>
-
-          <div className="glass-panel rounded-2xl p-6 hover-scale">
-            <Search className="w-8 h-8 mb-4 text-primary" />
-            <h3 className="font-display text-xl font-semibold mb-2">Quick Search</h3>
-            <p className="text-muted-foreground">
-              Find any document instantly with our powerful search functionality.
-            </p>
-          </div>
-
-          <div className="glass-panel rounded-2xl p-6 hover-scale">
-            <FileText className="w-8 h-8 mb-4 text-primary" />
-            <h3 className="font-display text-xl font-semibold mb-2">Smart Organization</h3>
-            <p className="text-muted-foreground">
-              Keep your documents organized with intelligent categorization.
             </p>
           </div>
         </div>
