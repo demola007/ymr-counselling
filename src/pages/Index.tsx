@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Upload, Search, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [isDragging, setIsDragging] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const { toast } = useToast();
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -15,11 +20,52 @@ const Index = () => {
     setIsDragging(false);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const processFile = async (file: File) => {
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    // Simulate upload progress
+    const interval = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 300);
+
+    // Simulate file upload delay
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    clearInterval(interval);
+    setUploadProgress(100);
+    setIsUploading(false);
+
+    toast({
+      title: "Upload Complete",
+      description: `Successfully uploaded ${file.name}`,
+    });
+  };
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    // Handle file drop here
-  };
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length === 0) return;
+
+    const file = files[0];
+    await processFile(file);
+  }, []);
+
+  const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    const file = files[0];
+    await processFile(file);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-white">
@@ -78,14 +124,30 @@ const Index = () => {
         >
           <Upload className="w-12 h-12 mb-4 mx-auto text-primary" />
           <h2 className="font-display text-2xl font-semibold mb-2">
-            Drop your files here
+            {isUploading ? "Uploading..." : "Drop your files here"}
           </h2>
           <p className="text-muted-foreground mb-6">
-            or click to browse your computer
+            {isUploading ? "Please wait while we process your file" : "or click to browse your computer"}
           </p>
-          <button className="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium button-hover">
-            Browse Files
-          </button>
+          
+          {isUploading ? (
+            <div className="max-w-md mx-auto mb-4">
+              <Progress value={uploadProgress} className="h-2" />
+              <p className="text-sm text-muted-foreground mt-2">{uploadProgress}% complete</p>
+            </div>
+          ) : (
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleFileSelect}
+                accept=".pdf,.doc,.docx,.txt,.xls,.xlsx"
+              />
+              <span className="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium button-hover inline-block">
+                Browse Files
+              </span>
+            </label>
+          )}
         </div>
       </div>
     </div>
