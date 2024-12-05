@@ -27,7 +27,7 @@
 }
 
 .glass-panel {
-  @apply bg-white bg-opacity-70 backdrop-blur-lg border border-white border-opacity-20 shadow-sm;
+  @apply bg-white bg-opacity-90 backdrop-blur-lg border border-purple-100 shadow-sm;
 }
 
 .hover-scale {
@@ -36,4 +36,15 @@
 
 .button-hover {
   @apply transition-all duration-300 hover:bg-opacity-90;
+}
+
+/* Mobile-first responsive styles */
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+  
+  .glass-panel {
+    @apply p-4;
+  }
 }
