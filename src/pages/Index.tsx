@@ -22,21 +22,20 @@ const Index = () => {
     navigate("/login");
   };
 
-  const validateFile = (file: File) => {
-    const validTypes = ["image/jpeg", "image/jpg", "image/png"];
-    if (!validTypes.includes(file.type)) {
-      toast({
-        title: "Invalid file type",
-        description: "Please upload only JPEG, JPG, or PNG images.",
-        variant: "destructive",
-      });
-      return false;
-    }
-    return true;
-  };
-
   const processFile = async (files: FileList) => {
-    const validFiles = Array.from(files).filter(validateFile);
+    const validFiles = Array.from(files).filter(file => {
+      const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+      if (!validTypes.includes(file.type)) {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload only JPEG, JPG, or PNG images.",
+          variant: "destructive",
+        });
+        return false;
+      }
+      return true;
+    });
+
     if (validFiles.length === 0) return;
 
     setSelectedFiles(prev => [...prev, ...validFiles]);
@@ -82,18 +81,10 @@ const Index = () => {
     });
   };
 
-  const removeFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
-    toast({
-      title: "Image Removed",
-      description: "Image removed from staging area",
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-8 mx-auto">
-        <nav className="flex justify-between items-center mb-8">
+        <nav className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
             <img 
               src="/lovable-uploads/fea97e0c-ca99-4275-aa6e-653e80cd7ec1.png" 
@@ -123,19 +114,90 @@ const Index = () => {
           </p>
         </header>
 
-        <UploadArea
-          isDragging={isDragging}
-          setIsDragging={setIsDragging}
-          onFileSelect={processFile}
-        />
+        <div className="glass-panel rounded-lg p-6 mb-6">
+          <div 
+            className={`border-2 border-dashed rounded-lg p-6 transition-colors ${
+              isDragging ? 'border-purple-500 bg-purple-50' : 'border-gray-300'
+            }`}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragging(false);
+              const files = e.dataTransfer.files;
+              processFile(files);
+            }}
+          >
+            <div className="flex flex-col items-center gap-4">
+              <Upload className="w-12 h-12 text-purple-500" />
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-1">Drag and drop files here</h3>
+                <p className="text-sm text-gray-600 mb-4">or</p>
+                <label className="cursor-pointer">
+                  <input
+                    type="file"
+                    className="hidden"
+                    multiple
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files) {
+                        processFile(e.target.files);
+                      }
+                    }}
+                  />
+                  <Button variant="secondary" className="hover-scale">
+                    Browse Files
+                  </Button>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <ImagePreview
-          selectedFiles={selectedFiles}
-          removeFile={removeFile}
-          isUploading={isUploading}
-          uploadProgress={uploadProgress}
-          handleUpload={handleUpload}
-        />
+        {selectedFiles.length > 0 && (
+          <div className="glass-panel rounded-lg p-6 mb-6 animate-fade-in">
+            <h2 className="text-xl font-semibold mb-4">Selected Images</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {selectedFiles.map((file, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`Preview ${index + 1}`}
+                    className="w-full h-32 object-cover rounded-lg"
+                  />
+                  <button
+                    onClick={() => {
+                      setSelectedFiles(files => files.filter((_, i) => i !== index));
+                      toast({
+                        title: "Image Removed",
+                        description: "Image removed from staging area",
+                      });
+                    }}
+                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6">
+              <Button
+                onClick={handleUpload}
+                disabled={isUploading}
+                className="w-full md:w-auto"
+              >
+                <Send className="w-4 h-4 mr-2" />
+                {isUploading ? 'Uploading...' : 'Upload Selected Images'}
+              </Button>
+              {isUploading && (
+                <Progress value={uploadProgress} className="mt-4" />
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

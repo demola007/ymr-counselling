@@ -26,30 +26,30 @@ const DetailView = () => {
   const fields = Object.entries(document).filter(([key]) => key !== 'id');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white p-4">
-      <div className="container max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+      <div className="container max-w-4xl mx-auto px-4 py-6">
+        <nav className="flex items-center justify-between mb-8 sticky top-0 bg-white/80 backdrop-blur-lg z-10 p-4 rounded-lg shadow-sm">
           <div className="flex items-center gap-4">
             <img 
               src="/lovable-uploads/fea97e0c-ca99-4275-aa6e-653e80cd7ec1.png" 
               alt="YMR Global Logo" 
-              className="h-12 w-auto"
+              className="h-10 w-auto"
             />
             <h1 className="text-xl md:text-2xl font-bold text-purple-800">Counselling Details</h1>
           </div>
           <Link to="/data">
-            <Button variant="outline">
+            <Button variant="outline" size="sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Documents
+              Back
             </Button>
           </Link>
-        </div>
+        </nav>
 
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="grid gap-6 md:grid-cols-2">
             {fields.map(([key, value]) => (
-              <div key={key} className="space-y-1">
-                <h3 className="text-sm font-medium text-gray-500 capitalize">
+              <div key={key} className="space-y-2 p-4 bg-purple-50/50 rounded-lg hover:bg-purple-50 transition-colors">
+                <h3 className="text-sm font-medium text-purple-600 capitalize">
                   {key.replace(/_/g, ' ')}
                 </h3>
                 <p className="text-lg text-gray-900">{value}</p>

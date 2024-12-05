@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, ArrowLeft } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -37,7 +37,6 @@ const DataView = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
 
-  // Filter documents based on search query and filters
   const filteredDocuments = mockDocuments.filter((doc) => {
     const matchesSearch = 
       doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -47,7 +46,6 @@ const DataView = () => {
     return matchesSearch && matchesStudent && matchesGender;
   });
 
-  // Calculate pagination
   const totalPages = Math.ceil(filteredDocuments.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedDocuments = filteredDocuments.slice(
@@ -61,20 +59,23 @@ const DataView = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
-      <div className="container px-4 py-4 mx-auto max-w-7xl">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
+      <div className="container px-4 py-6 mx-auto max-w-7xl">
+        <nav className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 sticky top-0 bg-white/80 backdrop-blur-lg z-10 p-4 rounded-lg shadow-sm">
           <div className="flex items-center gap-4">
             <img 
               src="/lovable-uploads/fea97e0c-ca99-4275-aa6e-653e80cd7ec1.png" 
               alt="YMR Global Logo" 
-              className="h-12 w-auto"
+              className="h-10 w-auto"
             />
-            <h1 className="text-xl font-bold text-purple-800">Counselling Data</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-purple-800">Counselling Data</h1>
           </div>
           <Link to="/">
-            <Button variant="outline" className="w-full md:w-auto">Back to Upload</Button>
+            <Button variant="outline" size="sm">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Upload
+            </Button>
           </Link>
-        </div>
+        </nav>
 
         <div className="glass-panel rounded-lg p-4 md:p-6 mb-6">
           <div className="grid gap-4 md:grid-cols-3">
@@ -110,76 +111,83 @@ const DataView = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto bg-white rounded-lg shadow">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Gender</TableHead>
-                <TableHead>Student</TableHead>
-                <TableHead>School</TableHead>
-                <TableHead>Age Group</TableHead>
-                <TableHead>Country</TableHead>
-                <TableHead>State</TableHead>
-                <TableHead>Follow Up</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedDocuments.map((doc) => (
-                <TableRow 
-                  key={doc.id} 
-                  className="hover:bg-purple-50 cursor-pointer"
-                  onClick={() => handleRowClick(doc.id)}
-                >
-                  <TableCell className="font-medium">{doc.name}</TableCell>
-                  <TableCell>{doc.email}</TableCell>
-                  <TableCell>{doc.phone_number}</TableCell>
-                  <TableCell>{doc.gender}</TableCell>
-                  <TableCell>{doc.isStudent}</TableCell>
-                  <TableCell>{doc.school}</TableCell>
-                  <TableCell>{doc.age_group}</TableCell>
-                  <TableCell>{doc.country}</TableCell>
-                  <TableCell>{doc.state}</TableCell>
-                  <TableCell>{doc.availability_for_follow_up}</TableCell>
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>Gender</TableHead>
+                  <TableHead>Student</TableHead>
+                  <TableHead>School</TableHead>
+                  <TableHead>Age Group</TableHead>
+                  <TableHead>Country</TableHead>
+                  <TableHead>State</TableHead>
+                  <TableHead>Follow Up</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {paginatedDocuments.map((doc) => (
+                  <TableRow 
+                    key={doc.id} 
+                    className="hover:bg-purple-50 cursor-pointer transition-colors"
+                    onClick={() => handleRowClick(doc.id)}
+                  >
+                    <TableCell className="font-medium">{doc.name}</TableCell>
+                    <TableCell>{doc.email}</TableCell>
+                    <TableCell>{doc.phone_number}</TableCell>
+                    <TableCell>{doc.gender}</TableCell>
+                    <TableCell>{doc.isStudent}</TableCell>
+                    <TableCell>{doc.school}</TableCell>
+                    <TableCell>{doc.age_group}</TableCell>
+                    <TableCell>{doc.country}</TableCell>
+                    <TableCell>{doc.state}</TableCell>
+                    <TableCell>{doc.availability_for_follow_up}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-4">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
-                />
-              </PaginationItem>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <PaginationItem key={i + 1}>
-                  <PaginationLink
-                    onClick={() => setCurrentPage(i + 1)}
-                    isActive={currentPage === i + 1}
-                  >
-                    {i + 1}
-                  </PaginationLink>
+          <div className="flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                  />
                 </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext 
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <PaginationItem key={i + 1} className="hidden md:block">
+                    <PaginationLink
+                      onClick={() => setCurrentPage(i + 1)}
+                      isActive={currentPage === i + 1}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext 
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
 
-          <div className="bg-white p-4 rounded-lg shadow">
+          <div className="bg-white p-4 rounded-lg shadow text-center">
             <p className="text-lg font-semibold text-purple-800">
               Total Records: {filteredDocuments.length}
+            </p>
+            <p className="text-sm text-gray-600">
+              Showing {startIndex + 1} - {Math.min(startIndex + ITEMS_PER_PAGE, filteredDocuments.length)} of {filteredDocuments.length}
             </p>
           </div>
         </div>
