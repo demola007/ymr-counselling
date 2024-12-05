@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -18,44 +18,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { mockDocuments } from "@/utils/mockData";
 
-// Sample data with new fields
-const documents = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    phone_number: "+1234567890",
-    date_of_birth: "1990-01-01",
-    relationship_status: "Single",
-    country: "Nigeria",
-    state: "Lagos",
-    address: "123 Main St",
-    nearest_bus_stop: "Central Station",
-    isStudent: "Yes",
-    age_group: "25-34",
-    school: "University of Lagos",
-    occupation: "Student",
-    denomination: "Christian",
-    gender: "Male",
-    availability_for_follow_up: "Yes",
-  },
-  // Add more sample data as needed
-];
+const ITEMS_PER_PAGE = 10;
 
 const DataView = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [studentFilter, setStudentFilter] = useState("all");
   const [genderFilter, setGenderFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
   // Filter documents based on search query and filters
-  const filteredDocuments = documents.filter((doc) => {
-    const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         doc.email.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredDocuments = mockDocuments.filter((doc) => {
+    const matchesSearch = 
+      doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doc.email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStudent = studentFilter === "all" || doc.isStudent === studentFilter;
     const matchesGender = genderFilter === "all" || doc.gender === genderFilter;
     return matchesSearch && matchesStudent && matchesGender;
   });
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredDocuments.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedDocuments = filteredDocuments.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+
+  const handleRowClick = (id: number) => {
+    navigate(`/data/${id}`);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
@@ -108,7 +110,7 @@ const DataView = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto bg-white rounded-lg shadow">
           <Table>
             <TableHeader>
               <TableRow>
@@ -125,8 +127,12 @@ const DataView = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredDocuments.map((doc) => (
-                <TableRow key={doc.id} className="hover:bg-purple-50">
+              {paginatedDocuments.map((doc) => (
+                <TableRow 
+                  key={doc.id} 
+                  className="hover:bg-purple-50 cursor-pointer"
+                  onClick={() => handleRowClick(doc.id)}
+                >
                   <TableCell className="font-medium">{doc.name}</TableCell>
                   <TableCell>{doc.email}</TableCell>
                   <TableCell>{doc.phone_number}</TableCell>
@@ -141,6 +147,41 @@ const DataView = () => {
               ))}
             </TableBody>
           </Table>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-4">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <PaginationItem key={i + 1}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(i + 1)}
+                    isActive={currentPage === i + 1}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <PaginationNext 
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+
+          <div className="bg-white p-4 rounded-lg shadow">
+            <p className="text-lg font-semibold text-purple-800">
+              Total Records: {filteredDocuments.length}
+            </p>
+          </div>
         </div>
       </div>
     </div>

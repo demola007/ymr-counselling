@@ -4,13 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { ImagePreview } from "@/components/ImagePreview";
+import { UploadArea } from "@/components/UploadArea";
 
 const Index = () => {
   const [isDragging, setIsDragging] = useState(false);
@@ -64,7 +59,6 @@ const Index = () => {
     setIsUploading(true);
     setUploadProgress(0);
 
-    // Simulate upload progress
     const interval = setInterval(() => {
       setUploadProgress((prev) => {
         if (prev >= 100) {
@@ -75,7 +69,6 @@ const Index = () => {
       });
     }, 300);
 
-    // Simulate file upload delay
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
     clearInterval(interval);
@@ -97,23 +90,18 @@ const Index = () => {
     });
   };
 
-  const handleDrop = useCallback(async (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    await processFile(e.dataTransfer.files);
-  }, []);
-
-  const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      await processFile(e.target.files);
-    }
-  }, []);
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-secondary/20 to-background">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-8 mx-auto">
         <nav className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-primary">YMR Global</h1>
+          <div className="flex items-center gap-4">
+            <img 
+              src="/lovable-uploads/fea97e0c-ca99-4275-aa6e-653e80cd7ec1.png" 
+              alt="YMR Global Logo" 
+              className="h-12 w-auto"
+            />
+            <h1 className="text-2xl font-bold text-purple-800">YMR Global</h1>
+          </div>
           <div className="flex gap-4">
             {userRole === "admin" && (
               <Link to="/data">
@@ -127,7 +115,7 @@ const Index = () => {
         </nav>
 
         <header className="text-center mb-8 animate-fade-in">
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-4 text-primary">
+          <h1 className="font-display text-3xl md:text-4xl font-bold mb-4 text-purple-800">
             Counselling Data Capture System
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -135,86 +123,19 @@ const Index = () => {
           </p>
         </header>
 
-        <div className="grid gap-6">
-          <Card className={`transition-all duration-300 ${isDragging ? "border-primary border-2" : ""}`}>
-            <CardHeader>
-              <CardTitle>Upload Images</CardTitle>
-              <CardDescription>
-                Drag and drop your images here or click to browse
-              </CardDescription>
-            </CardHeader>
-            <CardContent
-              className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-muted rounded-lg"
-              onDragOver={(e) => {
-                e.preventDefault();
-                setIsDragging(true);
-              }}
-              onDragLeave={() => setIsDragging(false)}
-              onDrop={handleDrop}
-            >
-              <Upload className="w-12 h-12 mb-4 text-primary" />
-              <p className="text-sm text-muted-foreground mb-2">
-                Supported formats: JPEG, JPG, PNG
-              </p>
-              <label className="cursor-pointer">
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileSelect}
-                  accept=".jpg,.jpeg,.png"
-                  multiple
-                />
-                <Button variant="secondary">Browse Files</Button>
-              </label>
-            </CardContent>
-          </Card>
+        <UploadArea
+          isDragging={isDragging}
+          setIsDragging={setIsDragging}
+          onFileSelect={processFile}
+        />
 
-          {selectedFiles.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Selected Images ({selectedFiles.length})</CardTitle>
-                <CardDescription>
-                  Review your selected images before uploading
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                  {selectedFiles.map((file, index) => (
-                    <div key={index} className="relative group">
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={`Preview ${index + 1}`}
-                        className="w-full h-32 object-cover rounded-lg"
-                      />
-                      <button
-                        onClick={() => removeFile(index)}
-                        className="absolute top-2 right-2 p-1 bg-destructive/90 text-destructive-foreground rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                <Button
-                  className="w-full"
-                  onClick={handleUpload}
-                  disabled={isUploading}
-                >
-                  <Send className="w-4 h-4 mr-2" />
-                  {isUploading ? "Uploading..." : "Upload Selected Images"}
-                </Button>
-                {isUploading && (
-                  <div className="mt-4">
-                    <Progress value={uploadProgress} className="h-2" />
-                    <p className="text-sm text-muted-foreground mt-2 text-center">
-                      {uploadProgress}% complete
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
-        </div>
+        <ImagePreview
+          selectedFiles={selectedFiles}
+          removeFile={removeFile}
+          isUploading={isUploading}
+          uploadProgress={uploadProgress}
+          handleUpload={handleUpload}
+        />
       </div>
     </div>
   );

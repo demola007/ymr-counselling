@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import DataView from "./pages/DataView";
+import DetailView from "./pages/DetailView";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -31,6 +32,11 @@ const App = () => {
             <Route path="/data" element={
               <ProtectedRoute allowedRoles={["admin"]}>
                 <DataView />
+              </ProtectedRoute>
+            } />
+            <Route path="/data/:id" element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <DetailView />
               </ProtectedRoute>
             } />
             <Route path="*" element={<Navigate to="/" replace />} />
