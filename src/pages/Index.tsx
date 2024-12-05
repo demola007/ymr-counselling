@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Upload } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
@@ -10,17 +10,33 @@ const Index = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const userRole = localStorage.getItem("userRole");
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
+  const handleLogout = () => {
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("isAuthenticated");
+    navigate("/login");
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
+  const validateFile = (file: File) => {
+    const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+    if (!validTypes.includes(file.type)) {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload only JPEG, JPG, or PNG images.",
+        variant: "destructive",
+      });
+      return false;
+    }
+    return true;
   };
 
-  const processFile = async (file: File) => {
+  const processFile = async (files: FileList) => {
+    const validFiles = Array.from(files).filter(validateFile);
+    
+    if (validFiles.length === 0) return;
+
     setIsUploading(true);
     setUploadProgress(0);
 
@@ -44,74 +60,67 @@ const Index = () => {
 
     toast({
       title: "Upload Complete",
-      description: `Successfully uploaded ${file.name}`,
+      description: `Successfully uploaded ${validFiles.length} image${validFiles.length > 1 ? 's' : ''}`,
     });
   };
 
   const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-
-    const files = Array.from(e.dataTransfer.files);
-    if (files.length === 0) return;
-
-    const file = files[0];
-    await processFile(file);
+    await processFile(e.dataTransfer.files);
   }, []);
 
   const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-
-    const file = files[0];
-    await processFile(file);
+    if (e.target.files) {
+      await processFile(e.target.files);
+    }
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-white">
       <div className="container px-4 py-16 mx-auto">
-        <nav className="flex justify-end mb-8">
-          <Link to="/data">
-            <Button variant="outline">View Documents</Button>
-          </Link>
+        <nav className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold">YMR Global</h1>
+          <div className="flex gap-4">
+            {userRole === "admin" && (
+              <Link to="/data">
+                <Button variant="outline">View Documents</Button>
+              </Link>
+            )}
+            <Button variant="outline" onClick={handleLogout}>
+              Logout
+            </Button>
+          </div>
         </nav>
 
         <header className="text-center mb-16 animate-fade-in">
-          <span className="inline-block px-4 py-1.5 mb-4 text-sm font-medium rounded-full bg-accent text-foreground">
-            Document Management System
-          </span>
-          <h1 className="font-display text-5xl font-bold mb-6 text-balance">
-            Manage your documents with elegance
+          <h1 className="font-display text-4xl font-bold mb-6">
+            Counselling Data Capture System
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Upload, organize, and access your documents with our beautifully designed interface.
+            Upload and manage counselling session data securely.
           </p>
         </header>
-
-        <div className="grid gap-8 md:grid-cols-1 mb-16 animate-fade-in-up">
-          <div className="glass-panel rounded-2xl p-6 hover-scale">
-            <Upload className="w-8 h-8 mb-4 text-primary" />
-            <h3 className="font-display text-xl font-semibold mb-2">Easy Upload</h3>
-            <p className="text-muted-foreground">
-              Drag and drop your files or browse to upload documents securely.
-            </p>
-          </div>
-        </div>
 
         <div
           className={`glass-panel rounded-3xl p-12 text-center transition-all duration-300 ${
             isDragging ? "border-primary border-2" : ""
           } animate-fade-in-up delay-100`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
         >
           <Upload className="w-12 h-12 mb-4 mx-auto text-primary" />
           <h2 className="font-display text-2xl font-semibold mb-2">
-            {isUploading ? "Uploading..." : "Drop your files here"}
+            {isUploading ? "Uploading..." : "Drop your images here"}
           </h2>
           <p className="text-muted-foreground mb-6">
-            {isUploading ? "Please wait while we process your file" : "or click to browse your computer"}
+            {isUploading 
+              ? "Please wait while we process your files" 
+              : "Supported formats: JPEG, JPG, PNG"}
           </p>
           
           {isUploading ? (
@@ -125,7 +134,8 @@ const Index = () => {
                 type="file"
                 className="hidden"
                 onChange={handleFileSelect}
-                accept=".pdf,.doc,.docx,.txt,.xls,.xlsx"
+                accept=".jpg,.jpeg,.png"
+                multiple
               />
               <span className="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium button-hover inline-block">
                 Browse Files
