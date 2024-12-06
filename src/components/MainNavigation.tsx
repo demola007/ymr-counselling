@@ -15,20 +15,23 @@ export const MainNavigation = ({ userRole }: MainNavigationProps) => {
   };
 
   return (
-    <nav className="bg-purple-900 text-white p-4 rounded-lg mb-8">
+    <nav className="bg-[#1A1F2C] text-white p-4 rounded-lg mb-8 shadow-lg">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
           <img 
             src="/lovable-uploads/fea97e0c-ca99-4275-aa6e-653e80cd7ec1.png" 
             alt="YMR Global Logo" 
-            className="h-12 w-auto"
+            className="h-12 w-auto brightness-110"
           />
-          <h1 className="text-2xl font-bold">YMR Global</h1>
+          <h1 className="text-2xl font-bold text-white">YMR Global</h1>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           {userRole === "admin" && (
             <Link to="/data">
-              <Button variant="outline" className="text-white border-white hover:bg-white hover:text-purple-900">
+              <Button 
+                variant="outline" 
+                className="text-white border-white/20 hover:bg-white/10 hover:text-white transition-colors"
+              >
                 View Documents
               </Button>
             </Link>
@@ -36,7 +39,7 @@ export const MainNavigation = ({ userRole }: MainNavigationProps) => {
           <Button 
             variant="outline" 
             onClick={handleLogout}
-            className="text-white border-white hover:bg-white hover:text-purple-900"
+            className="text-white border-white/20 hover:bg-white/10 hover:text-white transition-colors"
           >
             Logout
           </Button>
