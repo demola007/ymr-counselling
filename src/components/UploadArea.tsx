@@ -38,16 +38,20 @@ export const UploadArea = ({
         <p className="text-sm text-muted-foreground mb-2">
           Supported formats: JPEG, JPG, PNG
         </p>
-        <label className="cursor-pointer">
-          <input
-            type="file"
-            className="hidden"
-            onChange={(e) => e.target.files && onFileSelect(e.target.files)}
-            accept=".jpg,.jpeg,.png"
-            multiple
-          />
-          <Button variant="secondary">Browse Files</Button>
-        </label>
+        <input
+          type="file"
+          id="fileInput"
+          className="hidden"
+          onChange={(e) => e.target.files && onFileSelect(e.target.files)}
+          accept=".jpg,.jpeg,.png"
+          multiple
+        />
+        <Button 
+          variant="secondary" 
+          onClick={() => document.getElementById('fileInput')?.click()}
+        >
+          Browse Files
+        </Button>
       </CardContent>
     </Card>
   );
