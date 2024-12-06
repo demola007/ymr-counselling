@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Search, ArrowLeft } from "lucide-react";
+import { Search, ArrowLeft, Edit2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -18,6 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Pagination,
   PaginationContent,
@@ -27,6 +35,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { mockDocuments } from "@/utils/mockData";
+import { useToast } from "@/components/ui/use-toast";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -35,7 +44,10 @@ const DataView = () => {
   const [studentFilter, setStudentFilter] = useState("all");
   const [genderFilter, setGenderFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingDocument, setEditingDocument] = useState<any>(null);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const filteredDocuments = mockDocuments.filter((doc) => {
     const matchesSearch = 
@@ -57,20 +69,37 @@ const DataView = () => {
     navigate(`/data/${id}`);
   };
 
+  const handleEditClick = (e: React.MouseEvent, document: any) => {
+    e.stopPropagation();
+    setEditingDocument(document);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real application, this would make an API call to update the document
+    toast({
+      title: "Record Updated",
+      description: "The record has been successfully updated.",
+    });
+    setIsEditDialogOpen(false);
+    setEditingDocument(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-6 mx-auto max-w-7xl">
-        <nav className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 sticky top-0 bg-white/80 backdrop-blur-lg z-10 p-4 rounded-lg shadow-sm">
+        <nav className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 sticky top-0 bg-[#1A1F2C] backdrop-blur-lg z-10 p-4 rounded-lg shadow-sm">
           <div className="flex items-center gap-4">
             <img 
               src="/lovable-uploads/fea97e0c-ca99-4275-aa6e-653e80cd7ec1.png" 
               alt="YMR Global Logo" 
               className="h-10 w-auto"
             />
-            <h1 className="text-xl md:text-2xl font-bold text-purple-800">Counselling Data</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-white">Counselling Data</h1>
           </div>
           <Link to="/">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="text-white border-white hover:bg-white/10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Upload
             </Button>
@@ -126,6 +155,7 @@ const DataView = () => {
                   <TableHead>Country</TableHead>
                   <TableHead>State</TableHead>
                   <TableHead>Follow Up</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -145,6 +175,16 @@ const DataView = () => {
                     <TableCell>{doc.country}</TableCell>
                     <TableCell>{doc.state}</TableCell>
                     <TableCell>{doc.availability_for_follow_up}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => handleEditClick(e, doc)}
+                        className="hover:bg-purple-100"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -191,6 +231,54 @@ const DataView = () => {
             </p>
           </div>
         </div>
+
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Edit Record</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleEditSubmit} className="space-y-4">
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    id="name"
+                    value={editingDocument?.name || ""}
+                    onChange={(e) => setEditingDocument({ ...editingDocument, name: e.target.value })}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="email" className="text-right">
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    value={editingDocument?.email || ""}
+                    onChange={(e) => setEditingDocument({ ...editingDocument, email: e.target.value })}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="phone" className="text-right">
+                    Phone
+                  </Label>
+                  <Input
+                    id="phone"
+                    value={editingDocument?.phone_number || ""}
+                    onChange={(e) => setEditingDocument({ ...editingDocument, phone_number: e.target.value })}
+                    className="col-span-3"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Save changes</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
