@@ -21,7 +21,7 @@ const Login = () => {
         title: "Login successful",
         description: "Welcome back, Admin!",
       });
-      navigate("/");
+      navigate("/upload");
     } else if (email === "user@example.com" && password === "user") {
       localStorage.setItem("userRole", "user");
       localStorage.setItem("isAuthenticated", "true");
@@ -29,7 +29,7 @@ const Login = () => {
         title: "Login successful",
         description: "Welcome back!",
       });
-      navigate("/");
+      navigate("/upload");
     } else {
       toast({
         title: "Login failed",
