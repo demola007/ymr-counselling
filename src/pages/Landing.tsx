@@ -16,13 +16,6 @@ const Landing = () => {
             />
             <h1 className="text-2xl font-bold">YMR Global</h1>
           </div>
-          <div className="flex gap-4">
-            <Link to="/login">
-              <Button variant="outline" className="text-white border-white hover:bg-white hover:text-purple-900">
-                Login
-              </Button>
-            </Link>
-          </div>
         </div>
       </nav>
 
@@ -38,12 +31,6 @@ const Landing = () => {
                 Take the first step towards personal growth and emotional well-being with our experienced counsellors.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/login">
-                  <Button className="w-full sm:w-auto bg-purple-900 hover:bg-purple-800">
-                    <Upload className="mr-2 h-4 w-4" />
-                    Access Portal
-                  </Button>
-                </Link>
                 <a href="https://calendly.com/your-link" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="w-full sm:w-auto border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white">
                     <Calendar className="mr-2 h-4 w-4" />

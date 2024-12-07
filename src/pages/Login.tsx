@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { ArrowLeft } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -42,6 +43,15 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-secondary to-white">
       <div className="w-full max-w-md p-8 glass-panel rounded-lg shadow-lg">
+        <div className="flex justify-between items-center mb-8">
+          <Link to="/">
+            <Button variant="ghost" size="sm" className="text-purple-900 hover:bg-purple-100">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+          </Link>
+        </div>
+        
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold mb-2">YMR Global</h1>
           <p className="text-muted-foreground">Counselling Data Capture System</p>

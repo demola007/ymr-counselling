@@ -30,7 +30,7 @@ export const MainNavigation = ({ userRole }: MainNavigationProps) => {
             <Link to="/data">
               <Button 
                 variant="outline" 
-                className="text-white border-white/20 hover:bg-white/10 hover:text-white transition-colors"
+                className="text-white border-white/20 hover:bg-white/10"
               >
                 View Documents
               </Button>
@@ -39,7 +39,7 @@ export const MainNavigation = ({ userRole }: MainNavigationProps) => {
           <Button 
             variant="outline" 
             onClick={handleLogout}
-            className="text-white border-white/20 hover:bg-white/10 hover:text-white transition-colors"
+            className="text-white border-white/20 hover:bg-white/10"
           >
             Logout
           </Button>

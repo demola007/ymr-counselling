@@ -13,8 +13,8 @@ export const DataViewHeader = () => {
         />
         <h1 className="text-xl md:text-2xl font-bold text-white">Counselling Data</h1>
       </div>
-      <Link to="/">
-        <Button variant="outline" size="sm" className="text-white border-white hover:bg-white/10">
+      <Link to="/upload">
+        <Button variant="outline" size="sm" className="text-white border-white/20 hover:bg-white/10">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Upload
         </Button>
