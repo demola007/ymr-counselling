@@ -19,18 +19,18 @@ export const MainNavigation = ({ userRole }: MainNavigationProps) => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
           <img 
-            src="/lovable-uploads/fea97e0c-ca99-4275-aa6e-653e80cd7ec1.png" 
-            alt="YMR Global Logo" 
-            className="h-12 w-auto brightness-110"
+            src="/lovable-uploads/96b863b0-3c9e-4343-9797-a552ab5832f1.png" 
+            alt="Floodgates Logo" 
+            className="h-12 w-auto"
           />
-          <h1 className="text-2xl font-bold text-white">YMR Global</h1>
+          <h1 className="text-2xl font-bold text-white">FLOODGATES</h1>
         </div>
         <div className="flex flex-wrap gap-4">
           {userRole === "admin" && (
             <Link to="/data">
               <Button 
                 variant="outline" 
-                className="text-white border-white/20 hover:bg-white/10"
+                className="text-white border-white hover:bg-white/10 hover:text-white"
               >
                 View Documents
               </Button>
@@ -39,7 +39,7 @@ export const MainNavigation = ({ userRole }: MainNavigationProps) => {
           <Button 
             variant="outline" 
             onClick={handleLogout}
-            className="text-white border-white/20 hover:bg-white/10"
+            className="text-white border-white hover:bg-white/10 hover:text-white"
           >
             Logout
           </Button>
