@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -9,23 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Search, ArrowLeft, Edit2 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+import { Edit2 } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -36,6 +20,9 @@ import {
 } from "@/components/ui/pagination";
 import { mockDocuments } from "@/utils/mockData";
 import { useToast } from "@/components/ui/use-toast";
+import { DataViewHeader } from "@/components/data/DataViewHeader";
+import { DataViewFilters } from "@/components/data/DataViewFilters";
+import { EditDocumentDialog } from "@/components/data/EditDocumentDialog";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -77,7 +64,6 @@ const DataView = () => {
 
   const handleEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, this would make an API call to update the document
     toast({
       title: "Record Updated",
       description: "The record has been successfully updated.",
@@ -89,56 +75,16 @@ const DataView = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-6 mx-auto max-w-7xl">
-        <nav className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 sticky top-0 bg-[#1A1F2C] backdrop-blur-lg z-10 p-4 rounded-lg shadow-sm">
-          <div className="flex items-center gap-4">
-            <img 
-              src="/lovable-uploads/fea97e0c-ca99-4275-aa6e-653e80cd7ec1.png" 
-              alt="YMR Global Logo" 
-              className="h-10 w-auto"
-            />
-            <h1 className="text-xl md:text-2xl font-bold text-white">Counselling Data</h1>
-          </div>
-          <Link to="/">
-            <Button variant="outline" size="sm" className="text-white border-white hover:bg-white/10">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Upload
-            </Button>
-          </Link>
-        </nav>
-
-        <div className="glass-panel rounded-lg p-4 md:p-6 mb-6">
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input
-                placeholder="Search by name or email..."
-                className="pl-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <Select value={studentFilter} onValueChange={setStudentFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by Student Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Students</SelectItem>
-                <SelectItem value="Yes">Students</SelectItem>
-                <SelectItem value="No">Non-Students</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={genderFilter} onValueChange={setGenderFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by Gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Genders</SelectItem>
-                <SelectItem value="Male">Male</SelectItem>
-                <SelectItem value="Female">Female</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+        <DataViewHeader />
+        
+        <DataViewFilters
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          studentFilter={studentFilter}
+          setStudentFilter={setStudentFilter}
+          genderFilter={genderFilter}
+          setGenderFilter={setGenderFilter}
+        />
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="overflow-x-auto">
@@ -232,53 +178,13 @@ const DataView = () => {
           </div>
         </div>
 
-        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Edit Record</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleEditSubmit} className="space-y-4">
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value={editingDocument?.name || ""}
-                    onChange={(e) => setEditingDocument({ ...editingDocument, name: e.target.value })}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="email" className="text-right">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    value={editingDocument?.email || ""}
-                    onChange={(e) => setEditingDocument({ ...editingDocument, email: e.target.value })}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="phone" className="text-right">
-                    Phone
-                  </Label>
-                  <Input
-                    id="phone"
-                    value={editingDocument?.phone_number || ""}
-                    onChange={(e) => setEditingDocument({ ...editingDocument, phone_number: e.target.value })}
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Save changes</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <EditDocumentDialog
+          open={isEditDialogOpen}
+          onOpenChange={setIsEditDialogOpen}
+          document={editingDocument}
+          onSubmit={handleEditSubmit}
+          setEditingDocument={setEditingDocument}
+        />
       </div>
     </div>
   );
