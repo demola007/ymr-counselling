@@ -14,7 +14,7 @@ const Landing = () => {
               alt="YMR Global Logo" 
               className="h-12 w-auto"
             />
-            <h1 className="text-2xl font-bold">YMR Global</h1>
+            <h1 className="text-2xl font-bold">FLOODGATES</h1>
           </div>
         </div>
       </nav>
@@ -31,6 +31,12 @@ const Landing = () => {
                 Take the first step towards personal growth and emotional well-being with our experienced counsellors.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
+                <Link to="/login">
+                  <Button className="w-full sm:w-auto bg-purple-900 hover:bg-purple-800">
+                    <Upload className="mr-2 h-4 w-4" />
+                    Access Portal
+                  </Button>
+                </Link>
                 <a href="https://calendly.com/your-link" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="w-full sm:w-auto border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white">
                     <Calendar className="mr-2 h-4 w-4" />
@@ -51,18 +57,51 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-purple-900 text-white py-8">
+      <footer className="bg-purple-900 text-white py-12">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
-              <p className="mb-2">Phone: +2348069459084</p>
-              <p className="mb-2">Email: ymrcounsellingfollowup@gmail.com</p>
+              <div className="space-y-2">
+                <p className="flex items-center">
+                  <span className="font-medium">Phone:</span>
+                  <a href="tel:+2348069459084" className="ml-2 hover:text-purple-200 transition-colors">
+                    +234 806 945 9084
+                  </a>
+                </p>
+                <p className="flex items-center">
+                  <span className="font-medium">Email:</span>
+                  <a href="mailto:ymrcounsellingfollowup@gmail.com" className="ml-2 hover:text-purple-200 transition-colors">
+                    ymrcounsellingfollowup@gmail.com
+                  </a>
+                </p>
+              </div>
             </div>
-            <div className="text-right">
-              <p className="mb-2">Powered by YMR Counselling Unit</p>
-              <p className="font-bold">FLOODGATES</p>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="hover:text-purple-200 transition-colors">About Us</a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-purple-200 transition-colors">Services</a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-purple-200 transition-colors">Resources</a>
+                </li>
+              </ul>
             </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Hours of Operation</h3>
+              <div className="space-y-2">
+                <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                <p>Saturday: 10:00 AM - 2:00 PM</p>
+                <p>Sunday: Closed</p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 pt-8 border-t border-purple-800 text-center">
+            <p>&copy; {new Date().getFullYear()} YMR Counselling Unit. All rights reserved.</p>
           </div>
         </div>
       </footer>
