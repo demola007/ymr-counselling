@@ -10,11 +10,11 @@ const Landing = () => {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <img 
-              src="/lovable-uploads/96b863b0-3c9e-4343-9797-a552ab5832f1.png" 
-              alt="Floodgates Logo" 
+              src="/lovable-uploads/7d495cc3-bdc8-42d6-ab11-263a4b0a731a.png" 
+              alt="YMR Logo" 
               className="h-12 w-auto"
             />
-            <h1 className="text-2xl font-bold">FLOODGATES</h1>
+            <h1 className="text-2xl font-bold">YMR COUNSELLING</h1>
           </div>
         </div>
       </nav>
@@ -32,7 +32,7 @@ const Landing = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/login">
-                  <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white">
+                  <Button className="w-full sm:w-auto bg-white text-[#1A1F2C] hover:bg-gray-100">
                     <Upload className="mr-2 h-4 w-4" />
                     Access Portal
                   </Button>
@@ -48,7 +48,7 @@ const Landing = () => {
             <div className="hidden md:block">
               <img 
                 src="/lovable-uploads/d98e5926-4e71-42da-ad1d-d3456c15fc86.png" 
-                alt="Floodgates Event" 
+                alt="Counselling Session" 
                 className="rounded-lg shadow-xl animate-fade-in-up"
               />
             </div>
