@@ -45,11 +45,11 @@ const Landing = () => {
                 </a>
               </div>
             </div>
-            <div className="hidden md:block">
+            <div className="block">
               <img 
                 src="/lovable-uploads/d98e5926-4e71-42da-ad1d-d3456c15fc86.png" 
                 alt="Counselling Session" 
-                className="rounded-lg shadow-xl animate-fade-in-up"
+                className="rounded-lg shadow-xl animate-fade-in-up w-full"
               />
             </div>
           </div>
@@ -57,9 +57,9 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#1A1F2C] text-white py-12">
+      <footer className="bg-[#1A1F2C] text-white py-8">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
               <div className="space-y-2">
@@ -78,29 +78,20 @@ const Landing = () => {
               </div>
             </div>
             <div>
-              <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="hover:text-blue-300 transition-colors">About Us</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-blue-300 transition-colors">Services</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-blue-300 transition-colors">Resources</a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Hours of Operation</h3>
+              <h3 className="text-xl font-semibold mb-4">Book Counselling Session</h3>
               <div className="space-y-2">
-                <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
-                <p>Saturday: 10:00 AM - 2:00 PM</p>
-                <p>Sunday: Closed</p>
+                <a 
+                  href="https://calendly.com/your-link" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block text-blue-300 hover:text-blue-400 transition-colors"
+                >
+                  Schedule your session via Calendly
+                </a>
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center">
+          <div className="mt-6 pt-6 border-t border-gray-800 text-center">
             <p>&copy; {new Date().getFullYear()} YMR Counselling Unit. All rights reserved.</p>
           </div>
         </div>
