@@ -57,19 +57,19 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#1A1F2C] text-white py-8">
+      <footer className="bg-[#1A1F2C] text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
               <div className="space-y-2">
-                <p>
+                <p className="flex items-center">
                   <span className="font-medium">Phone:</span>
                   <a href="tel:+2348069459084" className="ml-2 hover:text-blue-300 transition-colors">
                     +234 806 945 9084
                   </a>
                 </p>
-                <p>
+                <p className="flex items-center">
                   <span className="font-medium">Email:</span>
                   <a href="mailto:ymrcounsellingfollowup@gmail.com" className="ml-2 hover:text-blue-300 transition-colors">
                     ymrcounsellingfollowup@gmail.com
@@ -100,8 +100,8 @@ const Landing = () => {
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-sm text-gray-400">
-            <p>&copy; {new Date().getFullYear()} FLOODGATES. All rights reserved.</p>
+          <div className="mt-8 pt-8 border-t border-gray-800 text-center">
+            <p>&copy; {new Date().getFullYear()} YMR Counselling Unit. All rights reserved.</p>
           </div>
         </div>
       </footer>
