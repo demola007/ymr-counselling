@@ -28,17 +28,21 @@ const DetailView = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container max-w-4xl mx-auto px-4 py-6">
-        <nav className="flex items-center justify-between mb-8 sticky top-0 bg-white/80 backdrop-blur-lg z-10 p-4 rounded-lg shadow-sm">
+        <nav className="flex items-center justify-between mb-8 sticky top-0 bg-[#1A1F2C] backdrop-blur-lg z-10 p-4 rounded-lg shadow-sm">
           <div className="flex items-center gap-4">
             <img 
-              src="/lovable-uploads/fea97e0c-ca99-4275-aa6e-653e80cd7ec1.png" 
+              src="/lovable-uploads/7d495cc3-bdc8-42d6-ab11-263a4b0a731a.png" 
               alt="YMR Global Logo" 
-              className="h-10 w-auto"
+              className="h-12 w-auto"
             />
-            <h1 className="text-xl md:text-2xl font-bold text-purple-800">Counselling Details</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-white">Counselling Details</h1>
           </div>
           <Link to="/data">
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="secondary" 
+              size="sm"
+              className="bg-white text-[#1A1F2C] hover:bg-gray-100"
+            >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
