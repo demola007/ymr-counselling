@@ -15,7 +15,15 @@ const Login = () => {
     e.preventDefault();
     
     // Mock authentication - replace with actual API call later
-    if (email === "admin@example.com" && password === "admin") {
+    if (email === "superadmin@example.com" && password === "superadmin") {
+      localStorage.setItem("userRole", "super-admin");
+      localStorage.setItem("isAuthenticated", "true");
+      toast({
+        title: "Login successful",
+        description: "Welcome back, Super Admin!",
+      });
+      navigate("/upload");
+    } else if (email === "admin@example.com" && password === "admin") {
       localStorage.setItem("userRole", "admin");
       localStorage.setItem("isAuthenticated", "true");
       toast({
@@ -83,6 +91,7 @@ const Login = () => {
         
         <div className="mt-4 text-sm text-center text-muted-foreground">
           <p>Demo Credentials:</p>
+          <p>Super Admin: superadmin@example.com / superadmin</p>
           <p>Admin: admin@example.com / admin</p>
           <p>User: user@example.com / user</p>
         </div>
