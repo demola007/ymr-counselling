@@ -1,8 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, LogOut } from "lucide-react";
 
 export const DataViewHeader = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("isAuthenticated");
+    navigate("/login", { replace: true });
+  };
+
   return (
     <nav className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 sticky top-0 bg-[#1A1F2C] backdrop-blur-lg z-10 p-4 rounded-lg shadow-sm">
       <div className="flex items-center gap-4">
@@ -13,16 +21,27 @@ export const DataViewHeader = () => {
         />
         <h1 className="text-xl md:text-2xl font-bold text-white">Counselling Data</h1>
       </div>
-      <Link to="/upload">
+      <div className="flex gap-2">
+        <Link to="/upload">
+          <Button 
+            variant="secondary"
+            size="sm" 
+            className="bg-white text-[#1A1F2C] hover:bg-gray-100"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Upload
+          </Button>
+        </Link>
         <Button 
           variant="secondary"
-          size="sm" 
+          size="sm"
+          onClick={handleLogout}
           className="bg-white text-[#1A1F2C] hover:bg-gray-100"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Upload
+          <LogOut className="w-4 h-4 mr-2" />
+          Logout
         </Button>
-      </Link>
+      </div>
     </nav>
   );
 };

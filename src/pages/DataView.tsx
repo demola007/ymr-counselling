@@ -35,6 +35,7 @@ const DataView = () => {
   const [editingDocument, setEditingDocument] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const userRole = localStorage.getItem("userRole");
 
   const filteredDocuments = mockDocuments.filter((doc) => {
     const matchesSearch = 
@@ -58,12 +59,28 @@ const DataView = () => {
 
   const handleEditClick = (e: React.MouseEvent, document: any) => {
     e.stopPropagation();
+    if (userRole !== "super-admin") {
+      toast({
+        title: "Access Denied",
+        description: "Only super-admin users can edit documents.",
+        variant: "destructive",
+      });
+      return;
+    }
     setEditingDocument(document);
     setIsEditDialogOpen(true);
   };
 
   const handleEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (userRole !== "super-admin") {
+      toast({
+        title: "Access Denied",
+        description: "Only super-admin users can edit documents.",
+        variant: "destructive",
+      });
+      return;
+    }
     toast({
       title: "Record Updated",
       description: "The record has been successfully updated.",
@@ -101,7 +118,7 @@ const DataView = () => {
                   <TableHead>Country</TableHead>
                   <TableHead>State</TableHead>
                   <TableHead>Follow Up</TableHead>
-                  <TableHead>Actions</TableHead>
+                  {userRole === "super-admin" && <TableHead>Actions</TableHead>}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -121,16 +138,18 @@ const DataView = () => {
                     <TableCell>{doc.country}</TableCell>
                     <TableCell>{doc.state}</TableCell>
                     <TableCell>{doc.availability_for_follow_up}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => handleEditClick(e, doc)}
-                        className="hover:bg-purple-100"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                    </TableCell>
+                    {userRole === "super-admin" && (
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => handleEditClick(e, doc)}
+                          className="hover:bg-purple-100"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </Button>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>
