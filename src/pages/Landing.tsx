@@ -38,7 +38,7 @@ const Landing = () => {
                   </Button>
                 </Link>
                 <a href="https://calendly.com/your-link" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-[#1A1F2C]">
+                  <Button variant="outline" className="w-full sm:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]">
                     <Calendar className="mr-2 h-4 w-4" />
                     Book a Session
                   </Button>
