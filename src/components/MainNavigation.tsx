@@ -26,7 +26,7 @@ export const MainNavigation = ({ userRole }: MainNavigationProps) => {
           <h1 className="text-2xl font-bold text-white">FLOODGATES</h1>
         </div>
         <div className="flex flex-wrap gap-4">
-          {userRole === "admin" && (
+          {(userRole === "admin" || userRole === "super-admin") && (
             <Link to="/data">
               <Button 
                 variant="secondary" 
