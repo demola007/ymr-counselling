@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -9,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Edit2 } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -23,6 +24,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { DataViewHeader } from "@/components/data/DataViewHeader";
 import { DataViewFilters } from "@/components/data/DataViewFilters";
 import { EditDocumentDialog } from "@/components/data/EditDocumentDialog";
+import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
+import { DataViewActions } from "@/components/data/DataViewActions";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -33,6 +36,9 @@ const DataView = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingDocument, setEditingDocument] = useState<any>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
   const userRole = localStorage.getItem("userRole");
@@ -71,22 +77,60 @@ const DataView = () => {
     setIsEditDialogOpen(true);
   };
 
-  const handleEditSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleDeleteClick = (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
     if (userRole !== "super-admin") {
       toast({
         title: "Access Denied",
-        description: "Only super-admin users can edit documents.",
+        description: "Only super-admin users can delete documents.",
         variant: "destructive",
       });
       return;
     }
+    setDeletingId(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    // Mock delete - replace with actual API call
     toast({
-      title: "Record Updated",
-      description: "The record has been successfully updated.",
+      title: "Record Deleted",
+      description: "The record has been successfully deleted.",
     });
-    setIsEditDialogOpen(false);
-    setEditingDocument(null);
+    setIsDeleteDialogOpen(false);
+    setDeletingId(null);
+    setSelectedIds([]);
+  };
+
+  const handleDeleteSelected = () => {
+    if (userRole !== "super-admin") {
+      toast({
+        title: "Access Denied",
+        description: "Only super-admin users can delete documents.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(paginatedDocuments.map(doc => doc.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelectRow = (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    setSelectedIds(prev => {
+      if (prev.includes(id)) {
+        return prev.filter(selectedId => selectedId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
   };
 
   return (
@@ -103,11 +147,19 @@ const DataView = () => {
           setGenderFilter={setGenderFilter}
         />
 
+        <DataViewActions
+          selectedIds={selectedIds}
+          onDeleteSelected={handleDeleteSelected}
+          selectAll={selectedIds.length === paginatedDocuments.length}
+          onSelectAll={handleSelectAll}
+        />
+
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
+                  {userRole === "super-admin" && <TableHead className="w-[50px]" />}
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Phone</TableHead>
@@ -128,6 +180,21 @@ const DataView = () => {
                     className="hover:bg-purple-50 cursor-pointer transition-colors"
                     onClick={() => handleRowClick(doc.id)}
                   >
+                    {userRole === "super-admin" && (
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedIds.includes(doc.id)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setSelectedIds(prev => [...prev, doc.id]);
+                            } else {
+                              setSelectedIds(prev => prev.filter(id => id !== doc.id));
+                            }
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </TableCell>
+                    )}
                     <TableCell className="font-medium">{doc.name}</TableCell>
                     <TableCell>{doc.email}</TableCell>
                     <TableCell>{doc.phone_number}</TableCell>
@@ -140,14 +207,24 @@ const DataView = () => {
                     <TableCell>{doc.availability_for_follow_up}</TableCell>
                     {userRole === "super-admin" && (
                       <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => handleEditClick(e, doc)}
-                          className="hover:bg-purple-100"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </Button>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => handleEditClick(e, doc)}
+                            className="hover:bg-purple-100"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => handleDeleteClick(e, doc.id)}
+                            className="hover:bg-red-100 text-red-500 hover:text-red-600"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     )}
                   </TableRow>
@@ -203,6 +280,13 @@ const DataView = () => {
           document={editingDocument}
           onSubmit={handleEditSubmit}
           setEditingDocument={setEditingDocument}
+        />
+
+        <DeleteConfirmDialog
+          open={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          onConfirm={handleDeleteConfirm}
+          isMultiple={selectedIds.length > 0}
         />
       </div>
     </div>

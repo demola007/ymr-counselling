@@ -3,8 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Landing from "./pages/Landing";
 import Index from "./pages/Index";
+import Upload from "./pages/Upload";
 import DataView from "./pages/DataView";
 import DetailView from "./pages/DetailView";
 import Login from "./pages/Login";
@@ -22,22 +22,22 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route path="/" element={<Index />} />
             <Route path="/login" element={
               isAuthenticated ? <Navigate to="/upload" replace /> : <Login />
             } />
             <Route path="/upload" element={
               <ProtectedRoute>
-                <Index />
+                <Upload />
               </ProtectedRoute>
             } />
             <Route path="/data" element={
-              <ProtectedRoute allowedRoles={["admin"]}>
+              <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
                 <DataView />
               </ProtectedRoute>
             } />
             <Route path="/data/:id" element={
-              <ProtectedRoute allowedRoles={["admin"]}>
+              <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
                 <DetailView />
               </ProtectedRoute>
             } />
