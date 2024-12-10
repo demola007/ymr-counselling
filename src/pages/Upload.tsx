@@ -11,7 +11,6 @@ const Index = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const { toast } = useToast();
-  const userRole = localStorage.getItem("userRole");
 
   const processFile = async (files: FileList) => {
     const validFiles = Array.from(files).filter(file => {
@@ -83,7 +82,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-8 mx-auto">
-        <MainNavigation userRole={userRole} />
+        <MainNavigation />
         <PageHeader />
 
         <div className="glass-panel rounded-lg p-6 mb-6">
