@@ -7,6 +7,7 @@ interface DataViewActionsProps {
   onDeleteSelected: () => void;
   selectAll: boolean;
   onSelectAll: (checked: boolean) => void;
+  userRole: string | null;
 }
 
 export const DataViewActions = ({
@@ -14,6 +15,7 @@ export const DataViewActions = ({
   onDeleteSelected,
   selectAll,
   onSelectAll,
+  userRole,
 }: DataViewActionsProps) => {
   return (
     <div className="flex items-center gap-4 mb-4">
@@ -23,11 +25,13 @@ export const DataViewActions = ({
           onCheckedChange={onSelectAll}
           aria-label="Select all"
         />
-        <span className="text-sm text-gray-600">
-          {selectedIds.length} selected
-        </span>
+        {userRole === "super-admin" && (
+          <span className="text-sm text-gray-600">
+            {selectedIds.length} selected
+          </span>
+        )}
       </div>
-      {selectedIds.length > 0 && (
+      {selectedIds.length > 0 && userRole === "super-admin" && (
         <Button
           variant="destructive"
           size="sm"

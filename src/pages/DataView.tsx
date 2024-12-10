@@ -143,8 +143,6 @@ const DataView = () => {
     });
   };
 
-  // ... keep existing code (JSX rendering)
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-6 mx-auto max-w-7xl">
@@ -164,6 +162,7 @@ const DataView = () => {
           onDeleteSelected={handleDeleteSelected}
           selectAll={selectedIds.length === paginatedDocuments.length}
           onSelectAll={handleSelectAll}
+          userRole={userRole}
         />
 
         <div className="bg-white rounded-lg shadow overflow-hidden">

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 
 interface MainNavigationProps {
   userRole: string | null;
@@ -41,6 +42,7 @@ export const MainNavigation = ({ userRole }: MainNavigationProps) => {
             onClick={handleLogout}
             className="bg-white text-[#1A1F2C] hover:bg-gray-100"
           >
+            <LogOut className="w-4 h-4 mr-2" />
             Logout
           </Button>
         </div>
