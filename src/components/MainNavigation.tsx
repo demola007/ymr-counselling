@@ -1,19 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
-interface MainNavigationProps {
-  userRole: string | null;
-}
-
-export const MainNavigation = ({ userRole }: MainNavigationProps) => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("isAuthenticated");
-    navigate("/login", { replace: true });
-  };
+export const MainNavigation = () => {
+  const { userRole, logout } = useAuth();
 
   return (
     <nav className="bg-[#1A1F2C] text-white p-4 rounded-lg mb-8 shadow-lg">
@@ -39,7 +30,7 @@ export const MainNavigation = ({ userRole }: MainNavigationProps) => {
           )}
           <Button 
             variant="secondary"
-            onClick={handleLogout}
+            onClick={logout}
             className="bg-white text-[#1A1F2C] hover:bg-gray-100"
           >
             <LogOut className="w-4 h-4 mr-2" />

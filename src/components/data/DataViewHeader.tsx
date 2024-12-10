@@ -1,15 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const DataViewHeader = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("isAuthenticated");
-    navigate("/login", { replace: true });
-  };
+  const { logout } = useAuth();
 
   return (
     <nav className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 sticky top-0 bg-[#1A1F2C] backdrop-blur-lg z-10 p-4 rounded-lg shadow-sm">
@@ -35,7 +30,7 @@ export const DataViewHeader = () => {
         <Button 
           variant="secondary"
           size="sm"
-          onClick={handleLogout}
+          onClick={logout}
           className="bg-white text-[#1A1F2C] hover:bg-gray-100"
         >
           <LogOut className="w-4 h-4 mr-2" />

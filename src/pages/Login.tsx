@@ -1,51 +1,18 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { ArrowLeft } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Mock authentication - replace with actual API call later
-    if (email === "superadmin@example.com" && password === "superadmin") {
-      localStorage.setItem("userRole", "super-admin");
-      localStorage.setItem("isAuthenticated", "true");
-      toast({
-        title: "Login successful",
-        description: "Welcome back, Super Admin!",
-      });
-      navigate("/upload");
-    } else if (email === "admin@example.com" && password === "admin") {
-      localStorage.setItem("userRole", "admin");
-      localStorage.setItem("isAuthenticated", "true");
-      toast({
-        title: "Login successful",
-        description: "Welcome back, Admin!",
-      });
-      navigate("/upload");
-    } else if (email === "user@example.com" && password === "user") {
-      localStorage.setItem("userRole", "user");
-      localStorage.setItem("isAuthenticated", "true");
-      toast({
-        title: "Login successful",
-        description: "Welcome back!",
-      });
-      navigate("/upload");
-    } else {
-      toast({
-        title: "Login failed",
-        description: "Invalid credentials. Please try again.",
-        variant: "destructive",
-      });
-    }
+    login(email, password);
   };
 
   return (
