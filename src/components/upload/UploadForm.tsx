@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { UploadArea } from "@/components/UploadArea";
+import { ImagePreview } from "@/components/ImagePreview";
 
 export const UploadForm = () => {
   const [isDragging, setIsDragging] = useState(false);
