@@ -1,31 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Edit2, Trash2 } from "lucide-react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { mockDocuments } from "@/utils/mockData";
 import { useToast } from "@/components/ui/use-toast";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataViewHeader } from "@/components/data/DataViewHeader";
 import { DataViewFilters } from "@/components/data/DataViewFilters";
 import { EditDocumentDialog } from "@/components/data/EditDocumentDialog";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { DataViewActions } from "@/components/data/DataViewActions";
+import { DocumentTable } from "@/components/data/DocumentTable";
+import { DocumentPagination } from "@/components/data/DocumentPagination";
+import { mockDocuments } from "@/utils/mockData";
+import { useAuth } from "@/hooks/useAuth";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -39,36 +24,80 @@ const DataView = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  
   const navigate = useNavigate();
   const { toast } = useToast();
-  const userRole = localStorage.getItem("userRole");
+  const { userRole } = useAuth();
+  const queryClient = useQueryClient();
 
-  const handleEditSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically make an API call to update the document
-    toast({
-      title: "Document Updated",
-      description: "The document has been successfully updated.",
-    });
-    setIsEditDialogOpen(false);
-    setEditingDocument(null);
-  };
-
-  const filteredDocuments = mockDocuments.filter((doc) => {
-    const matchesSearch = 
-      doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doc.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStudent = studentFilter === "all" || doc.isStudent === studentFilter;
-    const matchesGender = genderFilter === "all" || doc.gender === genderFilter;
-    return matchesSearch && matchesStudent && matchesGender;
+  // Fetch documents with filters and pagination
+  const { data: documents = [], isLoading: isLoadingDocuments } = useQuery({
+    queryKey: ['documents', searchQuery, studentFilter, genderFilter, currentPage],
+    queryFn: async () => {
+      // Simulate API call with mockDocuments
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const filtered = mockDocuments.filter((doc) => {
+        const matchesSearch =
+          doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          doc.email.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStudent = studentFilter === "all" || doc.isStudent === studentFilter;
+        const matchesGender = genderFilter === "all" || doc.gender === genderFilter;
+        return matchesSearch && matchesStudent && matchesGender;
+      });
+      
+      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+      return filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    },
   });
 
-  const totalPages = Math.ceil(filteredDocuments.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedDocuments = filteredDocuments.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE
-  );
+  // Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (ids: number[]) => {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return ids;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
+      toast({
+        title: "Success",
+        description: "Documents deleted successfully",
+      });
+      setIsDeleteDialogOpen(false);
+      setDeletingId(null);
+      setSelectedIds([]);
+    },
+  });
+
+  // Update mutation
+  const updateMutation = useMutation({
+    mutationFn: async (document: any) => {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return document;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
+      toast({
+        title: "Success",
+        description: "Document updated successfully",
+      });
+      setIsEditDialogOpen(false);
+      setEditingDocument(null);
+    },
+  });
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingDocument) {
+      updateMutation.mutate(editingDocument);
+    }
+  };
+
+  const handleDeleteConfirm = () => {
+    const idsToDelete = deletingId ? [deletingId] : selectedIds;
+    deleteMutation.mutate(idsToDelete);
+  };
 
   const handleRowClick = (id: number) => {
     navigate(`/data/${id}`);
@@ -102,16 +131,6 @@ const DataView = () => {
     setIsDeleteDialogOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
-    toast({
-      title: "Record Deleted",
-      description: "The record has been successfully deleted.",
-    });
-    setIsDeleteDialogOpen(false);
-    setDeletingId(null);
-    setSelectedIds([]);
-  };
-
   const handleDeleteSelected = () => {
     if (userRole !== "super-admin") {
       toast({
@@ -124,16 +143,7 @@ const DataView = () => {
     setIsDeleteDialogOpen(true);
   };
 
-  const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      setSelectedIds(paginatedDocuments.map(doc => doc.id));
-    } else {
-      setSelectedIds([]);
-    }
-  };
-
-  const handleSelectRow = (e: React.MouseEvent, id: number) => {
-    e.stopPropagation();
+  const handleSelectRow = (id: number) => {
     setSelectedIds(prev => {
       if (prev.includes(id)) {
         return prev.filter(selectedId => selectedId !== id);
@@ -142,6 +152,16 @@ const DataView = () => {
       }
     });
   };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(documents.map(doc => doc.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const totalPages = Math.ceil((documents?.length || 0) / ITEMS_PER_PAGE);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
@@ -160,127 +180,39 @@ const DataView = () => {
         <DataViewActions
           selectedIds={selectedIds}
           onDeleteSelected={handleDeleteSelected}
-          selectAll={selectedIds.length === paginatedDocuments.length}
+          selectAll={selectedIds.length === documents.length}
           onSelectAll={handleSelectAll}
           userRole={userRole}
         />
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {userRole === "super-admin" && <TableHead className="w-[50px]" />}
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Gender</TableHead>
-                  <TableHead>Student</TableHead>
-                  <TableHead>School</TableHead>
-                  <TableHead>Age Group</TableHead>
-                  <TableHead>Country</TableHead>
-                  <TableHead>State</TableHead>
-                  <TableHead>Follow Up</TableHead>
-                  {userRole === "super-admin" && <TableHead>Actions</TableHead>}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {paginatedDocuments.map((doc) => (
-                  <TableRow 
-                    key={doc.id} 
-                    className="hover:bg-purple-50 cursor-pointer transition-colors"
-                    onClick={() => handleRowClick(doc.id)}
-                  >
-                    {userRole === "super-admin" && (
-                      <TableCell>
-                        <Checkbox
-                          checked={selectedIds.includes(doc.id)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              setSelectedIds(prev => [...prev, doc.id]);
-                            } else {
-                              setSelectedIds(prev => prev.filter(id => id !== doc.id));
-                            }
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      </TableCell>
-                    )}
-                    <TableCell className="font-medium">{doc.name}</TableCell>
-                    <TableCell>{doc.email}</TableCell>
-                    <TableCell>{doc.phone_number}</TableCell>
-                    <TableCell>{doc.gender}</TableCell>
-                    <TableCell>{doc.isStudent}</TableCell>
-                    <TableCell>{doc.school}</TableCell>
-                    <TableCell>{doc.age_group}</TableCell>
-                    <TableCell>{doc.country}</TableCell>
-                    <TableCell>{doc.state}</TableCell>
-                    <TableCell>{doc.availability_for_follow_up}</TableCell>
-                    {userRole === "super-admin" && (
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e) => handleEditClick(e, doc)}
-                            className="hover:bg-purple-100"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e) => handleDeleteClick(e, doc.id)}
-                            className="hover:bg-red-100 text-red-500 hover:text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <DocumentTable
+              documents={documents}
+              selectedIds={selectedIds}
+              onSelectRow={handleSelectRow}
+              onRowClick={handleRowClick}
+              onEditClick={handleEditClick}
+              onDeleteClick={handleDeleteClick}
+              isLoading={isLoadingDocuments}
+            />
           </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-4">
-          <div className="flex justify-center">
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious 
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                    className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
-                  />
-                </PaginationItem>
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <PaginationItem key={i + 1} className="hidden md:block">
-                    <PaginationLink
-                      onClick={() => setCurrentPage(i + 1)}
-                      isActive={currentPage === i + 1}
-                    >
-                      {i + 1}
-                    </PaginationLink>
-                  </PaginationItem>
-                ))}
-                <PaginationItem>
-                  <PaginationNext 
-                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                    className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
+          <DocumentPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            isLoading={isLoadingDocuments}
+          />
 
           <div className="bg-white p-4 rounded-lg shadow text-center">
             <p className="text-lg font-semibold text-purple-800">
-              Total Records: {filteredDocuments.length}
+              Total Records: {documents.length}
             </p>
             <p className="text-sm text-gray-600">
-              Showing {startIndex + 1} - {Math.min(startIndex + ITEMS_PER_PAGE, filteredDocuments.length)} of {filteredDocuments.length}
+              Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} - {Math.min(currentPage * ITEMS_PER_PAGE, documents.length)} of {documents.length}
             </p>
           </div>
         </div>
@@ -291,6 +223,7 @@ const DataView = () => {
           document={editingDocument}
           onSubmit={handleEditSubmit}
           setEditingDocument={setEditingDocument}
+          isLoading={updateMutation.isPending}
         />
 
         <DeleteConfirmDialog
@@ -298,6 +231,7 @@ const DataView = () => {
           onOpenChange={setIsDeleteDialogOpen}
           onConfirm={handleDeleteConfirm}
           isMultiple={selectedIds.length > 0}
+          isLoading={deleteMutation.isPending}
         />
       </div>
     </div>
