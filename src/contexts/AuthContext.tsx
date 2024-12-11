@@ -1,16 +1,8 @@
-import { createContext, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { login as authLogin, logout as authLogout } from "./authUtils";
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  userRole: string | null;
-  login: (email: string, password: string) => void;
-  logout: () => void;
-}
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from "./AuthContextDefinition";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
