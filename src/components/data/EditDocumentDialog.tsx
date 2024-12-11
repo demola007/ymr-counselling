@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -17,6 +18,7 @@ interface EditDocumentDialogProps {
   document: CounsellingData | null;
   onSubmit: (e: React.FormEvent) => void;
   setEditingDocument: (doc: CounsellingData | null) => void;
+  isLoading?: boolean;
 }
 
 export const EditDocumentDialog = ({
@@ -25,6 +27,7 @@ export const EditDocumentDialog = ({
   document,
   onSubmit,
   setEditingDocument,
+  isLoading = false,
 }: EditDocumentDialogProps) => {
   if (!document) return null;
 
@@ -212,7 +215,16 @@ export const EditDocumentDialog = ({
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save changes"
+              )}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
