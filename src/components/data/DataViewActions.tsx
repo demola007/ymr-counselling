@@ -17,6 +17,10 @@ export const DataViewActions = ({
   onSelectAll,
   userRole,
 }: DataViewActionsProps) => {
+  if (userRole !== "super-admin") {
+    return null;
+  }
+
   return (
     <div className="flex items-center gap-4 mb-4">
       <div className="flex items-center gap-2">
@@ -25,13 +29,11 @@ export const DataViewActions = ({
           onCheckedChange={onSelectAll}
           aria-label="Select all"
         />
-        {userRole === "super-admin" && (
-          <span className="text-sm text-gray-600">
-            {selectedIds.length} selected
-          </span>
-        )}
+        <span className="text-sm text-gray-600">
+          {selectedIds.length} selected
+        </span>
       </div>
-      {selectedIds.length > 0 && userRole === "super-admin" && (
+      {selectedIds.length > 0 && (
         <Button
           variant="destructive"
           size="sm"

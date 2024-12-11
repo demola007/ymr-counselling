@@ -1,6 +1,7 @@
-import { createContext, useContext, ReactNode, useState, useEffect } from "react";
+import { createContext, useContext, ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { login as authLogin, logout as authLogout } from "./authUtils";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -22,34 +23,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
 
   const login = (email: string, password: string) => {
-    if (email === "superadmin@example.com" && password === "superadmin") {
-      setUserRole("super-admin");
+    const result = authLogin(email, password);
+    if (result.success) {
+      setUserRole(result.role);
       setIsAuthenticated(true);
-      localStorage.setItem("userRole", "super-admin");
+      localStorage.setItem("userRole", result.role);
       localStorage.setItem("isAuthenticated", "true");
       toast({
         title: "Login successful",
-        description: "Welcome back, Super Admin!",
-      });
-      navigate("/upload");
-    } else if (email === "admin@example.com" && password === "admin") {
-      setUserRole("admin");
-      setIsAuthenticated(true);
-      localStorage.setItem("userRole", "admin");
-      localStorage.setItem("isAuthenticated", "true");
-      toast({
-        title: "Login successful",
-        description: "Welcome back, Admin!",
-      });
-      navigate("/upload");
-    } else if (email === "user@example.com" && password === "user") {
-      setUserRole("user");
-      setIsAuthenticated(true);
-      localStorage.setItem("userRole", "user");
-      localStorage.setItem("isAuthenticated", "true");
-      toast({
-        title: "Login successful",
-        description: "Welcome back!",
+        description: `Welcome back${result.role === "super-admin" ? ", Super Admin" : result.role === "admin" ? ", Admin" : ""}!`,
       });
       navigate("/upload");
     } else {
@@ -62,6 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
+    authLogout();
     setIsAuthenticated(false);
     setUserRole(null);
     localStorage.removeItem("userRole");

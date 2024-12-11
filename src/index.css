@@ -38,6 +38,11 @@
   @apply transition-all duration-300 hover:bg-opacity-90;
 }
 
+/* Pagination styles */
+.pagination-link {
+  @apply cursor-pointer;
+}
+
 /* Mobile-first responsive styles */
 @media (max-width: 640px) {
   .container {
