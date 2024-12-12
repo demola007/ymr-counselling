@@ -29,7 +29,7 @@ const Login = () => {
         
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold mb-2">YMR Global</h1>
-          <p className="text-muted-foreground">Counselling Data Capture System</p>
+          <p className="text-muted-foreground">AI-Powered Data Capture System</p>
         </div>
         
         <form onSubmit={handleLogin} className="space-y-4">
