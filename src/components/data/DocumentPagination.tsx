@@ -74,14 +74,27 @@ export const DocumentPagination = ({
     return pages;
   };
 
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      onPageChange(page);
+    }
+  };
+
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious
-            onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-            className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-          />
+          <button 
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange(currentPage - 1);
+            }}
+            disabled={currentPage === 1}
+          >
+            <PaginationPrevious
+              className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
+          </button>
         </PaginationItem>
 
         {getPageNumbers().map((pageNum, index) => (
@@ -89,22 +102,35 @@ export const DocumentPagination = ({
             {pageNum === '...' ? (
               <span className="px-4 py-2">...</span>
             ) : (
-              <PaginationLink
-                onClick={() => onPageChange(pageNum as number)}
-                isActive={currentPage === pageNum}
-                className="cursor-pointer"
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePageChange(pageNum as number);
+                }}
               >
-                {pageNum}
-              </PaginationLink>
+                <PaginationLink
+                  isActive={currentPage === pageNum}
+                  className="cursor-pointer"
+                >
+                  {pageNum}
+                </PaginationLink>
+              </button>
             )}
           </PaginationItem>
         ))}
 
         <PaginationItem>
-          <PaginationNext
-            onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-            className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-          />
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange(currentPage + 1);
+            }}
+            disabled={currentPage === totalPages}
+          >
+            <PaginationNext
+              className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
+          </button>
         </PaginationItem>
       </PaginationContent>
     </Pagination>
