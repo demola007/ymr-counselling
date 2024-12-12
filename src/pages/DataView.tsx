@@ -31,12 +31,12 @@ const DataView = () => {
   const queryClient = useQueryClient();
 
   // Fetch documents with filters and pagination
-  const { data: documents = [], isLoading: isLoadingDocuments } = useQuery({
-    queryKey: ['documents', searchQuery, studentFilter, genderFilter, currentPage],
+  const { data: filteredDocuments = [], isLoading: isLoadingDocuments } = useQuery({
+    queryKey: ['documents', searchQuery, studentFilter, genderFilter],
     queryFn: async () => {
       // Simulate API call with mockDocuments
       await new Promise(resolve => setTimeout(resolve, 1000));
-      const filtered = mockDocuments.filter((doc) => {
+      return mockDocuments.filter((doc) => {
         const matchesSearch =
           doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           doc.email.toLowerCase().includes(searchQuery.toLowerCase());
@@ -44,11 +44,14 @@ const DataView = () => {
         const matchesGender = genderFilter === "all" || doc.gender === genderFilter;
         return matchesSearch && matchesStudent && matchesGender;
       });
-      
-      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-      return filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
     },
   });
+
+  // Calculate pagination
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredDocuments.length / ITEMS_PER_PAGE);
 
   // Delete mutation
   const deleteMutation = useMutation({
@@ -155,13 +158,11 @@ const DataView = () => {
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedIds(documents.map(doc => doc.id));
+      setSelectedIds(paginatedDocuments.map(doc => doc.id));
     } else {
       setSelectedIds([]);
     }
   };
-
-  const totalPages = Math.ceil((documents?.length || 0) / ITEMS_PER_PAGE);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
@@ -180,7 +181,7 @@ const DataView = () => {
         <DataViewActions
           selectedIds={selectedIds}
           onDeleteSelected={handleDeleteSelected}
-          selectAll={selectedIds.length === documents.length}
+          selectAll={selectedIds.length === paginatedDocuments.length}
           onSelectAll={handleSelectAll}
           userRole={userRole}
         />
@@ -188,7 +189,7 @@ const DataView = () => {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="overflow-x-auto">
             <DocumentTable
-              documents={documents}
+              documents={paginatedDocuments}
               selectedIds={selectedIds}
               onSelectRow={handleSelectRow}
               onRowClick={handleRowClick}
@@ -209,10 +210,10 @@ const DataView = () => {
 
           <div className="bg-white p-4 rounded-lg shadow text-center">
             <p className="text-lg font-semibold text-purple-800">
-              Total Records: {documents.length}
+              Total Records: {filteredDocuments.length}
             </p>
             <p className="text-sm text-gray-600">
-              Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} - {Math.min(currentPage * ITEMS_PER_PAGE, documents.length)} of {documents.length}
+              Showing {startIndex + 1} - {Math.min(endIndex, filteredDocuments.length)} of {filteredDocuments.length}
             </p>
           </div>
         </div>
