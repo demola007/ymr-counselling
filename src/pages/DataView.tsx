@@ -13,6 +13,7 @@ import { mockDocuments } from "@/utils/mockData";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -31,6 +32,7 @@ const DataView = () => {
   const { toast } = useToast();
   const { userRole } = useAuth();
   const queryClient = useQueryClient();
+  const isMobile = useIsMobile();
 
   // Fetch documents with filters and pagination
   const { data: filteredDocuments = [], isLoading: isLoadingDocuments } = useQuery({
@@ -169,14 +171,24 @@ const DataView = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-6 mx-auto max-w-7xl">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6 relative">
           <DataViewHeader />
-          <Link to="/new-convert-manual">
-            <Button>
-              <UserPlus className="mr-2 h-4 w-4" />
-              Add Convert Manually
+          {isMobile ? (
+            <Button
+              size="icon"
+              className="fixed bottom-6 right-6 rounded-full shadow-lg z-50"
+              onClick={() => navigate("/new-convert-manual")}
+            >
+              <UserPlus className="h-5 w-5" />
             </Button>
-          </Link>
+          ) : (
+            <Link to="/new-convert-manual">
+              <Button>
+                <UserPlus className="mr-2 h-4 w-4" />
+                Add Convert Manually
+              </Button>
+            </Link>
+          )}
         </div>
         
         <DataViewFilters

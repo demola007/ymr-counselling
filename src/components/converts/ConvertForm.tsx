@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, ArrowLeft } from "lucide-react";
+import { ConvertFormHeader } from "./ConvertFormHeader";
 
 interface ConvertFormProps {
   isOnlineConvert?: boolean;
@@ -52,7 +53,12 @@ export const ConvertForm = ({ isOnlineConvert = true }: ConvertFormProps) => {
   };
 
   return (
-    <div className="space-y-8">
+    <div 
+      className="space-y-8 min-h-screen bg-cover bg-center bg-fixed"
+      style={{
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('/lovable-uploads/95ee6348-b0f6-45c4-8b3c-3a339a302852.png')`,
+      }}
+    >
       {isFromDataPage && (
         <Button
           variant="ghost"
@@ -64,23 +70,9 @@ export const ConvertForm = ({ isOnlineConvert = true }: ConvertFormProps) => {
         </Button>
       )}
 
-      <div className="space-y-4 text-center max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold text-purple-800">New Converts</h2>
-        <p className="text-lg text-gray-700">
-          Did you answer the call of salvation, i.e., "get born again or Rededicate your life to Christ" during YMR 2024 - FLOODGATES?
-        </p>
-        <p className="text-gray-600">
-          Please fill out this short form below. We'll love to keep in touch with you.
-        </p>
-        <p className="text-sm text-gray-500 italic">
-          In line with the relevant Data Protection Laws in Nigeria, by completing this form your consent to the collection 
-          and processing of your Personal Data/Information for the purpose of YMR Counselling and Follow-up activities and 
-          other necessary data processing activities which may arise therefrom, as well as for communication purposes such 
-          as getting information by mail, telephone, email, or other electronic means about our activities.
-        </p>
-      </div>
+      <ConvertFormHeader />
 
-      <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
