@@ -30,7 +30,14 @@ export const FormField = ({
   className
 }: FormFieldProps) => (
   <div className="space-y-2">
-    <Label htmlFor={id}>{label}</Label>
+    <Label htmlFor={id} className="flex items-center gap-2">
+      {label}
+      {id === "phone" && (
+        <span className="text-sm text-muted-foreground">
+          WhatsApp Enabled (e.g. +234 *********) Kindly include your country code
+        </span>
+      )}
+    </Label>
     <Input
       id={id}
       type={type}
