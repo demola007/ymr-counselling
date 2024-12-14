@@ -9,6 +9,8 @@ import Upload from "./pages/Upload";
 import DataView from "./pages/DataView";
 import DetailView from "./pages/DetailView";
 import Login from "./pages/Login";
+import NewConvert from "./pages/NewConvert";
+import NewConvertManual from "./pages/NewConvertManual";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -24,6 +26,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/new-convert" element={<NewConvert />} />
               <Route path="/upload" element={
                 <ProtectedRoute>
                   <Upload />
@@ -37,6 +40,11 @@ const App = () => {
               <Route path="/data/:id" element={
                 <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
                   <DetailView />
+                </ProtectedRoute>
+              } />
+              <Route path="/new-convert-manual" element={
+                <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
+                  <NewConvertManual />
                 </ProtectedRoute>
               } />
               <Route path="*" element={<Navigate to="/" replace />} />

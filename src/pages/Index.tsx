@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Calendar, Upload } from "lucide-react";
+import { Calendar, Upload, UserPlus } from "lucide-react";
 
 const Landing = () => {
   return (
@@ -35,6 +35,12 @@ const Landing = () => {
                   <Button className="w-full sm:w-auto bg-white text-[#1A1F2C] hover:bg-gray-100">
                     <Upload className="mr-2 h-4 w-4" />
                     Access Portal
+                  </Button>
+                </Link>
+                <Link to="/new-convert">
+                  <Button className="w-full sm:w-auto bg-green-600 hover:bg-green-700">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    New Converts
                   </Button>
                 </Link>
                 <a href="https://calendly.com/your-link" target="_blank" rel="noopener noreferrer">

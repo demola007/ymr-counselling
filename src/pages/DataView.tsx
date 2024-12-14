@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataViewHeader } from "@/components/data/DataViewHeader";
@@ -11,6 +11,8 @@ import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { mockDocuments } from "@/utils/mockData";
 import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { UserPlus } from "lucide-react";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -167,7 +169,15 @@ const DataView = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-6 mx-auto max-w-7xl">
-        <DataViewHeader />
+        <div className="flex justify-between items-center mb-6">
+          <DataViewHeader />
+          <Link to="/new-convert-manual">
+            <Button>
+              <UserPlus className="mr-2 h-4 w-4" />
+              Add Convert Manually
+            </Button>
+          </Link>
+        </div>
         
         <DataViewFilters
           searchQuery={searchQuery}
