@@ -25,10 +25,10 @@ const Landing = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 animate-fade-in">
               <h1 className="text-4xl md:text-5xl font-bold">
-                Transform Your Life Through Professional Counselling
+                Transform your life through spiritually sensitive and professional counseling
               </h1>
               <p className="text-lg text-gray-300">
-                Take the first step towards personal growth and emotional well-being with our experienced counsellors.
+                Take the first step towards personal spiritual growth and emotional well-being with our experienced counsellors
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/login">
@@ -70,15 +70,15 @@ const Landing = () => {
               <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
               <div className="space-y-2">
                 <p className="flex items-center">
-                  <span className="font-medium">Phone:</span>
-                  <a href="tel:+2348069459084" className="ml-2 hover:text-blue-300 transition-colors">
-                    +234 806 945 9084
+                  <span className="font-medium">Counselling HOD:</span>
+                  <a href="tel:+2348162495328" className="ml-2 hover:text-blue-300 transition-colors">
+                    +234 816 249 5328
                   </a>
                 </p>
                 <p className="flex items-center">
-                  <span className="font-medium">Email:</span>
-                  <a href="mailto:ymrcounsellingfollowup@gmail.com" className="ml-2 hover:text-blue-300 transition-colors">
-                    ymrcounsellingfollowup@gmail.com
+                  <span className="font-medium">Counselling AHOD:</span>
+                  <a href="tel:+2348141689142" className="ml-2 hover:text-blue-300 transition-colors">
+                    +234 814 168 9142
                   </a>
                 </p>
               </div>

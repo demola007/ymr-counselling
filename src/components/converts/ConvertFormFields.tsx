@@ -45,7 +45,7 @@ export const FormField = ({
       placeholder={placeholder}
       disabled={disabled}
       value={value}
-      className={className}
+      className={`${className} bg-white`}
     />
   </div>
 );
