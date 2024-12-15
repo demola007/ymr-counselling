@@ -16,6 +16,12 @@ const Landing = () => {
             />
             <h1 className="text-2xl font-bold">YMR COUNSELLING</h1>
           </div>
+          <Link 
+            to="/counselor-registration"
+            className="text-sm hover:text-blue-300 transition-colors hidden md:block"
+          >
+            Join the team of Professionals and Matured Counselors
+          </Link>
         </div>
       </nav>
 
@@ -65,7 +71,7 @@ const Landing = () => {
       {/* Footer */}
       <footer className="bg-[#1A1F2C] text-white py-8">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
               <div className="space-y-2">
@@ -95,6 +101,15 @@ const Landing = () => {
                   Schedule your session via Calendly
                 </a>
               </div>
+            </div>
+            <div className="md:hidden">
+              <h3 className="text-xl font-semibold mb-4">Join Us</h3>
+              <Link 
+                to="/counselor-registration"
+                className="text-blue-300 hover:text-blue-400 transition-colors"
+              >
+                Join the team of Professionals and Matured Counselors
+              </Link>
             </div>
           </div>
           <div className="mt-6 pt-6 border-t border-gray-800 text-center">

@@ -11,6 +11,8 @@ import DetailView from "./pages/DetailView";
 import Login from "./pages/Login";
 import NewConvert from "./pages/NewConvert";
 import NewConvertManual from "./pages/NewConvertManual";
+import CounselorRegistration from "./pages/CounselorRegistration";
+import Counselors from "./pages/Counselors";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -27,9 +29,15 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/new-convert" element={<NewConvert />} />
+              <Route path="/counselor-registration" element={<CounselorRegistration />} />
               <Route path="/upload" element={
                 <ProtectedRoute>
                   <Upload />
+                </ProtectedRoute>
+              } />
+              <Route path="/counselors" element={
+                <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
+                  <Counselors />
                 </ProtectedRoute>
               } />
               <Route path="/data" element={
