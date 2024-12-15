@@ -17,6 +17,7 @@ interface FormFieldProps {
   disabled?: boolean;
   value?: string;
   className?: string;
+  hint?: string;
 }
 
 export const FormField = ({ 
@@ -27,14 +28,15 @@ export const FormField = ({
   placeholder,
   disabled,
   value,
-  className
+  className,
+  hint
 }: FormFieldProps) => (
   <div className="space-y-2">
-    <Label htmlFor={id} className="flex items-center gap-2">
+    <Label htmlFor={id} className="flex flex-col gap-1">
       {label}
-      {id === "phone" && (
+      {hint && (
         <span className="text-sm text-muted-foreground">
-          WhatsApp Enabled (e.g. +234 *********) Kindly include your country code
+          {hint}
         </span>
       )}
     </Label>

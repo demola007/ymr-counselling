@@ -14,10 +14,11 @@ export const PersonalInfoSection = () => (
       required 
     />
     <FormField 
-      label="Phone Number WhatsApp Enabled (e.g. +234 *********) Kindly include your country code" 
+      label="Phone Number" 
       id="phone" 
       required 
       placeholder="+234 *********"
+      hint="WhatsApp Enabled (e.g. +234 *********) Kindly include your country code"
     />
     <FormField 
       label="Date of Birth" 
@@ -25,6 +26,16 @@ export const PersonalInfoSection = () => (
       type="date" 
       required 
       placeholder="DD/MM/YYYY"
+    />
+    <SelectField
+      label="Gender"
+      id="gender"
+      required
+      placeholder="Select gender"
+      options={[
+        { value: "Male", label: "Male" },
+        { value: "Female", label: "Female" }
+      ]}
     />
   </>
 );
@@ -107,16 +118,6 @@ export const AdditionalInfoSection = () => (
       label="Denomination" 
       id="denomination" 
       required 
-    />
-    <SelectField
-      label="Gender"
-      id="gender"
-      required
-      placeholder="Select gender"
-      options={[
-        { value: "Male", label: "Male" },
-        { value: "Female", label: "Female" }
-      ]}
     />
     <SelectField
       label="Available for Follow-up"
