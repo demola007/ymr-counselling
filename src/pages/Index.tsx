@@ -18,9 +18,10 @@ const Landing = () => {
           </div>
           <Link 
             to="/counselor-registration"
-            className="text-sm hover:text-blue-300 transition-colors hidden md:block"
+            className="hidden md:inline-flex items-center px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-700 transition-colors text-white text-sm font-medium"
           >
-            Join the team of Professionals and Matured Counselors
+            <UserPlus className="w-4 h-4 mr-2" />
+            Join Our Counselling Team
           </Link>
         </div>
       </nav>
@@ -55,6 +56,15 @@ const Landing = () => {
                     Book a Session
                   </Button>
                 </a>
+              </div>
+              <div className="md:hidden mt-8">
+                <Link 
+                  to="/counselor-registration"
+                  className="inline-flex items-center justify-center w-full px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-700 transition-colors text-white text-sm font-medium"
+                >
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Join Our Counselling Team
+                </Link>
               </div>
             </div>
             <div className="block">
