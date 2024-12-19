@@ -46,10 +46,6 @@ const DataView = () => {
           searchQuery,
           limit: ITEMS_PER_PAGE,
           skip: (currentPage - 1) * ITEMS_PER_PAGE, // Calculate offset
-          // studentFilter,
-          // genderFilter,
-          // // page: currentPage,
-          // perPage: ITEMS_PER_PAGE,
         },
       });
       if (response.data.status === "success") {
@@ -203,31 +199,13 @@ const DataView = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
-       {loading && (
-            <div className="loader-overlay">
-              <ClipLoader color="#3498db" size={50} /> {/* Using ClipLoader */}
-            </div>
-         )}
-      <div className="container px-4 py-6 mx-auto max-w-7xl">
-        <div className="flex justify-between items-center mb-6 relative">
-          <DataViewHeader />
-          {isMobile ? (
-            <Button
-              size="icon"
-              className="fixed bottom-6 right-6 rounded-full shadow-lg z-50"
-              onClick={() => navigate("/new-convert-manual")}
-            >
-              <UserPlus className="h-5 w-5" />
-            </Button>
-          ) : (
-            <Link to="/new-convert-manual">
-              <Button>
-                <UserPlus className="mr-2 h-4 w-4" />
-                Add Convert Manually
-              </Button>
-            </Link>
-          )}
+      {loading && (
+        <div className="loader-overlay">
+          <ClipLoader color="#3498db" size={50} />
         </div>
+      )}
+      <div className="container px-4 py-6 mx-auto max-w-7xl">
+        <DataViewHeader />
         
         <DataViewFilters
           searchQuery={searchQuery}
