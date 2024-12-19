@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, LogOut } from "lucide-react";
+import { ArrowLeft, LogOut, UserPlus } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export const DataViewHeader = () => {
@@ -17,6 +17,16 @@ export const DataViewHeader = () => {
         <h1 className="text-xl md:text-2xl font-bold text-white">Counselling Data</h1>
       </div>
       <div className="flex gap-2">
+        <Link to="/new-convert-manual">
+          <Button 
+            variant="secondary"
+            size="sm" 
+            className="bg-white text-[#1A1F2C] hover:bg-gray-100"
+          >
+            <UserPlus className="w-4 h-4 mr-2" />
+            Add Convert Manually
+          </Button>
+        </Link>
         <Link to="/upload">
           <Button 
             variant="secondary"
@@ -28,10 +38,10 @@ export const DataViewHeader = () => {
           </Button>
         </Link>
         <Button 
-          variant="secondary"
+          variant="destructive"
           size="sm"
           onClick={logout}
-          className="bg-white text-[#1A1F2C] hover:bg-gray-100"
+          className="bg-red-500 hover:bg-red-600"
         >
           <LogOut className="w-4 h-4 mr-2" />
           Logout

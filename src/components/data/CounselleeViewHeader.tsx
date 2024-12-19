@@ -38,10 +38,10 @@ export const CounselleeViewHeader = () => {
           </Button>
         </Link>
         <Button 
-          variant="secondary"
+          variant="destructive"
           size="sm"
           onClick={logout}
-          className="bg-white text-[#1A1F2C] hover:bg-gray-100"
+          className="bg-red-500 hover:bg-red-600"
         >
           <LogOut className="w-4 h-4 mr-2" />
           Logout
