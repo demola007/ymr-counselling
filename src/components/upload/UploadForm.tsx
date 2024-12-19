@@ -43,7 +43,7 @@ export const UploadForm = () => {
         files.forEach((file) => {
           formData.append("files", file);
         });
-      const response = await apiClient.post("/uploads/generate-presigned-urls", formData, {
+      const response = await apiClient.post("uploads/generate-presigned-urls", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

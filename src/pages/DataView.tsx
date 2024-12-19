@@ -41,7 +41,7 @@ const DataView = () => {
   const { data: filteredDocuments = [], isLoading: isLoadingDocuments } = useQuery({
     queryKey: ['converts', searchQuery, studentFilter, genderFilter, currentPage],
     queryFn: async () => {
-      const response = await apiClient.get('/converts', {
+      const response = await apiClient.get('converts', {
         params: {
           searchQuery,
           limit: ITEMS_PER_PAGE,
@@ -71,7 +71,7 @@ const DataView = () => {
   const deleteMutation = useMutation({
     mutationFn: async (ids: number[]) => {
       setLoading(true);
-      await apiClient.delete('/converts/bulk-delete', {
+      await apiClient.delete('converts/bulk-delete', {
         data: { ids },
       });
       return ids;
@@ -104,7 +104,7 @@ const DataView = () => {
   // Update mutation
   const updateMutation = useMutation({
     mutationFn: async (document: any) => {
-      await apiClient.put(`/converts/${document.id}`, document);
+      await apiClient.put(`converts/${document.id}`, document);
       return document;
     },
     onSuccess: () => {

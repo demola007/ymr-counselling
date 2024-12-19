@@ -13,7 +13,7 @@ const DetailView = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["convert", id],
     queryFn: async () => {
-      const response = await apiClient.get(`/converts/${id}`);
+      const response = await apiClient.get(`converts/${id}`);
       return response.data?.data; // Return only the "data" field from the response
     },
     retry: 1, // Retry once on failure

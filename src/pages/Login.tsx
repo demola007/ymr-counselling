@@ -22,7 +22,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await apiClient.post(
-        "/login",
+        "login",
         new URLSearchParams({
           username: email,
           password,
