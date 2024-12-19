@@ -63,7 +63,13 @@ export const CounselorForm = () => {
         <div className="space-y-6">
           <FormField label="Full Name" id="name" required />
           <FormField label="Email" id="email" type="email" required />
-          <FormField label="Phone Number" id="phone_number" required placeholder="+234 *********" />
+          <FormField 
+            label="Phone Number" 
+            id="phone_number" 
+            required 
+            placeholder="+234 *********"
+            hint="WhatsApp Enabled (e.g. +234 *********) Kindly include your country code"
+          />
           <SelectField
             label="Gender"
             id="gender"
@@ -74,7 +80,13 @@ export const CounselorForm = () => {
               { value: "female", label: "Female" }
             ]}
           />
-          <FormField label="Date of Birth" id="date_of_birth" type="date" required />
+          <FormField 
+            label="Date of Birth" 
+            id="date_of_birth" 
+            type="date" 
+            required 
+            placeholder="DD/MM/YYYY"
+          />
           <FormField label="Address" id="address" required />
           <SelectField
             label="Years of Experience"
