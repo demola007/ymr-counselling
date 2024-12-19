@@ -7,7 +7,7 @@ interface ImagePreviewProps {
   selectedFiles: File[];
   removeFile: (index: number) => void;
   isUploading: boolean;
-  uploadProgress: number;
+  uploadProgress: number[];
   handleUpload: () => void;
 }
 

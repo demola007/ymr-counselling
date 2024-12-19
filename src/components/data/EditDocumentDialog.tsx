@@ -90,9 +90,9 @@ export const EditDocumentDialog = ({
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Single">Single</SelectItem>
-                  <SelectItem value="Married">Married</SelectItem>
-                  <SelectItem value="Divorced">Divorced</SelectItem>
+                  <SelectItem value="single">Single</SelectItem>
+                  <SelectItem value="married">Married</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -129,11 +129,11 @@ export const EditDocumentDialog = ({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="isStudent">Student Status</Label>
-              <Select
-                value={document.isStudent}
-                onValueChange={(value) => handleChange("isStudent", value)}
-              >
+            <Label htmlFor="is_student">Are you a student?</Label>
+            <Select
+              value={document.is_student ? "Yes" : "No"} // Convert boolean to string
+              onValueChange={(value) => handleChange("is_student", value)} // Convert string to boolean
+            >
                 <SelectTrigger>
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
@@ -193,15 +193,15 @@ export const EditDocumentDialog = ({
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Male">Male</SelectItem>
-                  <SelectItem value="Female">Female</SelectItem>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="followUp">Available for Follow-up</Label>
               <Select
-                value={document.availability_for_follow_up}
+                value={document.availability_for_follow_up ? "Yes" : "No"}
                 onValueChange={(value) => handleChange("availability_for_follow_up", value)}
               >
                 <SelectTrigger>
