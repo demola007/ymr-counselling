@@ -16,13 +16,6 @@ const Landing = () => {
             />
             <h1 className="text-2xl font-bold">YMR COUNSELLING</h1>
           </div>
-          <Link 
-            to="/counselor-registration"
-            className="hidden md:inline-flex items-center px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-700 transition-colors text-white text-sm font-medium"
-          >
-            <UserPlus className="w-4 h-4 mr-2" />
-            Join Our Counselling Team
-          </Link>
         </div>
       </nav>
 
@@ -50,21 +43,18 @@ const Landing = () => {
                     New Converts
                   </Button>
                 </Link>
+                <Link to="/counselor-registration">
+                  <Button className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Join Our Team
+                  </Button>
+                </Link>
                 <a href="https://calendly.com/your-link" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="w-full sm:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]">
                     <Calendar className="mr-2 h-4 w-4" />
                     Book a Session
                   </Button>
                 </a>
-              </div>
-              <div className="md:hidden mt-8">
-                <Link 
-                  to="/counselor-registration"
-                  className="inline-flex items-center justify-center w-full px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-700 transition-colors text-white text-sm font-medium"
-                >
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  Join Our Counselling Team
-                </Link>
               </div>
             </div>
             <div className="block">
@@ -81,7 +71,7 @@ const Landing = () => {
       {/* Footer */}
       <footer className="bg-[#1A1F2C] text-white py-8">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
               <div className="space-y-2">
@@ -111,15 +101,6 @@ const Landing = () => {
                   Schedule your session via Calendly
                 </a>
               </div>
-            </div>
-            <div className="md:hidden">
-              <h3 className="text-xl font-semibold mb-4">Join Us</h3>
-              <Link 
-                to="/counselor-registration"
-                className="text-blue-300 hover:text-blue-400 transition-colors"
-              >
-                Join the team of Professionals and Matured Counselors
-              </Link>
             </div>
           </div>
           <div className="mt-6 pt-6 border-t border-gray-800 text-center">
