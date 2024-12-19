@@ -16,6 +16,8 @@ import Counsellors from "./pages/Counsellors";
 import CounsellorDetail from "./pages/CounsellorDetail";
 import Counsellee from "./pages/Counsellee";
 import CounselleeDetail from "./pages/CounselleeDetail";
+import AddCounsellor from "./pages/AddCounsellor";
+import AddCounsellee from "./pages/AddCounsellee";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -48,6 +50,11 @@ const App = () => {
                   <CounsellorDetail />
                 </ProtectedRoute>
               } />
+              <Route path="/add-counsellor" element={
+                <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
+                  <AddCounsellor />
+                </ProtectedRoute>
+              } />
               <Route path="/counsellee" element={
                 <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
                   <Counsellee />
@@ -56,6 +63,11 @@ const App = () => {
               <Route path="/counsellee/:id" element={
                 <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
                   <CounselleeDetail />
+                </ProtectedRoute>
+              } />
+              <Route path="/add-counsellee" element={
+                <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
+                  <AddCounsellee />
                 </ProtectedRoute>
               } />
               <Route path="/data" element={

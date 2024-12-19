@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { MainNavigation } from "@/components/MainNavigation";
-import { PageHeader } from "@/components/PageHeader";
+import { CounsellorViewHeader } from "@/components/data/CounsellorViewHeader";
 import { DataViewFilters } from "@/components/data/DataViewFilters";
 import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
@@ -11,6 +10,7 @@ import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { useAuth } from "@/hooks/useAuth";
 import apiClient from "@/utils/apiClient";
 import { ClipLoader } from "react-spinners";
+import "../contexts/loader.css";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -120,12 +120,8 @@ const Counsellors = () => {
         </div>
       )}
       <div className="container px-4 py-6 mx-auto max-w-7xl">
-        <MainNavigation />
-        <PageHeader 
-          title="Counsellors Portal" 
-          description="View and manage counsellor information"
-        />
-
+        <CounsellorViewHeader />
+        
         <DataViewFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}

@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { MainNavigation } from "@/components/MainNavigation";
-import { PageHeader } from "@/components/PageHeader";
+import { CounselleeViewHeader } from "@/components/data/CounselleeViewHeader";
 import { DataViewFilters } from "@/components/data/DataViewFilters";
 import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
@@ -120,12 +119,7 @@ const Counsellee = () => {
         </div>
       )}
       <div className="container px-4 py-6 mx-auto max-w-7xl">
-        <MainNavigation />
-        <PageHeader 
-          title="Counsellee Portal" 
-          description="View and manage counsellee information"
-        />
-
+        <CounselleeViewHeader />
         <DataViewFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
