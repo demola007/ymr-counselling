@@ -16,27 +16,29 @@ export const DataViewHeader = () => {
         />
         <h1 className="text-xl md:text-2xl font-bold text-white">Counselling Data</h1>
       </div>
-      <div className="flex gap-2">
-        <Link to="/new-convert-manual">
-          <Button 
-            variant="secondary"
-            size="sm" 
-            className="bg-white text-[#1A1F2C] hover:bg-gray-100"
-          >
-            <UserPlus className="w-4 h-4 mr-2" />
-            Add Convert Manually
-          </Button>
-        </Link>
-        <Link to="/upload">
-          <Button 
-            variant="secondary"
-            size="sm" 
-            className="bg-white text-[#1A1F2C] hover:bg-gray-100"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Upload
-          </Button>
-        </Link>
+      <div className="flex items-center justify-between w-full md:w-auto gap-4">
+        <div className="flex gap-2">
+          <Link to="/new-convert-manual">
+            <Button 
+              variant="secondary"
+              size="sm" 
+              className="bg-white text-[#1A1F2C] hover:bg-gray-100"
+            >
+              <UserPlus className="w-4 h-4 mr-2" />
+              Add Convert Manually
+            </Button>
+          </Link>
+          <Link to="/upload">
+            <Button 
+              variant="secondary"
+              size="sm" 
+              className="bg-white text-[#1A1F2C] hover:bg-gray-100"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Upload
+            </Button>
+          </Link>
+        </div>
         <Button 
           variant="destructive"
           size="sm"
