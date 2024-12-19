@@ -12,7 +12,7 @@ import apiClient from "@/utils/apiClient";
 import { ClipLoader } from "react-spinners";
 import "../contexts/loader.css";
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 5;
 
 const Counsellors = () => {
   const [searchQuery, setSearchQuery] = useState("");

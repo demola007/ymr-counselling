@@ -11,7 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import apiClient from "@/utils/apiClient";
 import { ClipLoader } from "react-spinners";
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 5;
 
 const Counsellee = () => {
   const [searchQuery, setSearchQuery] = useState("");
