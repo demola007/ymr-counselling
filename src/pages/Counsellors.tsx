@@ -7,6 +7,7 @@ import { DataViewFilters } from "@/components/data/DataViewFilters";
 import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
+import { DataViewActions } from "@/components/data/DataViewActions";
 import { useAuth } from "@/hooks/useAuth";
 import apiClient from "@/utils/apiClient";
 import { ClipLoader } from "react-spinners";
@@ -21,6 +22,7 @@ const Counsellors = () => {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectAll, setSelectAll] = useState(false);
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -62,6 +64,7 @@ const Counsellors = () => {
       setIsDeleteDialogOpen(false);
       setDeletingId(null);
       setSelectedIds([]);
+      setSelectAll(false);
     },
     onError: (error: any) => {
       toast({
@@ -108,6 +111,20 @@ const Counsellors = () => {
     });
   };
 
+  const handleSelectAll = (checked: boolean) => {
+    setSelectAll(checked);
+    if (checked) {
+      setSelectedIds(counsellors?.data?.map(doc => doc.id) || []);
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleDeleteSelected = () => {
+    if (selectedIds.length === 0) return;
+    setIsDeleteDialogOpen(true);
+  };
+
   const paginatedCounsellors = counsellors?.data || [];
   const totalRecords = counsellors?.total || 0;
   const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
@@ -129,6 +146,14 @@ const Counsellors = () => {
           setStudentFilter={() => {}}
           genderFilter="all"
           setGenderFilter={() => {}}
+        />
+
+        <DataViewActions
+          selectedIds={selectedIds}
+          onDeleteSelected={handleDeleteSelected}
+          selectAll={selectAll}
+          onSelectAll={handleSelectAll}
+          userRole={userRole}
         />
 
         <div className="bg-white rounded-lg shadow overflow-hidden">

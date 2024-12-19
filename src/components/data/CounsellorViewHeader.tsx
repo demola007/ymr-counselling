@@ -24,7 +24,7 @@ export const CounsellorViewHeader = () => {
             Add Counsellor
           </Button>
         </Link>
-        <Link to="/data">
+        <Link to="/upload">
           <Button variant="secondary" size="sm" className="bg-white text-[#1A1F2C] hover:bg-gray-100">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Uploads
