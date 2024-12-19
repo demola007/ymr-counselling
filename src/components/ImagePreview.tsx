@@ -20,6 +20,11 @@ export const ImagePreview = ({
 }: ImagePreviewProps) => {
   if (selectedFiles.length === 0) return null;
 
+  // Calculate average progress across all files
+  const averageProgress = uploadProgress.length > 0
+    ? Math.round(uploadProgress.reduce((a, b) => a + b, 0) / uploadProgress.length)
+    : 0;
+
   return (
     <Card className="mt-6">
       <CardHeader>
@@ -55,9 +60,9 @@ export const ImagePreview = ({
         </Button>
         {isUploading && (
           <div className="mt-4">
-            <Progress value={uploadProgress} className="h-2" />
+            <Progress value={averageProgress} className="h-2" />
             <p className="text-sm text-muted-foreground mt-2 text-center">
-              {uploadProgress}% complete
+              {averageProgress}% complete
             </p>
           </div>
         )}
