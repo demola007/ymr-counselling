@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, LogOut, UserPlus } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { ArrowLeft } from "lucide-react";
 
 export const CounsellorViewHeader = () => {
-  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <nav className="flex items-center justify-between gap-4 mb-6 sticky top-0 bg-[#1A1F2C] backdrop-blur-lg z-10 p-4 w-full rounded-lg shadow-sm">
@@ -14,41 +13,17 @@ export const CounsellorViewHeader = () => {
           alt="YMR Logo" 
           className="h-10 w-auto"
         />
-        <h1 className="text-xl md:text-2xl font-bold text-white">Counsellor Data</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-white">Counsellor Details</h1>
       </div>
-      <div className="flex items-center gap-4">
-        <div className="flex gap-2">
-          <Link to="/counselor-registration">
-            <Button 
-              variant="secondary"
-              size="sm" 
-              className="bg-white text-[#1A1F2C] hover:bg-gray-100"
-            >
-              <UserPlus className="w-4 h-4 mr-2" />
-              Add Counsellor
-            </Button>
-          </Link>
-          <Link to="/upload">
-            <Button 
-              variant="secondary"
-              size="sm" 
-              className="bg-white text-[#1A1F2C] hover:bg-gray-100"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Upload
-            </Button>
-          </Link>
-        </div>
-        <Button 
-          variant="destructive"
-          size="sm"
-          onClick={logout}
-          className="bg-red-500 hover:bg-red-600"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
-        </Button>
-      </div>
+      <Button 
+        variant="secondary"
+        size="sm" 
+        onClick={() => navigate("/counsellors")}
+        className="bg-white text-[#1A1F2C] hover:bg-gray-100"
+      >
+        <ArrowLeft className="w-4 h-4 mr-2" />
+        Back to Counsellors
+      </Button>
     </nav>
   );
 };

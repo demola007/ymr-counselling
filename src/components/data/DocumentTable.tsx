@@ -45,12 +45,13 @@ export const DocumentTable = ({
           <TableHead>Email</TableHead>
           <TableHead>Phone</TableHead>
           <TableHead>Gender</TableHead>
-          <TableHead>Student</TableHead>
-          <TableHead>School</TableHead>
-          <TableHead>Age Group</TableHead>
-          <TableHead>Country</TableHead>
-          <TableHead>State</TableHead>
-          <TableHead>Follow Up</TableHead>
+          <TableHead>Date of Birth</TableHead>
+          <TableHead>Address</TableHead>
+          <TableHead>Experience</TableHead>
+          <TableHead>Certified</TableHead>
+          <TableHead>Denomination</TableHead>
+          <TableHead>YMR 2024</TableHead>
+          <TableHead>Training</TableHead>
           {userRole === "super-admin" && <TableHead>Actions</TableHead>}
         </TableRow>
       </TableHeader>
@@ -74,12 +75,13 @@ export const DocumentTable = ({
             <TableCell>{doc.email}</TableCell>
             <TableCell>{doc.phone_number}</TableCell>
             <TableCell>{doc.gender}</TableCell>
-            <TableCell>{doc.is_student ? "Yes" : "No"}</TableCell>
-            <TableCell>{doc.school}</TableCell>
-            <TableCell>{doc.age_group}</TableCell>
-            <TableCell>{doc.country}</TableCell>
-            <TableCell>{doc.state}</TableCell>
-            <TableCell>{doc.availability_for_follow_up ? "Yes" : "No"}</TableCell>
+            <TableCell>{doc.date_of_birth}</TableCell>
+            <TableCell>{doc.address}</TableCell>
+            <TableCell>{doc.years_of_experience}</TableCell>
+            <TableCell>{doc.has_certification ? "Yes" : "No"}</TableCell>
+            <TableCell>{doc.denomination}</TableCell>
+            <TableCell>{doc.will_attend_ymr_2024 ? "Yes" : "No"}</TableCell>
+            <TableCell>{doc.is_available_for_training ? "Yes" : "No"}</TableCell>
             {userRole === "super-admin" && (
               <TableCell>
                 <div className="flex items-center gap-2">
