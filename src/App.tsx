@@ -12,7 +12,10 @@ import Login from "./pages/Login";
 import NewConvert from "./pages/NewConvert";
 import NewConvertManual from "./pages/NewConvertManual";
 import CounselorRegistration from "./pages/CounselorRegistration";
-import Counselors from "./pages/Counselors";
+import Counsellors from "./pages/Counsellors";
+import CounsellorDetail from "./pages/CounsellorDetail";
+import Counsellee from "./pages/Counsellee";
+import CounselleeDetail from "./pages/CounselleeDetail";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -35,9 +38,24 @@ const App = () => {
                   <Upload />
                 </ProtectedRoute>
               } />
-              <Route path="/counselors" element={
+              <Route path="/counsellors" element={
                 <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
-                  <Counselors />
+                  <Counsellors />
+                </ProtectedRoute>
+              } />
+              <Route path="/counsellors/:id" element={
+                <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
+                  <CounsellorDetail />
+                </ProtectedRoute>
+              } />
+              <Route path="/counsellee" element={
+                <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
+                  <Counsellee />
+                </ProtectedRoute>
+              } />
+              <Route path="/counsellee/:id" element={
+                <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
+                  <CounselleeDetail />
                 </ProtectedRoute>
               } />
               <Route path="/data" element={

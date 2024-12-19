@@ -1,10 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export const MainNavigation = () => {
   const { userRole, logout } = useAuth();
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <nav className="bg-[#1A1F2C] text-white p-4 rounded-lg mb-8 shadow-lg">
@@ -19,14 +24,32 @@ export const MainNavigation = () => {
         </div>
         <div className="flex flex-wrap gap-4">
           {(userRole === "admin" || userRole === "super-admin") && (
-            <Link to="/data">
-              <Button 
-                variant="secondary" 
-                className="bg-white text-[#1A1F2C] hover:bg-gray-100"
-              >
-                View Documents
-              </Button>
-            </Link>
+            <>
+              <Link to="/data">
+                <Button 
+                  variant="secondary" 
+                  className={`${isActive('/data') ? 'bg-purple-100' : 'bg-white'} text-[#1A1F2C] hover:bg-gray-100`}
+                >
+                  Converts Portal
+                </Button>
+              </Link>
+              <Link to="/counsellors">
+                <Button 
+                  variant="secondary" 
+                  className={`${isActive('/counsellors') ? 'bg-purple-100' : 'bg-white'} text-[#1A1F2C] hover:bg-gray-100`}
+                >
+                  Counsellors Portal
+                </Button>
+              </Link>
+              <Link to="/counsellee">
+                <Button 
+                  variant="secondary" 
+                  className={`${isActive('/counsellee') ? 'bg-purple-100' : 'bg-white'} text-[#1A1F2C] hover:bg-gray-100`}
+                >
+                  Counsellee Portal
+                </Button>
+              </Link>
+            </>
           )}
           <Button 
             variant="secondary"
