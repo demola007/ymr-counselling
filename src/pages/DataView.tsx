@@ -9,15 +9,13 @@ import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { DataViewActions } from "@/components/data/DataViewActions";
 import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
+import { mockDocuments } from "@/utils/mockData";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import apiClient from "@/utils/apiClient";
-import { ClipLoader } from "react-spinners";
-import "../contexts/loader.css"
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 10;
 
 const DataView = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,7 +27,6 @@ const DataView = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [loading, setLoading] = useState<boolean>(false); 
   
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -39,91 +36,61 @@ const DataView = () => {
 
   // Fetch documents with filters and pagination
   const { data: filteredDocuments = [], isLoading: isLoadingDocuments } = useQuery({
-    queryKey: ['converts', searchQuery, studentFilter, genderFilter, currentPage],
+    queryKey: ['documents', searchQuery, studentFilter, genderFilter],
     queryFn: async () => {
-      const response = await apiClient.get('/converts', {
-        params: {
-          searchQuery,
-          limit: ITEMS_PER_PAGE,
-          skip: (currentPage - 1) * ITEMS_PER_PAGE, // Calculate offset
-          // studentFilter,
-          // genderFilter,
-          // // page: currentPage,
-          // perPage: ITEMS_PER_PAGE,
-        },
+      // Simulate API call with mockDocuments
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return mockDocuments.filter((doc) => {
+        const matchesSearch =
+          doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          doc.email.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStudent = studentFilter === "all" || doc.isStudent === studentFilter;
+        const matchesGender = genderFilter === "all" || doc.gender === genderFilter;
+        return matchesSearch && matchesStudent && matchesGender;
       });
-      if (response.data.status === "success") {
-        return response.data;
-      } else {
-        throw new Error('Failed to fetch documents');
-      }
     },
   });
 
   // Calculate pagination
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedDocuments = filteredDocuments?.data || [];
-  const totalRecords = filteredDocuments?.total || 0;
-  const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
-  
+  const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredDocuments.length / ITEMS_PER_PAGE);
+
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: async (ids: number[]) => {
-      setLoading(true);
-      await apiClient.delete('/converts/bulk-delete', {
-        data: { ids },
-      });
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
       return ids;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['converts'] });
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
       toast({
         title: "Success",
-        description: "Convert data deleted successfully",
+        description: "Documents deleted successfully",
       });
       setIsDeleteDialogOpen(false);
       setDeletingId(null);
       setSelectedIds([]);
-    },
-    onError: (error: any) => {
-      // Handle errors here
-      toast({
-        title: "Error",
-        description: error?.response?.data?.message || "Failed to delete convert data",
-        variant: "destructive",
-      });
-      console.error("Delete Error:", error);
-    },
-    onSettled: () => {
-      // Cleanup logic after success or error
-      setLoading(false);
     },
   });
 
   // Update mutation
   const updateMutation = useMutation({
     mutationFn: async (document: any) => {
-      await apiClient.put(`/converts/${document.id}`, document);
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
       return document;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['converts'] });
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
       toast({
         title: "Success",
-        description: "Convert data updated successfully",
+        description: "Document updated successfully",
       });
       setIsEditDialogOpen(false);
       setEditingDocument(null);
-    },
-    onError: (error: any) => {
-      // Handle errors here
-      toast({
-        title: "Error",
-        description: error?.response?.data?.message || "Failed to update convert data",
-        variant: "destructive",
-      });
-      console.error("Update Error:", error);
     },
   });
 
@@ -203,11 +170,6 @@ const DataView = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
-       {loading && (
-            <div className="loader-overlay">
-              <ClipLoader color="#3498db" size={50} /> {/* Using ClipLoader */}
-            </div>
-         )}
       <div className="container px-4 py-6 mx-auto max-w-7xl">
         <div className="flex justify-between items-center mb-6 relative">
           <DataViewHeader />
@@ -241,7 +203,7 @@ const DataView = () => {
         <DataViewActions
           selectedIds={selectedIds}
           onDeleteSelected={handleDeleteSelected}
-          selectAll={selectedIds?.length === paginatedDocuments?.length}
+          selectAll={selectedIds.length === paginatedDocuments.length}
           onSelectAll={handleSelectAll}
           userRole={userRole}
         />
@@ -270,11 +232,10 @@ const DataView = () => {
 
           <div className="bg-white p-4 rounded-lg shadow text-center">
             <p className="text-lg font-semibold text-purple-800">
-              Total Records: {totalRecords}
+              Total Records: {filteredDocuments.length}
             </p>
             <p className="text-sm text-gray-600">
-              Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} - {" "}
-              {Math.min(currentPage * ITEMS_PER_PAGE, totalRecords)} of {totalRecords}
+              Showing {startIndex + 1} - {Math.min(endIndex, filteredDocuments.length)} of {filteredDocuments.length}
             </p>
           </div>
         </div>

@@ -74,12 +74,12 @@ export const DocumentTable = ({
             <TableCell>{doc.email}</TableCell>
             <TableCell>{doc.phone_number}</TableCell>
             <TableCell>{doc.gender}</TableCell>
-            <TableCell>{doc.is_student ? "Yes" : "No"}</TableCell>
+            <TableCell>{doc.isStudent}</TableCell>
             <TableCell>{doc.school}</TableCell>
             <TableCell>{doc.age_group}</TableCell>
             <TableCell>{doc.country}</TableCell>
             <TableCell>{doc.state}</TableCell>
-            <TableCell>{doc.availability_for_follow_up ? "Yes" : "No"}</TableCell>
+            <TableCell>{doc.availability_for_follow_up}</TableCell>
             {userRole === "super-admin" && (
               <TableCell>
                 <div className="flex items-center gap-2">
