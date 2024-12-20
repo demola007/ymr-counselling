@@ -22,7 +22,13 @@ export const CounselorForm = () => {
     setIsLoading(true);
     
     try {
-      const response = await apiClient.post("/counsellors", data);
+      // Parse years_of_experience to number before sending to API
+      const formData = {
+        ...data,
+        years_of_experience: Number(data.years_of_experience)
+      };
+      
+      const response = await apiClient.post("/counsellors", formData);
       
       if (response.status === 201 && response.data?.status === "success") {
         toast({

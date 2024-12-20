@@ -44,17 +44,12 @@ export const CounselorFormFields = () => {
         id="address" 
         required 
       />
-      <SelectField
+      <FormField
         label="Years of Experience"
         id="years_of_experience"
+        type="number"
         required
-        placeholder="Select years of experience"
-        options={[
-          { value: "0-2", label: "0-2 years" },
-          { value: "3-5", label: "3-5 years" },
-          { value: "6-10", label: "6-10 years" },
-          { value: "10+", label: "More than 10 years" }
-        ]}
+        placeholder="Enter number of years"
       />
       <SelectField
         label="Do you have a professional counselling certification?"

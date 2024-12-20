@@ -5,7 +5,7 @@ export interface CounselorFormData {
   gender: string;
   date_of_birth: string;
   address: string;
-  years_of_experience: string;
+  years_of_experience: number;
   has_certification: string;
   denomination: string;
   will_attend_ymr_2024: string;
