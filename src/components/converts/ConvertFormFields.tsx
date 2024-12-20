@@ -3,7 +3,7 @@ import { SelectField } from "./SelectField";
 
 export { FormField, SelectField };
 
-export const ConvertFormFields = ({ form, isOnlineConvert }: { form: any, isOnlineConvert: boolean }) => {
+export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolean }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <FormField 
