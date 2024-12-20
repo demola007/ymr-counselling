@@ -6,7 +6,7 @@ import { Loader2, ArrowLeft } from "lucide-react";
 import { ConvertFormHeader } from "./ConvertFormHeader";
 import { ConvertFormFields } from "./ConvertFormFields";
 import apiClient from "@/utils/apiClient";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 
 interface ConvertFormData {
   name: string;
@@ -33,7 +33,7 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<ConvertFormData>();
+  const methods = useForm<ConvertFormData>();
 
   const isFromDataPage = location.pathname === "/new-convert-manual";
   const isFromIndexPage = location.pathname === "/new-convert";
@@ -91,29 +91,31 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
 
       <ConvertFormHeader />
 
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
-        <ConvertFormFields form={form} isOnlineConvert={isOnlineConvert} />
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(handleSubmit)} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
+          <ConvertFormFields isOnlineConvert={isOnlineConvert} />
 
-        <div className="flex justify-end gap-4 mt-8">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleCancel}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              "Submit"
-            )}
-          </Button>
-        </div>
-      </form>
+          <div className="flex justify-end gap-4 mt-8">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </div>
+        </form>
+      </FormProvider>
     </div>
   );
 };
