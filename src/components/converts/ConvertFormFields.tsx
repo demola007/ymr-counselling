@@ -31,11 +31,11 @@ export const FormField = ({
   className,
   hint
 }: FormFieldProps) => (
-  <div className="space-y-2">
-    <Label htmlFor={id} className="flex flex-col gap-1">
+  <div className="space-y-2 w-full">
+    <Label htmlFor={id} className="text-gray-700">
       {label}
       {hint && (
-        <span className="text-sm text-muted-foreground">
+        <span className="block text-sm text-muted-foreground mt-0.5">
           {hint}
         </span>
       )}
@@ -47,7 +47,10 @@ export const FormField = ({
       placeholder={placeholder}
       disabled={disabled}
       value={value}
-      className={`${className} bg-white`}
+      className={cn(
+        "w-full bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200",
+        className
+      )}
     />
   </div>
 );
@@ -67,15 +70,22 @@ export const SelectField = ({
   options,
   placeholder
 }: SelectFieldProps) => (
-  <div className="space-y-2">
-    <Label htmlFor={id}>{label}</Label>
+  <div className="space-y-2 w-full">
+    <Label htmlFor={id} className="text-gray-700">{label}</Label>
     <Select required={required}>
-      <SelectTrigger id={id} className="bg-white">
+      <SelectTrigger 
+        id={id} 
+        className="w-full bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200"
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className="bg-white">
         {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
+          <SelectItem 
+            key={option.value} 
+            value={option.value}
+            className="hover:bg-purple-50"
+          >
             {option.label}
           </SelectItem>
         ))}

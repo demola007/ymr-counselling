@@ -38,6 +38,15 @@
   @apply transition-all duration-300 hover:bg-opacity-90;
 }
 
+/* Form styling */
+.form-grid {
+  @apply grid gap-6 md:grid-cols-2;
+}
+
+.form-field {
+  @apply flex flex-col space-y-2;
+}
+
 /* Pagination styles */
 .pagination-link {
   @apply cursor-pointer;
