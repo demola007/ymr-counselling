@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectFieldProps } from "./types";
+import { Form } from "@/components/ui/form";
 
 export const SelectField = ({
   label,
@@ -16,36 +17,45 @@ export const SelectField = ({
   options,
   placeholder
 }: SelectFieldProps) => {
-  const { control } = useFormContext();
+  const form = useFormContext();
+  
+  if (!form) {
+    console.error('SelectField must be used within a FormProvider');
+    return null;
+  }
+
+  const { control } = form;
   
   return (
-    <div className="space-y-2 w-full">
-      <Label htmlFor={id} className="text-gray-700">{label}</Label>
-      <Controller
-        name={id}
-        control={control}
-        rules={{ required }}
-        render={({ field }) => (
-          <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-            <SelectTrigger 
-              className="w-full bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200"
-            >
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              {options.map((option) => (
-                <SelectItem 
-                  key={option.value} 
-                  value={option.value}
-                  className="hover:bg-purple-50"
-                >
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-      />
-    </div>
+    <Form.Field>
+      <div className="space-y-2 w-full">
+        <Label htmlFor={id} className="text-gray-700">{label}</Label>
+        <Controller
+          name={id}
+          control={control}
+          rules={{ required }}
+          render={({ field }) => (
+            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
+              <SelectTrigger 
+                className="w-full bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200"
+              >
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                {options.map((option) => (
+                  <SelectItem 
+                    key={option.value} 
+                    value={option.value}
+                    className="hover:bg-purple-50"
+                  >
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+      </div>
+    </Form.Field>
   );
 };
