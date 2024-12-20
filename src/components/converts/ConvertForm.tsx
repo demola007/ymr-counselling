@@ -13,6 +13,7 @@ export const ConvertForm = ({ isOnlineConvert = true }: { isOnlineConvert?: bool
   const [isLoading, setIsLoading] = useState(false);
 
   const isFromDataPage = location.pathname === "/new-convert-manual";
+  const isFromIndexPage = location.pathname === "/new-convert";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,17 +42,15 @@ export const ConvertForm = ({ isOnlineConvert = true }: { isOnlineConvert?: bool
   };
 
   return (
-    <div 
-      className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-8"
-    >
-      {isFromDataPage && (
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-8">
+      {(isFromDataPage || isFromIndexPage) && (
         <Button
           variant="ghost"
           onClick={handleCancel}
           className="flex items-center gap-2 ml-4"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Data
+          {isFromDataPage ? 'Back to Data' : 'Back to Home'}
         </Button>
       )}
 
