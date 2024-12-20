@@ -22,7 +22,7 @@ interface FormFieldProps {
   hint?: string;
 }
 
-const FormField = ({ 
+export const FormField = ({ 
   label, 
   id, 
   type = "text", 
@@ -68,7 +68,7 @@ interface SelectFieldProps {
   placeholder?: string;
 }
 
-const SelectField = ({
+export const SelectField = ({
   label,
   id,
   required = false,
