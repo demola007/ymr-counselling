@@ -1,4 +1,4 @@
-import { ConvertForm } from "@/components/converts/ConvertForm";
+import { ConvertFormContainer } from "@/components/converts/ConvertFormContainer";
 import { PageHeader } from "@/components/PageHeader";
 
 const NewConvert = () => {
@@ -8,7 +8,7 @@ const NewConvert = () => {
         title="New Convert Registration" 
         description="Please fill in the details below to register a new convert."
       />
-      <ConvertForm isOnlineConvert={true} />
+      <ConvertFormContainer isOnlineConvert={true} />
     </div>
   );
 };
