@@ -36,8 +36,8 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
         required
         placeholder="Select gender"
         options={[
-          { value: "Male", label: "Male" },
-          { value: "Female", label: "Female" }
+          { value: "male", label: "Male" },
+          { value: "female", label: "Female" }
         ]}
       />
       <FormField 
@@ -66,9 +66,9 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
         required
         placeholder="Select status"
         options={[
-          { value: "Single", label: "Single" },
-          { value: "Married", label: "Married" },
-          { value: "Other", label: "Other" }
+          { value: "single", label: "Single" },
+          { value: "married", label: "Married" },
+          { value: "other", label: "Other" }
         ]}
       />
       <SelectField
