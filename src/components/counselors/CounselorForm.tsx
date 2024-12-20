@@ -3,8 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft } from "lucide-react";
-import { FormField, SelectField } from "@/components/converts/ConvertFormFields";
+import { FormField } from "@/components/converts/FormField";
+import { SelectField } from "@/components/converts/SelectField";
 import { useAuth } from "@/hooks/useAuth";
+import { useForm, FormProvider } from "react-hook-form";
+
+interface CounselorFormData {
+  name: string;
+  email: string;
+  phone_number: string;
+  gender: string;
+  date_of_birth: string;
+  address: string;
+  years_of_experience: string;
+  has_certification: string;
+  denomination: string;
+  will_attend_ymr_2024: string;
+  is_available_for_training: string;
+}
 
 export const CounselorForm = () => {
   const navigate = useNavigate();
@@ -12,8 +28,9 @@ export const CounselorForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { isAuthenticated } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const methods = useForm<CounselorFormData>();
+
+  const handleSubmit = async (data: CounselorFormData) => {
     setIsLoading(true);
     
     try {
@@ -76,117 +93,119 @@ export const CounselorForm = () => {
           <p className="text-gray-600">Apply to become part of our team of professionals and matured counselors.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
-          <div className="space-y-6">
-            <FormField 
-              label="Full Name" 
-              id="name" 
-              required 
-            />
-            <FormField 
-              label="Email" 
-              id="email" 
-              type="email" 
-              required 
-            />
-            <FormField 
-              label="Phone Number" 
-              id="phone_number" 
-              required 
-              placeholder="+234 *********"
-              hint="WhatsApp Enabled (e.g. +234 *********) Kindly include your country code"
-            />
-            <SelectField
-              label="Gender"
-              id="gender"
-              required
-              placeholder="Select gender"
-              options={[
-                { value: "male", label: "Male" },
-                { value: "female", label: "Female" }
-              ]}
-            />
-            <FormField 
-              label="Date of Birth" 
-              id="date_of_birth" 
-              type="date" 
-              required 
-              placeholder="DD/MM/YYYY"
-            />
-            <FormField 
-              label="Address" 
-              id="address" 
-              required 
-            />
-            <SelectField
-              label="Years of Experience"
-              id="years_of_experience"
-              required
-              placeholder="Select years of experience"
-              options={[
-                { value: "0-2", label: "0-2 years" },
-                { value: "3-5", label: "3-5 years" },
-                { value: "6-10", label: "6-10 years" },
-                { value: "10+", label: "More than 10 years" }
-              ]}
-            />
-            <SelectField
-              label="Do you have a professional counselling certification?"
-              id="has_certification"
-              required
-              placeholder="Select option"
-              options={[
-                { value: "true", label: "Yes" },
-                { value: "false", label: "No" }
-              ]}
-            />
-            <FormField 
-              label="Denomination" 
-              id="denomination" 
-              required 
-            />
-            <SelectField
-              label="Will you be present at YMR 2024 - FLOODGATES?"
-              id="will_attend_ymr_2024"
-              required
-              placeholder="Select option"
-              options={[
-                { value: "true", label: "Yes" },
-                { value: "false", label: "No" }
-              ]}
-            />
-            <SelectField
-              label="Are you available for interactions and further trainings?"
-              id="is_available_for_training"
-              required
-              placeholder="Select option"
-              options={[
-                { value: "true", label: "Yes" },
-                { value: "false", label: "No" }
-              ]}
-            />
-          </div>
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-8 max-w-2xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
+            <div className="space-y-6">
+              <FormField 
+                label="Full Name" 
+                id="name" 
+                required 
+              />
+              <FormField 
+                label="Email" 
+                id="email" 
+                type="email" 
+                required 
+              />
+              <FormField 
+                label="Phone Number" 
+                id="phone_number" 
+                required 
+                placeholder="+234 *********"
+                hint="WhatsApp Enabled (e.g. +234 *********) Kindly include your country code"
+              />
+              <SelectField
+                label="Gender"
+                id="gender"
+                required
+                placeholder="Select gender"
+                options={[
+                  { value: "male", label: "Male" },
+                  { value: "female", label: "Female" }
+                ]}
+              />
+              <FormField 
+                label="Date of Birth" 
+                id="date_of_birth" 
+                type="date" 
+                required 
+                placeholder="DD/MM/YYYY"
+              />
+              <FormField 
+                label="Address" 
+                id="address" 
+                required 
+              />
+              <SelectField
+                label="Years of Experience"
+                id="years_of_experience"
+                required
+                placeholder="Select years of experience"
+                options={[
+                  { value: "0-2", label: "0-2 years" },
+                  { value: "3-5", label: "3-5 years" },
+                  { value: "6-10", label: "6-10 years" },
+                  { value: "10+", label: "More than 10 years" }
+                ]}
+              />
+              <SelectField
+                label="Do you have a professional counselling certification?"
+                id="has_certification"
+                required
+                placeholder="Select option"
+                options={[
+                  { value: "true", label: "Yes" },
+                  { value: "false", label: "No" }
+                ]}
+              />
+              <FormField 
+                label="Denomination" 
+                id="denomination" 
+                required 
+              />
+              <SelectField
+                label="Will you be present at YMR 2024 - FLOODGATES?"
+                id="will_attend_ymr_2024"
+                required
+                placeholder="Select option"
+                options={[
+                  { value: "true", label: "Yes" },
+                  { value: "false", label: "No" }
+                ]}
+              />
+              <SelectField
+                label="Are you available for interactions and further trainings?"
+                id="is_available_for_training"
+                required
+                placeholder="Select option"
+                options={[
+                  { value: "true", label: "Yes" },
+                  { value: "false", label: "No" }
+                ]}
+              />
+            </div>
 
-          <div className="flex justify-end gap-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => navigate(isAuthenticated ? "/counsellors" : "/")}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Submitting...
-                </>
-              ) : (
-                "Submit Application"
-              )}
-            </Button>
-          </div>
-        </form>
+            <div className="flex justify-end gap-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate(isAuthenticated ? "/counsellors" : "/")}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Application"
+                )}
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
       </div>
     </div>
   );
