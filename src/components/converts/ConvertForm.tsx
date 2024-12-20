@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { ConvertFormHeader } from "./ConvertFormHeader";
 import { FormField, SelectField } from "./ConvertFormFields";
+import apiClient from "@/utils/apiClient";
 
 export const ConvertForm = ({ isOnlineConvert = true }: { isOnlineConvert?: boolean }) => {
   const navigate = useNavigate();
@@ -18,14 +19,45 @@ export const ConvertForm = ({ isOnlineConvert = true }: { isOnlineConvert?: bool
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const payload = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      gender: formData.get("gender"),
+      phone_number: formData.get("phone"),
+      date_of_birth: formData.get("dob"),
+      relationship_status: formData.get("relationship"),
+      country: formData.get("country"),
+      state: formData.get("state"),
+      address: formData.get("address"),
+      nearest_bus_stop: formData.get("busStop"),
+      is_student: formData.get("isStudent") === "Yes",
+      age_group: formData.get("ageGroup"),
+      school: formData.get("school"),
+      occupation: formData.get("occupation"),
+      denomination: formData.get("denomination"),
+      availability_for_follow_up: formData.get("followUp") === "Yes",
+      online_convert: isOnlineConvert
+    };
+    console.log("paylaoad", payload)
     try {
       // TODO: Implement form submission logic
-      toast({
-        title: "Success",
-        description: "Convert data saved successfully",
-      });
-      navigate(isFromDataPage ? "/data" : "/");
+      const response = await apiClient.post("/converts", payload);
+      console.log("response", response)
+      if (response.status === 200 && response.data?.status === "success") {
+        toast({ 
+          title: "Success", 
+          description: "Convert data saved successfully" 
+        });
+        navigate(isFromDataPage ? "/data" : "/");
+      } else {
+        // Handle unexpected success response formats or status codes
+        toast({
+          title: "Error",
+          description: response.data?.message || "Failed to save convert data. Please try again."
+        });
+      }
     } catch (error) {
       toast({
         title: "Error",
@@ -59,12 +91,12 @@ export const ConvertForm = ({ isOnlineConvert = true }: { isOnlineConvert?: bool
       <form onSubmit={handleSubmit} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField 
-            label="Name" 
+            label="Name"
             id="name" 
             required 
           />
           <FormField 
-            label="Email" 
+            label="Email"
             id="email" 
             type="email" 
             required 
@@ -120,7 +152,7 @@ export const ConvertForm = ({ isOnlineConvert = true }: { isOnlineConvert?: bool
             options={[
               { value: "Single", label: "Single" },
               { value: "Married", label: "Married" },
-              { value: "Divorced", label: "Divorced" }
+              { value: "Other", label: "Other" }
             ]}
           />
           <SelectField
