@@ -48,11 +48,10 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
     try {
       const payload = {
         ...data,
-        online_convert: isOnlineConvert
+        online: isOnlineConvert
       };
-      
       const response = await apiClient.post("/converts", payload);
-      if (response.status === 200 && response.data?.status === "success") {
+      if (response.status === 201 && response.data?.status === "success") {
         toast({ 
           title: "Success", 
           description: "Convert data saved successfully" 
