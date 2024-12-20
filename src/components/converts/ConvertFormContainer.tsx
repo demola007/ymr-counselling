@@ -33,18 +33,21 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const methods = useForm<ConvertFormData>();
+  const methods = useForm<ConvertFormData>({
+    defaultValues: {
+      is_student: false,
+      availability_for_follow_up: false,
+    }
+  });
 
   const isFromDataPage = location.pathname === "/new-convert-manual";
   const isFromIndexPage = location.pathname === "/new-convert";
 
-  const handleSubmit = async (data: ConvertFormData) => {
+  const onSubmit = async (data: ConvertFormData) => {
     setIsLoading(true);
     try {
       const payload = {
         ...data,
-        is_student: data.is_student === true,
-        availability_for_follow_up: data.availability_for_follow_up === true,
         online_convert: isOnlineConvert
       };
       
@@ -92,7 +95,7 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
       <ConvertFormHeader />
 
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(handleSubmit)} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
           <ConvertFormFields isOnlineConvert={isOnlineConvert} />
 
           <div className="flex justify-end gap-4 mt-8">
