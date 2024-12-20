@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
-interface FormFieldProps {
+export interface FormFieldProps {
   label: string;
   id: string;
   type?: string;
@@ -60,7 +60,7 @@ export const FormField = ({
   );
 };
 
-interface SelectFieldProps {
+export interface SelectFieldProps {
   label: string;
   id: string;
   required?: boolean;
