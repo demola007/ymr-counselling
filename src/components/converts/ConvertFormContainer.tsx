@@ -7,7 +7,6 @@ import { ConvertFormHeader } from "./ConvertFormHeader";
 import { ConvertFormFields } from "./ConvertFormFields";
 import apiClient from "@/utils/apiClient";
 import { useForm, FormProvider } from "react-hook-form";
-import { Form } from "@/components/ui/form";
 
 interface ConvertFormData {
   name: string;
@@ -95,31 +94,29 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
       <ConvertFormHeader />
 
       <FormProvider {...methods}>
-        <Form>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
-            <ConvertFormFields isOnlineConvert={isOnlineConvert} />
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
+          <ConvertFormFields isOnlineConvert={isOnlineConvert} />
 
-            <div className="flex justify-end gap-4 mt-8">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleCancel}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  "Submit"
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
+          <div className="flex justify-end gap-4 mt-8">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </div>
+        </form>
       </FormProvider>
     </div>
   );

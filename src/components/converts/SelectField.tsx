@@ -1,5 +1,4 @@
-import { useFormContext, Controller } from "react-hook-form";
-import { Label } from "@/components/ui/label";
+import { useFormContext } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -8,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectFieldProps } from "./types";
-import { Form } from "@/components/ui/form";
+import { FormField as FormFieldUI, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 
 export const SelectField = ({
   label,
@@ -23,18 +22,15 @@ export const SelectField = ({
     console.error('SelectField must be used within a FormProvider');
     return null;
   }
-
-  const { control } = form;
   
   return (
-    <Form.Field>
-      <div className="space-y-2 w-full">
-        <Label htmlFor={id} className="text-gray-700">{label}</Label>
-        <Controller
-          name={id}
-          control={control}
-          rules={{ required }}
-          render={({ field }) => (
+    <FormFieldUI
+      control={form.control}
+      name={id}
+      render={({ field }) => (
+        <FormItem className="space-y-2 w-full">
+          <FormLabel className="text-gray-700">{label}</FormLabel>
+          <FormControl>
             <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
               <SelectTrigger 
                 className="w-full bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200"
@@ -53,9 +49,9 @@ export const SelectField = ({
                 ))}
               </SelectContent>
             </Select>
-          )}
-        />
-      </div>
-    </Form.Field>
+          </FormControl>
+        </FormItem>
+      )}
+    />
   );
 };
