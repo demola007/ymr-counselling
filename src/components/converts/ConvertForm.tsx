@@ -4,19 +4,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { ConvertFormHeader } from "./ConvertFormHeader";
-import { FormField } from "./ConvertFormFields";
-import {
-  PersonalInfoSection,
-  LocationSection,
-  StatusSection,
-  AdditionalInfoSection,
-} from "./ConvertFormSections";
+import { FormField, SelectField } from "./ConvertFormFields";
 
-interface ConvertFormProps {
-  isOnlineConvert?: boolean;
-}
-
-export const ConvertForm = ({ isOnlineConvert = true }: ConvertFormProps) => {
+export const ConvertForm = ({ isOnlineConvert = true }: { isOnlineConvert?: boolean }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
@@ -52,16 +42,13 @@ export const ConvertForm = ({ isOnlineConvert = true }: ConvertFormProps) => {
 
   return (
     <div 
-      className="space-y-8 min-h-screen bg-cover bg-center bg-fixed"
-      style={{
-        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('/lovable-uploads/95ee6348-b0f6-45c4-8b3c-3a339a302852.png')`,
-      }}
+      className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-8"
     >
       {isFromDataPage && (
         <Button
           variant="ghost"
           onClick={handleCancel}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 ml-4"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Data
@@ -70,38 +57,129 @@ export const ConvertForm = ({ isOnlineConvert = true }: ConvertFormProps) => {
 
       <ConvertFormHeader />
 
-      <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
+      <form onSubmit={handleSubmit} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-6 col-span-2 md:col-span-1">
-            <h3 className="text-lg font-semibold">Personal Information</h3>
-            <PersonalInfoSection />
-          </div>
-          
-          <div className="space-y-6 col-span-2 md:col-span-1">
-            <h3 className="text-lg font-semibold">Location</h3>
-            <LocationSection />
-          </div>
-          
-          <div className="space-y-6 col-span-2 md:col-span-1">
-            <h3 className="text-lg font-semibold">Status</h3>
-            <StatusSection />
-          </div>
-          
-          <div className="space-y-6 col-span-2 md:col-span-1">
-            <h3 className="text-lg font-semibold">Additional Information</h3>
-            <AdditionalInfoSection />
-          </div>
-
+          <FormField 
+            label="Name" 
+            id="name" 
+            required 
+          />
+          <FormField 
+            label="Email" 
+            id="email" 
+            type="email" 
+            required 
+          />
+          <FormField 
+            label="Phone Number" 
+            id="phone" 
+            required 
+            placeholder="+234 *********"
+            hint="WhatsApp Enabled (e.g. +234 *********) Kindly include your country code"
+          />
+          <FormField 
+            label="Date of Birth" 
+            id="dob" 
+            type="date" 
+            required 
+          />
+          <SelectField
+            label="Gender"
+            id="gender"
+            required
+            placeholder="Select gender"
+            options={[
+              { value: "Male", label: "Male" },
+              { value: "Female", label: "Female" }
+            ]}
+          />
+          <FormField 
+            label="Country" 
+            id="country" 
+            required 
+          />
+          <FormField 
+            label="State" 
+            id="state" 
+            required 
+          />
+          <FormField 
+            label="Address" 
+            id="address" 
+            required 
+          />
+          <FormField 
+            label="Nearest Bus Stop" 
+            id="busStop" 
+            required 
+          />
+          <SelectField
+            label="Relationship Status"
+            id="relationship"
+            required
+            placeholder="Select status"
+            options={[
+              { value: "Single", label: "Single" },
+              { value: "Married", label: "Married" },
+              { value: "Divorced", label: "Divorced" }
+            ]}
+          />
+          <SelectField
+            label="Are you a student?"
+            id="isStudent"
+            required
+            placeholder="Select option"
+            options={[
+              { value: "Yes", label: "Yes" },
+              { value: "No", label: "No" }
+            ]}
+          />
+          <SelectField
+            label="Age Group"
+            id="ageGroup"
+            required
+            placeholder="Select age group"
+            options={[
+              { value: "18-24", label: "18-24" },
+              { value: "25-34", label: "25-34" },
+              { value: "35-44", label: "35-44" },
+              { value: "45+", label: "45+" }
+            ]}
+          />
+          <FormField 
+            label="School" 
+            id="school"
+          />
+          <FormField 
+            label="Occupation" 
+            id="occupation" 
+            required 
+          />
+          <FormField 
+            label="Denomination" 
+            id="denomination" 
+            required 
+          />
+          <SelectField
+            label="Available for Follow-up"
+            id="followUp"
+            required
+            placeholder="Select option"
+            options={[
+              { value: "Yes", label: "Yes" },
+              { value: "No", label: "No" }
+            ]}
+          />
           <FormField 
             label="Online Convert" 
             id="onlineConvert" 
             value={isOnlineConvert ? "Yes" : "No"} 
             disabled 
-            className="bg-gray-100 col-span-2"
+            className="bg-gray-100"
           />
         </div>
 
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-4 mt-8">
           <Button
             type="button"
             variant="outline"
