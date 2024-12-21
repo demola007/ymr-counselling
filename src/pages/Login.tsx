@@ -42,6 +42,7 @@ const Login = () => {
           title: "Login failed",
           description: "Invalid credentials. Please try again.",
           variant: "destructive",
+          className: "bg-red-500 text-white border-none",
         });
       }
     } catch (error) {
@@ -49,6 +50,7 @@ const Login = () => {
         title: "Login failed",
         description: `${error?.response?.data?.detail}`,
         variant: "destructive",
+        className: "bg-red-500 text-white border-none",
       });
       console.error("Login failed:", error?.response?.data?.detail);
     } finally {
