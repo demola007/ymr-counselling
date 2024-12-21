@@ -6,11 +6,34 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CounselleeFormFields } from "@/components/counsellee/CounselleeFormFields";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import apiClient from "@/utils/apiClient";
+import { useState } from "react";
+
+interface CounselleeFormData {
+  name: string;
+  gender: string;
+  email: string;
+  phone_number: string;
+  date_of_birth: string;
+  relationship_status: string;
+  country: string;
+  state: string;
+  address: string;
+  nearest_bus_stop: string;
+  is_student: boolean;
+  age_group: string;
+  school: string;
+  occupation: string;
+  denomination: string;
+  counselling_reason: string;
+  counsellor_name?: string;
+  counsellor_comments?: string;
+}
 
 const AddCounsellee = () => {
   const { toast } = useToast();
-  const form = useForm();
-  const isLoading = false;
+  const form = useForm<CounselleeFormData>();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated } = useAuth();
@@ -23,18 +46,38 @@ const AddCounsellee = () => {
     }
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: CounselleeFormData) => {
+    setIsLoading(true);
     try {
-      // Submit data to your API or backend
-      toast({
-        title: "Success",
-        description: "Counsellee registered successfully!",
+      const response = await apiClient.post('/counsellee', {
+        ...data,
+        is_student: data.is_student === 'true',
+        counsellor_name: "",
+        counsellor_comments: ""
       });
-    } catch (error) {
+
+      if (response.status === 201 && response.data?.status === "success") {
+        toast({
+          title: "Success",
+          description: "Counsellee registered successfully!",
+        });
+        // Navigate based on where the user came from
+        if (isAuthenticated) {
+          navigate('/counsellee');
+        } else {
+          navigate('/');
+        }
+      } else {
+        throw new Error(response.data?.message || "Failed to register counsellee");
+      }
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "There was an error registering the counsellee.",
+        description: error?.response?.data?.message || "There was an error registering the counsellee.",
+        variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
