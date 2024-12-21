@@ -3,6 +3,8 @@ export interface CounselorFormData {
   email: string;
   phone_number: string;
   gender: string;
+  country: string;
+  state: string;
   date_of_birth: string;
   address: string;
   years_of_experience: number;
