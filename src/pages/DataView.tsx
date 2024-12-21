@@ -1,21 +1,19 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataViewHeader } from "@/components/data/DataViewHeader";
 import { DataViewFilters } from "@/components/data/DataViewFilters";
-import { EditDocumentDialog } from "@/components/data/EditDocumentDialog";
+import { EditCounselleeDialog } from "@/components/data/EditCounselleeDialog";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { DataViewActions } from "@/components/data/DataViewActions";
 import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { UserPlus } from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile";
-import apiClient from "@/utils/apiClient";
 import { ClipLoader } from "react-spinners";
-import "../contexts/loader.css"
+import apiClient from "@/utils/apiClient";
+import "../contexts/loader.css";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -35,7 +33,6 @@ const DataView = () => {
   const { toast } = useToast();
   const { userRole } = useAuth();
   const queryClient = useQueryClient();
-  const isMobile = useIsMobile();
 
   // Fetch documents with filters and pagination
   const { data: filteredDocuments = [], isLoading: isLoadingDocuments } = useQuery({
@@ -141,41 +138,17 @@ const DataView = () => {
 
   const handleEditClick = (e: React.MouseEvent, document: any) => {
     e.stopPropagation();
-    if (userRole !== "super-admin") {
-      toast({
-        title: "Access Denied",
-        description: "Only super-admin users can edit documents.",
-        variant: "destructive",
-      });
-      return;
-    }
     setEditingDocument(document);
     setIsEditDialogOpen(true);
   };
 
   const handleDeleteClick = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
-    if (userRole !== "super-admin") {
-      toast({
-        title: "Access Denied",
-        description: "Only super-admin users can delete documents.",
-        variant: "destructive",
-      });
-      return;
-    }
     setDeletingId(id);
     setIsDeleteDialogOpen(true);
   };
 
   const handleDeleteSelected = () => {
-    if (userRole !== "super-admin") {
-      toast({
-        title: "Access Denied",
-        description: "Only super-admin users can delete documents.",
-        variant: "destructive",
-      });
-      return;
-    }
     setIsDeleteDialogOpen(true);
   };
 
@@ -257,7 +230,7 @@ const DataView = () => {
           </div>
         </div>
 
-        <EditDocumentDialog
+        <EditCounselleeDialog
           open={isEditDialogOpen}
           onOpenChange={setIsEditDialogOpen}
           document={editingDocument}

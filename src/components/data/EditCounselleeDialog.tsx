@@ -14,32 +14,23 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-interface Field {
-  key: string;
-  label: string;
-  type: "text" | "email" | "date" | "select" | "textarea" | "checkbox";
-  options?: { value: string; label: string }[];
-}
-
-interface EditDocumentDialogProps {
+interface EditCounselleeDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   document: any;
   onSubmit: (e: React.FormEvent) => void;
   setEditingDocument: (doc: any) => void;
   isLoading?: boolean;
-  fields?: Field[];
 }
 
-export const EditDocumentDialog = ({
+export const EditCounselleeDialog = ({
   open,
   onOpenChange,
   document,
   onSubmit,
   setEditingDocument,
   isLoading = false,
-  fields,
-}: EditDocumentDialogProps) => {
+}: EditCounselleeDialogProps) => {
   if (!document) return null;
 
   const handleChange = (field: string, value: any) => {
@@ -89,7 +80,7 @@ export const EditDocumentDialog = ({
     { key: "attended_to", label: "Attended To", type: "checkbox" as const }
   ];
 
-  const renderField = (field: Field) => {
+  const renderField = (field: any) => {
     switch (field.type) {
       case "select":
         return (
@@ -101,7 +92,7 @@ export const EditDocumentDialog = ({
               <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
             </SelectTrigger>
             <SelectContent>
-              {field.options?.map((option) => (
+              {field.options?.map((option: any) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -146,13 +137,11 @@ export const EditDocumentDialog = ({
     }
   };
 
-  const fieldsToRender = fields || [...counselleeFields, ...counsellorFields];
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[800px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Record</DialogTitle>
+          <DialogTitle>Edit Counsellee</DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-6">
           <Card>

@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { DataViewFilters } from "@/components/data/DataViewFilters";
 import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
-import { EditDocumentDialog } from "@/components/data/EditDocumentDialog";
+import { EditCounsellorDialog } from "@/components/data/EditCounsellorDialog";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -154,7 +154,7 @@ const Counselors = () => {
           />
         </div>
 
-        <EditDocumentDialog
+        <EditCounsellorDialog
           open={isEditDialogOpen}
           onOpenChange={setIsEditDialogOpen}
           document={editingDocument}
