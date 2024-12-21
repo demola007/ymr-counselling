@@ -43,7 +43,7 @@ export const useCounsellees = (searchQuery: string, currentPage: number, itemsPe
     onError: (error: any) => {
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to delete counsellee(s)",
+        description: error?.response?.data?.detail || "Failed to delete counsellee(s)",
         variant: "destructive",
       });
     },
@@ -64,7 +64,7 @@ export const useCounsellees = (searchQuery: string, currentPage: number, itemsPe
     onError: (error: any) => {
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to update counsellee",
+        description: error?.response?.data?.detail || "Failed to update counsellee",
         variant: "destructive",
       });
     },

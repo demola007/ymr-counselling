@@ -40,14 +40,14 @@ export const CounselorForm = () => {
       } else {
         toast({
           title: "Error",
-          description: response.data?.message || "Failed to submit application",
+          description: response.data?.detail || "Failed to submit application",
           variant: "destructive",
         });
       }
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to submit application",
+        description: error?.response?.data?.detail || "Failed to submit application",
         variant: "destructive",
       });
     } finally {

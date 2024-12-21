@@ -21,7 +21,7 @@ const Landing = () => {
               alt="YMR Logo" 
               className="h-12 w-auto"
             />
-            <h1 className="text-2xl font-bold">YMR COUNSELLING</h1>
+            <h1 className="text-2xl font-bold">YMR 2024 - FLOODGATES</h1>
           </div>
         </div>
       </nav>

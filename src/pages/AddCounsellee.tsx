@@ -49,6 +49,7 @@ const AddCounsellee = () => {
   const onSubmit = async (data: CounselleeFormData) => {
     setIsLoading(true);
     try {
+      console.log("data", data)
       const response = await apiClient.post('/counsellee', {
         ...data,
         is_student: data.is_student === 'true',  // Now comparing string with string
@@ -67,12 +68,13 @@ const AddCounsellee = () => {
           navigate('/');
         }
       } else {
-        throw new Error(response.data?.message || "Failed to register counsellee");
+        throw new Error(response.data?.detail || "Failed to register counsellee");
       }
     } catch (error: any) {
+      console.log("errror", error)
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "There was an error registering the counsellee.",
+        description: error?.response?.data?.detail || "There was an error registering the counsellee.",
         variant: "destructive"
       });
     } finally {

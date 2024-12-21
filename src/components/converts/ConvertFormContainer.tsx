@@ -60,7 +60,7 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
       } else {
         toast({
           title: "Error",
-          description: response.data?.message || "Failed to save convert data. Please try again."
+          description: response.data?.detail || "Failed to save convert data. Please try again."
         });
       }
     } catch (error) {

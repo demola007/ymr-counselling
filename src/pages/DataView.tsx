@@ -77,7 +77,7 @@ const DataView = () => {
     onError: (error: any) => {
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to delete convert data",
+        description: error?.response?.data?.detail || "Failed to delete convert data",
         variant: "destructive",
       });
     },
