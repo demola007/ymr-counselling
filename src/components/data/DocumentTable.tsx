@@ -9,6 +9,7 @@ import { Convert } from "@/types/convert";
 interface Column {
   key: string;
   label: string;
+  width?: string;
 }
 
 interface DocumentTableProps {
@@ -51,13 +52,29 @@ export const DocumentTable = ({
     return value;
   };
 
+  const getColumnWidth = (key: string) => {
+    switch (key) {
+      case 'email':
+        return 'w-[180px] min-w-[180px]';
+      case 'address':
+        return 'w-[300px] min-w-[300px]';
+      default:
+        return '';
+    }
+  };
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           {userRole === "super-admin" && <TableHead className="w-[50px]" />}
           {columns.map((column) => (
-            <TableHead key={column.key}>{column.label}</TableHead>
+            <TableHead 
+              key={column.key} 
+              className={getColumnWidth(column.key)}
+            >
+              {column.label}
+            </TableHead>
           ))}
           {userRole === "super-admin" && <TableHead>Actions</TableHead>}
         </TableRow>
@@ -79,7 +96,10 @@ export const DocumentTable = ({
               </TableCell>
             )}
             {columns.map((column) => (
-              <TableCell key={column.key}>
+              <TableCell 
+                key={column.key}
+                className={getColumnWidth(column.key)}
+              >
                 {formatValue(doc[column.key])}
               </TableCell>
             ))}
