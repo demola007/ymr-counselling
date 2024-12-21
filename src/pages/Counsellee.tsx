@@ -5,6 +5,7 @@ import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { CounselleeList } from "@/components/counsellees/CounselleeList";
 import { useCounsellees } from "@/hooks/useCounsellees";
 import { ClipLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 import "../contexts/loader.css";
 
 const ITEMS_PER_PAGE = 5;
@@ -23,6 +24,11 @@ const Counsellee = () => {
   } = useCounsellees(searchQuery, currentPage, ITEMS_PER_PAGE);
 
   const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
+  const navigate = useNavigate();
+
+  const handleAddCounsellee = () => {
+    navigate('/add-counsellee', { state: { from: '/counsellee' } });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
