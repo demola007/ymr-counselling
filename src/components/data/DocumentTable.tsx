@@ -54,10 +54,12 @@ export const DocumentTable = ({
 
   const getColumnWidth = (key: string) => {
     switch (key) {
+      case 'name':
+        return 'w-[220px] min-w-[220px]';
       case 'email':
         return 'w-[180px] min-w-[180px]';
       case 'address':
-        return 'w-[300px] min-w-[300px]';
+        return 'w-[250px] min-w-[250px]';
       default:
         return '';
     }
