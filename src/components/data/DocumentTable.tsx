@@ -4,21 +4,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Edit2, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-
-interface Column {
-  key: string;
-  label: string;
-}
+import { Convert, convertColumns } from "@/types/convert";
 
 interface DocumentTableProps {
-  documents: any[];
+  documents: Convert[];
   selectedIds: number[];
   onSelectRow: (id: number) => void;
   onRowClick: (id: number) => void;
-  onEditClick: (e: React.MouseEvent, document: any) => void;
+  onEditClick: (e: React.MouseEvent, document: Convert) => void;
   onDeleteClick: (e: React.MouseEvent, id: number) => void;
   isLoading: boolean;
-  columns?: Column[];
 }
 
 export const DocumentTable = ({
@@ -29,7 +24,6 @@ export const DocumentTable = ({
   onEditClick,
   onDeleteClick,
   isLoading,
-  columns = [],
 }: DocumentTableProps) => {
   const { userRole } = useAuth();
 
@@ -43,30 +37,21 @@ export const DocumentTable = ({
     );
   }
 
+  const formatValue = (value: any) => {
+    if (typeof value === 'boolean') {
+      return value ? 'Yes' : 'No';
+    }
+    return value;
+  };
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           {userRole === "super-admin" && <TableHead className="w-[50px]" />}
-          {columns.length > 0 ? (
-            columns.map((column) => (
-              <TableHead key={column.key}>{column.label}</TableHead>
-            ))
-          ) : (
-            <>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Gender</TableHead>
-              <TableHead>Date of Birth</TableHead>
-              <TableHead>Address</TableHead>
-              <TableHead>Experience</TableHead>
-              <TableHead>Certified</TableHead>
-              <TableHead>Denomination</TableHead>
-              <TableHead>YMR 2024</TableHead>
-              <TableHead>Training</TableHead>
-            </>
-          )}
+          {convertColumns.map((column) => (
+            <TableHead key={column.key}>{column.label}</TableHead>
+          ))}
           {userRole === "super-admin" && <TableHead>Actions</TableHead>}
         </TableRow>
       </TableHeader>
@@ -86,25 +71,11 @@ export const DocumentTable = ({
                 />
               </TableCell>
             )}
-            {columns.length > 0 ? (
-              columns.map((column) => (
-                <TableCell key={column.key}>{doc.displayFields[column.key]}</TableCell>
-              ))
-            ) : (
-              <>
-                <TableCell className="font-medium">{doc.name}</TableCell>
-                <TableCell>{doc.email}</TableCell>
-                <TableCell>{doc.phone_number}</TableCell>
-                <TableCell>{doc.gender}</TableCell>
-                <TableCell>{doc.date_of_birth}</TableCell>
-                <TableCell>{doc.address}</TableCell>
-                <TableCell>{doc.years_of_experience}</TableCell>
-                <TableCell>{doc.has_certification ? "Yes" : "No"}</TableCell>
-                <TableCell>{doc.denomination}</TableCell>
-                <TableCell>{doc.will_attend_ymr_2024 ? "Yes" : "No"}</TableCell>
-                <TableCell>{doc.is_available_for_training ? "Yes" : "No"}</TableCell>
-              </>
-            )}
+            {convertColumns.map((column) => (
+              <TableCell key={column.key}>
+                {formatValue(doc[column.key as keyof Convert])}
+              </TableCell>
+            ))}
             {userRole === "super-admin" && (
               <TableCell>
                 <div className="flex items-center gap-2">
