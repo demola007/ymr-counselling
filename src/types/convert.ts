@@ -8,7 +8,10 @@ export interface Convert {
   country: string;
   state: string;
   address: string;
+  relationship_status: string;
+  occupation: string;
   is_student: boolean;
+  school: string;
   age_group: string;
   denomination: string;
   nearest_bus_stop: string;

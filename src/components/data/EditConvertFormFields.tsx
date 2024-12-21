@@ -47,6 +47,21 @@ export const EditConvertFormFields = () => {
         required 
       />
       <FormField 
+        label="Relationship Status" 
+        id="relationship_status" 
+        required 
+      />
+      <FormField 
+        label="Nearest B.Stop" 
+        id="nearest_bus_stop" 
+        required 
+      />
+      <FormField 
+        label="Occupation" 
+        id="occupation" 
+        required 
+      />
+      <FormField 
         label="Address" 
         id="address" 
         required 
@@ -60,6 +75,11 @@ export const EditConvertFormFields = () => {
           { value: "true", label: "Yes" },
           { value: "false", label: "No" }
         ]}
+      />
+      <FormField 
+        label="School" 
+        id="school" 
+        required 
       />
       <SelectField
         label="Age Group"
