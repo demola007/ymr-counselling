@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Calendar, Upload, UserPlus } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const Landing = () => {
   return (
@@ -49,12 +56,38 @@ const Landing = () => {
                     Join Our Team
                   </Button>
                 </Link>
-                <a href="https://calendly.com/your-link" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="w-full sm:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    Book a Session
-                  </Button>
-                </a>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full sm:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]">
+                      <Calendar className="mr-2 h-4 w-4" />
+                      Book a Session
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Book Your Counselling Session</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <Link to="/add-counsellee">
+                        <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                          <UserPlus className="mr-2 h-4 w-4" />
+                          Register for Counseling Session
+                        </Button>
+                      </Link>
+                      <a 
+                        href="https://calendly.com/your-link" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-full"
+                      >
+                        <Button variant="outline" className="w-full border-2">
+                          <Calendar className="mr-2 h-4 w-4" />
+                          Schedule Session
+                        </Button>
+                      </a>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
             <div className="block">
