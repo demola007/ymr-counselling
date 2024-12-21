@@ -11,6 +11,7 @@ export interface Convert {
   is_student: boolean;
   age_group: string;
   denomination: string;
+  nearest_bus_stop: string;
   availability_for_follow_up: boolean;
   online: boolean;
 }

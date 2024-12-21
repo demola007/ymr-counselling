@@ -36,11 +36,12 @@ export const EditConvertDialog = ({
         country: document.country || "",
         state: document.state || "",
         address: document.address || "",
-        is_student: document.is_student || false,
+        nearest_bus_stop: document.nearest_bus_stop || "",
+        is_student: document.is_student ? "true" : "false",
         age_group: document.age_group || "",
         denomination: document.denomination || "",
-        availability_for_follow_up: document.availability_for_follow_up || false,
-        online: document.online || false,
+        availability_for_follow_up: document.availability_for_follow_up ? "true" : "false",
+        online: document.online ? "true" : "false",
       });
     }
   }, [document, open, methods]);
