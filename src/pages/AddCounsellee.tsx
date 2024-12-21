@@ -15,14 +15,14 @@ const AddCounsellee = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   
-  // Check if we came from the counsellee page
-  const fromPath = location.state?.from || '/';
+  // Get the previous path from location state
+  const from = location.state?.from;
 
   const handleBack = () => {
-    if (isAuthenticated && fromPath === '/counsellee') {
-      navigate('/counsellee');
+    if (isAuthenticated && from === '/counsellee') {
+      navigate('/counsellee', { replace: true });
     } else {
-      navigate('/');
+      navigate('/', { replace: true });
     }
   };
 
@@ -49,7 +49,7 @@ const AddCounsellee = () => {
         onClick={handleBack}
         className="mb-6"
       >
-        <ArrowLeft className="mr-2 h-4 w-4" />
+        <ArrowLeft className="w-4 h-4 mr-2" />
         Back
       </Button>
 
