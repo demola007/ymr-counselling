@@ -8,6 +8,7 @@ import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { DataViewActions } from "@/components/data/DataViewActions";
+import { EditDocumentDialog } from "@/components/data/EditDocumentDialog";
 import { useAuth } from "@/hooks/useAuth";
 import apiClient from "@/utils/apiClient";
 import { ClipLoader } from "react-spinners";
@@ -23,6 +24,8 @@ const Counsellors = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectAll, setSelectAll] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingDocument, setEditingDocument] = useState<any>(null);
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -78,6 +81,36 @@ const Counsellors = () => {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async (document: any) => {
+      await apiClient.put(`counsellors/${document.id}`, document);
+      return document;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['counsellors'] });
+      toast({
+        title: "Success",
+        description: "Counsellor updated successfully",
+      });
+      setIsEditDialogOpen(false);
+      setEditingDocument(null);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error?.response?.data?.message || "Failed to update counsellor",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingDocument) {
+      updateMutation.mutate(editingDocument);
+    }
+  };
+
   const handleDeleteConfirm = () => {
     const idsToDelete = deletingId ? [deletingId] : selectedIds;
     deleteMutation.mutate(idsToDelete);
@@ -85,6 +118,20 @@ const Counsellors = () => {
 
   const handleRowClick = (id: number) => {
     navigate(`/counsellors/${id}`);
+  };
+
+  const handleEditClick = (e: React.MouseEvent, document: any) => {
+    e.stopPropagation();
+    if (userRole !== "super-admin") {
+      toast({
+        title: "Access Denied",
+        description: "Only super-admin users can edit counsellors.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setEditingDocument(document);
+    setIsEditDialogOpen(true);
   };
 
   const handleDeleteClick = (e: React.MouseEvent, id: number) => {
@@ -163,7 +210,7 @@ const Counsellors = () => {
               selectedIds={selectedIds}
               onSelectRow={handleSelectRow}
               onRowClick={handleRowClick}
-              onEditClick={() => {}}
+              onEditClick={handleEditClick}
               onDeleteClick={handleDeleteClick}
               isLoading={isLoading}
             />
@@ -188,6 +235,15 @@ const Counsellors = () => {
             </p>
           </div>
         </div>
+
+        <EditDocumentDialog
+          open={isEditDialogOpen}
+          onOpenChange={setIsEditDialogOpen}
+          document={editingDocument}
+          onSubmit={handleEditSubmit}
+          setEditingDocument={setEditingDocument}
+          isLoading={updateMutation.isPending}
+        />
 
         <DeleteConfirmDialog
           open={isDeleteDialogOpen}
