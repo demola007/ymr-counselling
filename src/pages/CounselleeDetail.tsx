@@ -42,7 +42,26 @@ const CounselleeDetail = () => {
     );
   }
 
-  const fields = Object.entries(data).filter(([key]) => key !== "id");
+  const fields = [
+    { key: "name", label: "Name" },
+    { key: "gender", label: "Gender" },
+    { key: "email", label: "Email" },
+    { key: "phone_number", label: "Phone Number" },
+    { key: "date_of_birth", label: "Date of Birth" },
+    { key: "relationship_status", label: "Relationship Status" },
+    { key: "country", label: "Country" },
+    { key: "state", label: "State" },
+    { key: "address", label: "Address" },
+    { key: "nearest_bus_stop", label: "Nearest Bus Stop" },
+    { key: "is_student", label: "Is Student" },
+    { key: "age_group", label: "Age Group" },
+    { key: "school", label: "School" },
+    { key: "occupation", label: "Occupation" },
+    { key: "denomination", label: "Denomination" },
+    { key: "counselling_reason", label: "Counselling Reason" },
+    { key: "counsellor_name", label: "Counsellor Name" },
+    { key: "counsellor_comments", label: "Counsellor Comments" }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
@@ -70,15 +89,19 @@ const CounselleeDetail = () => {
 
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="grid gap-6 md:grid-cols-2">
-            {fields.map(([key, value]) => (
+            {fields.map(({ key, label }) => (
               <div
                 key={key}
                 className="space-y-2 p-4 bg-purple-50/50 rounded-lg hover:bg-purple-50 transition-colors"
               >
-                <h3 className="text-sm font-medium text-purple-600 capitalize">
-                  {key.replace(/_/g, " ")}
+                <h3 className="text-sm font-medium text-purple-600">
+                  {label}
                 </h3>
-                <p className="text-lg text-gray-900">{String(value) || "N/A"}</p>
+                <p className="text-lg text-gray-900">
+                  {data[key] !== undefined && data[key] !== null 
+                    ? String(data[key]) 
+                    : "N/A"}
+                </p>
               </div>
             ))}
           </div>

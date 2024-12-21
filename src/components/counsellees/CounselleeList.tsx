@@ -105,6 +105,17 @@ export const CounselleeList = ({
     setIsDeleteDialogOpen(true);
   };
 
+  const getDisplayFields = (document: any) => {
+    return {
+      name: document.name || "N/A",
+      email: document.email || "N/A",
+      phone_number: document.phone_number || "N/A",
+      counsellor_name: document.counsellor_name || "N/A",
+      counselling_reason: document.counselling_reason || "N/A",
+      date_of_birth: document.date_of_birth || "N/A",
+    };
+  };
+
   return (
     <>
       <DataViewActions
@@ -118,13 +129,24 @@ export const CounselleeList = ({
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <DocumentTable
-            documents={counsellees}
+            documents={counsellees.map(doc => ({
+              ...doc,
+              displayFields: getDisplayFields(doc)
+            }))}
             selectedIds={selectedIds}
             onSelectRow={handleSelectRow}
             onRowClick={handleRowClick}
             onEditClick={handleEditClick}
             onDeleteClick={handleDeleteClick}
             isLoading={isLoading}
+            columns={[
+              { key: "name", label: "Name" },
+              { key: "email", label: "Email" },
+              { key: "phone_number", label: "Phone Number" },
+              { key: "counsellor_name", label: "Counsellor" },
+              { key: "counselling_reason", label: "Reason" },
+              { key: "date_of_birth", label: "Date of Birth" },
+            ]}
           />
         </div>
       </div>
@@ -136,6 +158,41 @@ export const CounselleeList = ({
         onSubmit={handleEditSubmit}
         setEditingDocument={setEditingDocument}
         isLoading={false}
+        fields={[
+          { key: "name", label: "Name", type: "text" },
+          { key: "gender", label: "Gender", type: "select", options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" }
+          ]},
+          { key: "email", label: "Email", type: "email" },
+          { key: "phone_number", label: "Phone Number", type: "text" },
+          { key: "date_of_birth", label: "Date of Birth", type: "date" },
+          { key: "relationship_status", label: "Relationship Status", type: "select", options: [
+            { value: "single", label: "Single" },
+            { value: "married", label: "Married" },
+            { value: "other", label: "Other" }
+          ]},
+          { key: "country", label: "Country", type: "text" },
+          { key: "state", label: "State", type: "text" },
+          { key: "address", label: "Address", type: "text" },
+          { key: "nearest_bus_stop", label: "Nearest Bus Stop", type: "text" },
+          { key: "is_student", label: "Is Student", type: "select", options: [
+            { value: "true", label: "Yes" },
+            { value: "false", label: "No" }
+          ]},
+          { key: "age_group", label: "Age Group", type: "select", options: [
+            { value: "18-24", label: "18-24" },
+            { value: "25-34", label: "25-34" },
+            { value: "35-44", label: "35-44" },
+            { value: "45+", label: "45+" }
+          ]},
+          { key: "school", label: "School", type: "text" },
+          { key: "occupation", label: "Occupation", type: "text" },
+          { key: "denomination", label: "Denomination", type: "text" },
+          { key: "counselling_reason", label: "Counselling Reason", type: "textarea" },
+          { key: "counsellor_name", label: "Counsellor Name", type: "text" },
+          { key: "counsellor_comments", label: "Counsellor Comments", type: "textarea" }
+        ]}
       />
 
       <DeleteConfirmDialog
