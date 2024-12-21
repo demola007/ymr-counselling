@@ -15,7 +15,7 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [loading, setLoading] = useState<boolean>(false); 
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,11 +57,22 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-secondary to-white">
-      <div className="w-full max-w-md p-8 glass-panel rounded-lg shadow-lg">
+    <div 
+      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+      style={{ 
+        backgroundImage: 'url("/lovable-uploads/c7337a42-2b96-45b9-b377-8e15df75f694.png")',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundBlendMode: 'overlay'
+      }}
+    >
+      <div className="w-full max-w-md p-8 backdrop-blur-md bg-white/10 rounded-lg shadow-2xl border border-white/20">
         <div className="flex justify-between items-center mb-8">
           <Link to="/">
-            <Button variant="ghost" size="sm" className="text-purple-900 hover:bg-purple-100">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-white hover:bg-white/20 transition-all"
+            >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
@@ -69,8 +80,8 @@ const Login = () => {
         </div>
         
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold mb-2">YMR Global</h1>
-          <p className="text-muted-foreground">AI-Powered Data Capture System</p>
+          <h1 className="text-3xl font-bold mb-2 text-white">YMR Global</h1>
+          <p className="text-white/80">AI-Powered Data Capture System</p>
         </div>
         
         <form onSubmit={handleLogin} className="space-y-6">
@@ -81,7 +92,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full"
+              className="w-full bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40"
             />
           </div>
           <div>
@@ -91,17 +102,20 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full"
+              className="w-full bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40"
             />
           </div>
-          <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+          <Button 
+            type="submit" 
+            className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/40 backdrop-blur-lg transition-all duration-300"
+          >
             Login
           </Button>
         </form>
         
         {loading && (
           <div className="loader-overlay">
-            <ClipLoader color="#3498db" size={50} />
+            <ClipLoader color="#ffffff" size={50} />
           </div>
         )}
       </div>
