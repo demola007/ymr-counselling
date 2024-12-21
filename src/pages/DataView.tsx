@@ -4,13 +4,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataViewHeader } from "@/components/data/DataViewHeader";
 import { DataViewFilters } from "@/components/data/DataViewFilters";
-import { EditCounselleeDialog } from "@/components/data/EditCounselleeDialog";
+import { EditConvertDialog } from "@/components/data/EditConvertDialog";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { DataViewActions } from "@/components/data/DataViewActions";
 import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/button";
 import { ClipLoader } from "react-spinners";
 import apiClient from "@/utils/apiClient";
 import "../contexts/loader.css";
@@ -27,14 +26,13 @@ const DataView = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [loading, setLoading] = useState<boolean>(false); 
+  const [loading, setLoading] = useState<boolean>(false);
   
   const navigate = useNavigate();
   const { toast } = useToast();
   const { userRole } = useAuth();
   const queryClient = useQueryClient();
 
-  // Fetch documents with filters and pagination
   const { data: filteredDocuments = [], isLoading: isLoadingDocuments } = useQuery({
     queryKey: ['converts', searchQuery, studentFilter, genderFilter, currentPage],
     queryFn: async () => {
@@ -42,25 +40,22 @@ const DataView = () => {
         params: {
           searchQuery,
           limit: ITEMS_PER_PAGE,
-          skip: (currentPage - 1) * ITEMS_PER_PAGE, // Calculate offset
+          skip: (currentPage - 1) * ITEMS_PER_PAGE,
         },
       });
       if (response.data.status === "success") {
         return response.data;
-      } else {
-        throw new Error('Failed to fetch documents');
       }
+      throw new Error('Failed to fetch documents');
     },
   });
 
-  // Calculate pagination
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedDocuments = filteredDocuments?.data || [];
   const totalRecords = filteredDocuments?.total || 0;
   const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
   
-  // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: async (ids: number[]) => {
       setLoading(true);
@@ -80,25 +75,21 @@ const DataView = () => {
       setSelectedIds([]);
     },
     onError: (error: any) => {
-      // Handle errors here
       toast({
         title: "Error",
         description: error?.response?.data?.message || "Failed to delete convert data",
         variant: "destructive",
       });
-      console.error("Delete Error:", error);
     },
     onSettled: () => {
-      // Cleanup logic after success or error
       setLoading(false);
     },
   });
 
-  // Update mutation
   const updateMutation = useMutation({
     mutationFn: async (document: any) => {
-      await apiClient.put(`converts/${document.id}`, document);
-      return document;
+      const response = await apiClient.put(`converts/${document.id}`, document);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['converts'] });
@@ -110,20 +101,17 @@ const DataView = () => {
       setEditingDocument(null);
     },
     onError: (error: any) => {
-      // Handle errors here
       toast({
         title: "Error",
         description: error?.response?.data?.message || "Failed to update convert data",
         variant: "destructive",
       });
-      console.error("Update Error:", error);
     },
   });
 
-  const handleEditSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleEditSubmit = async (data: any) => {
     if (editingDocument) {
-      updateMutation.mutate(editingDocument);
+      updateMutation.mutate({ ...data, id: editingDocument.id });
     }
   };
 
@@ -224,13 +212,12 @@ const DataView = () => {
               Total Records: {totalRecords}
             </p>
             <p className="text-sm text-gray-600">
-              Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} - {" "}
-              {Math.min(currentPage * ITEMS_PER_PAGE, totalRecords)} of {totalRecords}
+              Showing {startIndex + 1} - {Math.min(endIndex, totalRecords)} of {totalRecords}
             </p>
           </div>
         </div>
 
-        <EditCounselleeDialog
+        <EditConvertDialog
           open={isEditDialogOpen}
           onOpenChange={setIsEditDialogOpen}
           document={editingDocument}
