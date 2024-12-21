@@ -110,6 +110,7 @@ export const CounsellorList = ({
     { key: "email", label: "Email" },
     { key: "phone_number", label: "Phone Number" },
     { key: "gender", label: "Gender" },
+    { key: "address", label: "Address" },
     { key: "country", label: "Country" },
     { key: "state", label: "State" },
     { key: "country", label: "Country" },
