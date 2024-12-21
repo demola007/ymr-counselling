@@ -90,6 +90,16 @@ const Counselors = () => {
     }
   };
 
+  const columns = [
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "phone_number", label: "Phone Number" },
+    { key: "gender", label: "Gender" },
+    { key: "country", label: "Country" },
+    { key: "state", label: "State" },
+    { key: "address", label: "Address" },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-6 mx-auto max-w-7xl">
@@ -141,6 +151,7 @@ const Counselors = () => {
                 setIsDeleteDialogOpen(true);
               }}
               isLoading={isLoading}
+              columns={columns}
             />
           </div>
         </div>

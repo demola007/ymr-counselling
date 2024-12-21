@@ -158,6 +158,22 @@ const DataView = () => {
     }
   };
 
+  const columns = [
+    { key: "name", label: "Name" },
+    { key: "gender", label: "Gender" },
+    { key: "email", label: "Email" },
+    { key: "phone_number", label: "Phone" },
+    { key: "date_of_birth", label: "Date of Birth" },
+    { key: "country", label: "Country" },
+    { key: "state", label: "State" },
+    { key: "address", label: "Address" },
+    { key: "is_student", label: "Student" },
+    { key: "age_group", label: "Age Group" },
+    { key: "denomination", label: "Denomination" },
+    { key: "availability_for_follow_up", label: "Available for Follow-up" },
+    { key: "online", label: "Online" },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       {loading && (
@@ -195,6 +211,7 @@ const DataView = () => {
               onEditClick={handleEditClick}
               onDeleteClick={handleDeleteClick}
               isLoading={isLoadingDocuments}
+              columns={columns}
             />
           </div>
         </div>

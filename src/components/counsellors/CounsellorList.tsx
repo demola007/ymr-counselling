@@ -105,6 +105,16 @@ export const CounsellorList = ({
     setIsDeleteDialogOpen(true);
   };
 
+  const columns = [
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "phone_number", label: "Phone Number" },
+    { key: "gender", label: "Gender" },
+    { key: "country", label: "Country" },
+    { key: "state", label: "State" },
+    { key: "address", label: "Address" },
+  ];
+
   return (
     <>
       <DataViewActions
@@ -125,6 +135,7 @@ export const CounsellorList = ({
             onEditClick={handleEditClick}
             onDeleteClick={handleDeleteClick}
             isLoading={isLoading}
+            columns={columns}
           />
         </div>
       </div>
