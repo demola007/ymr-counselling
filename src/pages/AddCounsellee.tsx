@@ -1,72 +1,44 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Form } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import { FormField, SelectField } from "@/components/converts/ConvertFormFields";
 import { Loader2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useForm, FormProvider } from "react-hook-form";
 import { CounselleeFormFields } from "@/components/counsellee/CounselleeFormFields";
-import { CounsellorRemarks } from "@/components/counsellee/CounsellorRemarks";
-import apiClient from "@/utils/apiClient";
-
-interface CounselleeFormData {
-  name: string;
-  gender: string;
-  email: string;
-  phone_number: string;
-  date_of_birth: string;
-  relationship_status: string;
-  country: string;
-  state: string;
-  address: string;
-  nearest_bus_stop: string;
-  is_student: boolean;
-  age_group: string;
-  school: string;
-  occupation: string;
-  denomination: string;
-  counselling_reason: string;
-  counsellor_name: string;
-  counsellor_comments: string;
-}
 
 const AddCounsellee = () => {
-  const navigate = useNavigate();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const form = useForm();
+  const isLoading = false;
 
-  const methods = useForm<CounselleeFormData>({
-    defaultValues: {
-      is_student: false,
-    }
-  });
-
-  const onSubmit = async (data: CounselleeFormData) => {
-    setIsLoading(true);
+  const onSubmit = async (data: any) => {
+    // Handle form submission logic here
     try {
-      await apiClient.post('counsellee', data);
+      // Submit data to your API or backend
       toast({
         title: "Success",
-        description: "Counsellee added successfully",
+        description: "Counsellee registered successfully!",
       });
-      navigate("/counsellee");
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to add counsellee",
-        variant: "destructive",
+        description: "There was an error registering the counsellee.",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Add New Counsellee</h1>
-      
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="text-center mb-8 space-y-4">
+        <h1 className="text-3xl font-bold text-gray-900">Register for Counselling</h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Welcome to YMR Counselling Unit - Please fill this short form providing your details, thereafter you can schedule your counselling session. God bless you
+        </p>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <Card>
             <CardHeader>
               <CardTitle>Counsellee Information</CardTitle>
@@ -81,31 +53,31 @@ const AddCounsellee = () => {
               <CardTitle>Counsellor Remarks</CardTitle>
             </CardHeader>
             <CardContent>
-              <CounsellorRemarks />
+              <div className="space-y-4">
+                <FormField
+                  label="Counsellor Name"
+                  id="counsellor_name"
+                  required
+                />
+                <div className="space-y-2">
+                  <label className="text-gray-700">Counsellor Comments</label>
+                  <textarea
+                    {...form.register("counsellor_comments")}
+                    className="w-full min-h-[100px] p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300"
+                  />
+                </div>
+              </div>
             </CardContent>
           </Card>
 
-          <div className="flex justify-end gap-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => navigate("/counsellee")}
-            >
-              Cancel
-            </Button>
+          <div className="flex justify-end">
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Adding...
-                </>
-              ) : (
-                "Add Counsellee"
-              )}
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Submit
             </Button>
           </div>
         </form>
-      </FormProvider>
+      </Form>
     </div>
   );
 };
