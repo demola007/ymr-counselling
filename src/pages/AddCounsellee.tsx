@@ -20,7 +20,7 @@ interface CounselleeFormData {
   state: string;
   address: string;
   nearest_bus_stop: string;
-  is_student: boolean;
+  is_student: string;  // Changed from boolean to string since form returns string
   age_group: string;
   school: string;
   occupation: string;
@@ -51,7 +51,7 @@ const AddCounsellee = () => {
     try {
       const response = await apiClient.post('/counsellee', {
         ...data,
-        is_student: data.is_student === 'true',
+        is_student: data.is_student === 'true',  // Now comparing string with string
         counsellor_name: "",
         counsellor_comments: ""
       });
