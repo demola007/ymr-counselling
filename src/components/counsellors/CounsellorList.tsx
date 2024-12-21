@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DocumentTable } from "@/components/data/DocumentTable";
-import { EditDocumentDialog } from "@/components/data/EditDocumentDialog";
+import { EditCounsellorDialog } from "@/components/data/EditCounsellorDialog";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { DataViewActions } from "@/components/data/DataViewActions";
 import { useAuth } from "@/hooks/useAuth";
@@ -129,7 +129,7 @@ export const CounsellorList = ({
         </div>
       </div>
 
-      <EditDocumentDialog
+      <EditCounsellorDialog
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
         document={editingDocument}

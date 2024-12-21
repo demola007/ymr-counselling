@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DocumentTable } from "@/components/data/DocumentTable";
-import { EditDocumentDialog } from "@/components/data/EditDocumentDialog";
+import { EditCounselleeDialog } from "@/components/data/EditCounselleeDialog";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { DataViewActions } from "@/components/data/DataViewActions";
 import { useAuth } from "@/hooks/useAuth";
@@ -161,48 +161,13 @@ export const CounselleeList = ({
         </div>
       </div>
 
-      <EditDocumentDialog
+      <EditCounselleeDialog
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
         document={editingDocument}
         onSubmit={handleEditSubmit}
         setEditingDocument={setEditingDocument}
         isLoading={false}
-        fields={[
-          { key: "name", label: "Name", type: "text" },
-          { key: "gender", label: "Gender", type: "select", options: [
-            { value: "male", label: "Male" },
-            { value: "female", label: "Female" }
-          ]},
-          { key: "email", label: "Email", type: "email" },
-          { key: "phone_number", label: "Phone Number", type: "text" },
-          { key: "date_of_birth", label: "Date of Birth", type: "date" },
-          { key: "relationship_status", label: "Relationship Status", type: "select", options: [
-            { value: "single", label: "Single" },
-            { value: "married", label: "Married" },
-            { value: "other", label: "Other" }
-          ]},
-          { key: "country", label: "Country", type: "text" },
-          { key: "state", label: "State", type: "text" },
-          { key: "address", label: "Address", type: "text" },
-          { key: "nearest_bus_stop", label: "Nearest Bus Stop", type: "text" },
-          { key: "is_student", label: "Is Student", type: "select", options: [
-            { value: "true", label: "Yes" },
-            { value: "false", label: "No" }
-          ]},
-          { key: "age_group", label: "Age Group", type: "select", options: [
-            { value: "18-24", label: "18-24" },
-            { value: "25-34", label: "25-34" },
-            { value: "35-44", label: "35-44" },
-            { value: "45+", label: "45+" }
-          ]},
-          { key: "school", label: "School", type: "text" },
-          { key: "occupation", label: "Occupation", type: "text" },
-          { key: "denomination", label: "Denomination", type: "text" },
-          { key: "counselling_reason", label: "Counselling Reason", type: "textarea" },
-          { key: "counsellor_name", label: "Counsellor Name", type: "text" },
-          { key: "counsellor_comments", label: "Counsellor Comments", type: "textarea" }
-        ]}
       />
 
       <DeleteConfirmDialog
