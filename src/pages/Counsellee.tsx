@@ -43,10 +43,6 @@ const Counsellee = () => {
         <DataViewFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          studentFilter="all"
-          setStudentFilter={() => {}}
-          genderFilter="all"
-          setGenderFilter={() => {}}
         />
 
         <CounselleeList

@@ -111,10 +111,6 @@ const Counselors = () => {
         <DataViewFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          studentFilter="all"
-          setStudentFilter={() => {}}
-          genderFilter="all"
-          setGenderFilter={() => {}}
         />
 
         <div className="bg-white rounded-lg shadow overflow-hidden">

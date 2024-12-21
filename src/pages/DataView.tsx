@@ -187,10 +187,6 @@ const DataView = () => {
         <DataViewFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          studentFilter={studentFilter}
-          setStudentFilter={setStudentFilter}
-          genderFilter={genderFilter}
-          setGenderFilter={setGenderFilter}
         />
 
         <DataViewActions
