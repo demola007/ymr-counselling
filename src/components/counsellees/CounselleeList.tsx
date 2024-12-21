@@ -110,9 +110,14 @@ export const CounselleeList = ({
       name: document.name || "N/A",
       email: document.email || "N/A",
       phone_number: document.phone_number || "N/A",
+      gender: document.gender || "N/A",
+      country: document.country || "N/A",
+      state: document.state || "N/A",
+      address: document.address || "N/A",
+      age_group: document.age_group || "N/A",
+      school: document.school || "N/A",
+      occupation: document.occupation || "N/A",
       counsellor_name: document.counsellor_name || "N/A",
-      counselling_reason: document.counselling_reason || "N/A",
-      date_of_birth: document.date_of_birth || "N/A",
     };
   };
 
@@ -143,9 +148,14 @@ export const CounselleeList = ({
               { key: "name", label: "Name" },
               { key: "email", label: "Email" },
               { key: "phone_number", label: "Phone Number" },
+              { key: "gender", label: "Gender" },
+              { key: "country", label: "Country" },
+              { key: "state", label: "State" },
+              { key: "address", label: "Address" },
+              { key: "age_group", label: "Age Group" },
+              { key: "school", label: "School" },
+              { key: "occupation", label: "Occupation" },
               { key: "counsellor_name", label: "Counsellor" },
-              { key: "counselling_reason", label: "Reason" },
-              { key: "date_of_birth", label: "Date of Birth" },
             ]}
           />
         </div>
