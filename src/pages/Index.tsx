@@ -29,8 +29,8 @@ const Landing = () => {
       {/* Hero Section */}
       <section className="pt-24 flex-1 text-white">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center py-12">
-            <div className="space-y-8 animate-fade-in">
+          <div className="grid lg:grid-cols-2 gap-12 items-start py-12">
+            <div className="space-y-8 animate-fade-in lg:sticky lg:top-24">
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
                 Transform Your Life Through 
                 <span className="text-blue-400"> Spiritually Sensitive</span> and 
@@ -39,7 +39,7 @@ const Landing = () => {
               <p className="text-xl text-gray-300 leading-relaxed">
                 Take the first step towards personal spiritual growth and emotional well-being with our experienced counsellors
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-wrap gap-4 pb-8">
                 <Link to="/login">
                   <Button className="w-full sm:w-auto bg-white text-[#1A1F2C] hover:bg-gray-100">
                     <Upload className="mr-2 h-4 w-4" />
