@@ -48,43 +48,43 @@ export const EditDocumentDialog = ({
   };
 
   const counselleeFields = [
-    { key: "name", label: "Name", type: "text" },
-    { key: "gender", label: "Gender", type: "select", options: [
+    { key: "name", label: "Name", type: "text" as const },
+    { key: "gender", label: "Gender", type: "select" as const, options: [
       { value: "male", label: "Male" },
       { value: "female", label: "Female" }
     ]},
-    { key: "email", label: "Email", type: "email" },
-    { key: "phone_number", label: "Phone Number", type: "text" },
-    { key: "date_of_birth", label: "Date of Birth", type: "date" },
-    { key: "relationship_status", label: "Relationship Status", type: "select", options: [
+    { key: "email", label: "Email", type: "email" as const },
+    { key: "phone_number", label: "Phone Number", type: "text" as const },
+    { key: "date_of_birth", label: "Date of Birth", type: "date" as const },
+    { key: "relationship_status", label: "Relationship Status", type: "select" as const, options: [
       { value: "single", label: "Single" },
       { value: "married", label: "Married" },
       { value: "other", label: "Other" }
     ]},
-    { key: "country", label: "Country", type: "text" },
-    { key: "state", label: "State", type: "text" },
-    { key: "address", label: "Address", type: "text" },
-    { key: "nearest_bus_stop", label: "Nearest Bus Stop", type: "text" },
-    { key: "is_student", label: "Is Student", type: "select", options: [
+    { key: "country", label: "Country", type: "text" as const },
+    { key: "state", label: "State", type: "text" as const },
+    { key: "address", label: "Address", type: "text" as const },
+    { key: "nearest_bus_stop", label: "Nearest Bus Stop", type: "text" as const },
+    { key: "is_student", label: "Is Student", type: "select" as const, options: [
       { value: "true", label: "Yes" },
       { value: "false", label: "No" }
     ]},
-    { key: "age_group", label: "Age Group", type: "select", options: [
+    { key: "age_group", label: "Age Group", type: "select" as const, options: [
       { value: "18-24", label: "18-24" },
       { value: "25-34", label: "25-34" },
       { value: "35-44", label: "35-44" },
       { value: "45+", label: "45+" }
     ]},
-    { key: "school", label: "School", type: "text" },
-    { key: "occupation", label: "Occupation", type: "text" },
-    { key: "denomination", label: "Denomination", type: "text" },
-    { key: "counselling_reason", label: "Counselling Reason", type: "textarea" }
+    { key: "school", label: "School", type: "text" as const },
+    { key: "occupation", label: "Occupation", type: "text" as const },
+    { key: "denomination", label: "Denomination", type: "text" as const },
+    { key: "counselling_reason", label: "Counselling Reason", type: "textarea" as const }
   ];
 
   const counsellorFields = [
-    { key: "counsellor_name", label: "Counsellor Name", type: "text" },
-    { key: "counsellor_comments", label: "Counsellor Comments", type: "textarea" },
-    { key: "attended_to", label: "Attended To", type: "checkbox" }
+    { key: "counsellor_name", label: "Counsellor Name", type: "text" as const },
+    { key: "counsellor_comments", label: "Counsellor Comments", type: "textarea" as const },
+    { key: "attended_to", label: "Attended To", type: "checkbox" as const }
   ];
 
   const renderField = (field: Field) => {
@@ -185,7 +185,14 @@ export const EditDocumentDialog = ({
             </CardContent>
           </Card>
 
-          <DialogFooter>
+          <DialogFooter className="flex justify-end space-x-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? (
                 <>
