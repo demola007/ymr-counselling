@@ -35,6 +35,7 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/new-convert" element={<NewConvert />} />
               <Route path="/counselor-registration" element={<CounselorRegistration />} />
+              <Route path="/add-counsellee" element={<AddCounsellee />} />
               <Route path="/upload" element={
                 <ProtectedRoute>
                   <Upload />
@@ -63,11 +64,6 @@ const App = () => {
               <Route path="/counsellee/:id" element={
                 <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
                   <CounselleeDetail />
-                </ProtectedRoute>
-              } />
-              <Route path="/add-counsellee" element={
-                <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
-                  <AddCounsellee />
                 </ProtectedRoute>
               } />
               <Route path="/data" element={
