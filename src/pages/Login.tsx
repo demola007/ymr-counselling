@@ -73,7 +73,7 @@ const Login = () => {
           <p className="text-muted-foreground">AI-Powered Data Capture System</p>
         </div>
         
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <Input
               type="email"
@@ -81,6 +81,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="w-full"
             />
           </div>
           <div>
@@ -90,24 +91,19 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="w-full"
             />
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
             Login
           </Button>
         </form>
+        
         {loading && (
           <div className="loader-overlay">
-            <ClipLoader color="#3498db" size={50} /> {/* Using ClipLoader */}
+            <ClipLoader color="#3498db" size={50} />
           </div>
         )}
-        
-        <div className="mt-4 text-sm text-center text-muted-foreground">
-          <p>Demo Credentials:</p>
-          <p>Super Admin: superadmin@example.com / superadmin</p>
-          <p>Admin: admin@example.com / admin</p>
-          <p>User: user@example.com / user</p>
-        </div>
       </div>
     </div>
   );
