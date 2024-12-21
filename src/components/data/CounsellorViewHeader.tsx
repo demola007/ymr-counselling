@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, LogOut } from "lucide-react";
+import { ArrowLeft, UserPlus, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export const CounsellorViewHeader = () => {
@@ -8,8 +8,8 @@ export const CounsellorViewHeader = () => {
   const { logout } = useAuth();
 
   return (
-    <nav className="flex items-center justify-between gap-4 mb-6 sticky top-0 bg-[#1A1F2C] backdrop-blur-lg z-10 p-4 w-full rounded-lg shadow-sm">
-      <div className="flex items-center gap-4">
+    <nav className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sticky top-0 bg-[#1A1F2C] backdrop-blur-lg z-10 p-4 w-full rounded-lg shadow-sm">
+      <div className="flex items-center gap-4 w-full sm:w-auto">
         <img 
           src="/lovable-uploads/7d495cc3-bdc8-42d6-ab11-263a4b0a731a.png" 
           alt="YMR Logo" 
@@ -17,27 +17,38 @@ export const CounsellorViewHeader = () => {
         />
         <h1 className="text-xl md:text-2xl font-bold text-white">Counsellors</h1>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
         <Link to="/add-counsellor">
-          <Button variant="secondary" size="sm" className="bg-white text-[#1A1F2C] hover:bg-gray-100">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Counsellor
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            className="bg-white text-[#1A1F2C] hover:bg-gray-100 whitespace-nowrap"
+          >
+            <UserPlus className="w-4 h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Add Counsellor</span>
+            <span className="sm:hidden">New</span>
           </Button>
         </Link>
         <Link to="/upload">
-          <Button variant="secondary" size="sm" className="bg-white text-[#1A1F2C] hover:bg-gray-100">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Uploads
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            className="bg-white text-[#1A1F2C] hover:bg-gray-100 whitespace-nowrap"
+          >
+            <ArrowLeft className="w-4 h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Back to Uploads</span>
+            <span className="sm:hidden">Back</span>
           </Button>
         </Link>
         <Button 
-          variant="secondary" 
-          size="sm" 
+          variant="destructive"
+          size="sm"
           onClick={logout}
-          className="bg-white text-[#1A1F2C] hover:bg-gray-100"
+          className="bg-red-500 hover:bg-red-600 whitespace-nowrap"
         >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
+          <LogOut className="w-4 h-4 sm:mr-2" />
+          <span className="hidden sm:inline">Logout</span>
+          <span className="sm:hidden">Exit</span>
         </Button>
       </div>
     </nav>
