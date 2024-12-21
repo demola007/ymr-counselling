@@ -14,7 +14,7 @@ export const useCounsellees = (searchQuery: string, currentPage: number, itemsPe
     queryFn: async () => {
       const response = await apiClient.get('counsellee', {
         params: {
-          search: searchQuery,
+          searchQuery,
           limit: itemsPerPage,
           skip: (currentPage - 1) * itemsPerPage,
         },

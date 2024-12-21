@@ -118,6 +118,7 @@ export const CounselleeList = ({
       school: document.school || "N/A",
       occupation: document.occupation || "N/A",
       counsellor_name: document.counsellor_name || "N/A",
+      attended_to: document.attended_to || "N/A",
     };
   };
 
@@ -156,6 +157,7 @@ export const CounselleeList = ({
               { key: "school", label: "School" },
               { key: "occupation", label: "Occupation" },
               { key: "counsellor_name", label: "Counsellor" },
+              { key: "attended_to", label: "Attended To" },
             ]}
           />
         </div>

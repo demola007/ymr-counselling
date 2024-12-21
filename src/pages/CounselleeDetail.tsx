@@ -60,7 +60,8 @@ const CounselleeDetail = () => {
     { key: "denomination", label: "Denomination" },
     { key: "counselling_reason", label: "Counselling Reason" },
     { key: "counsellor_name", label: "Counsellor Name" },
-    { key: "counsellor_comments", label: "Counsellor Comments" }
+    { key: "counsellor_comments", label: "Counsellor Comments" },
+    { key: "attended_to", label: "Attended To?" }
   ];
 
   return (
