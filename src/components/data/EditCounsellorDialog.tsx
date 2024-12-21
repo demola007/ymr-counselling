@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 
 interface EditCounsellorDialogProps {
   open: boolean;
@@ -33,24 +33,42 @@ export const EditCounsellorDialog = ({
   };
 
   const counsellorFields = [
-    { key: "name", label: "Name", type: "text" as const },
+    { key: "name", label: "Full Name", type: "text" as const },
     { key: "email", label: "Email", type: "email" as const },
     { key: "phone_number", label: "Phone Number", type: "text" as const },
-    { key: "specialization", label: "Specialization", type: "text" as const },
-    { key: "availability", label: "Availability", type: "textarea" as const },
-    { key: "bio", label: "Biography", type: "textarea" as const }
+    { key: "gender", label: "Gender", type: "select" as const, options: [
+      { value: "male", label: "Male" },
+      { value: "female", label: "Female" }
+    ]},
+    { key: "date_of_birth", label: "Date of Birth", type: "date" as const },
+    { key: "address", label: "Address", type: "text" as const },
+    { key: "years_of_experience", label: "Years of Experience", type: "number" as const },
+    { key: "denomination", label: "Denomination", type: "text" as const }
+  ];
+
+  const toggleFields = [
+    { key: "has_certification", label: "Has Professional Counselling Certification" },
+    { key: "will_attend_ymr_2024", label: "Will Attend YMR 2024 - FLOODGATES" },
+    { key: "is_available_for_training", label: "Available for Training" }
   ];
 
   const renderField = (field: any) => {
     switch (field.type) {
-      case "textarea":
+      case "select":
         return (
-          <Textarea
+          <select
             id={field.key}
             value={document[field.key] || ""}
             onChange={(e) => handleChange(field.key, e.target.value)}
-            className="min-h-[100px]"
-          />
+            className="w-full border border-gray-300 rounded-md px-3 py-2"
+          >
+            <option value="">Select {field.label}</option>
+            {field.options.map((option: any) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         );
       default:
         return (
@@ -80,6 +98,24 @@ export const EditCounsellorDialog = ({
                 <div key={field.key} className="space-y-2">
                   <Label htmlFor={field.key}>{field.label}</Label>
                   {renderField(field)}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Additional Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {toggleFields.map((field) => (
+                <div key={field.key} className="flex items-center justify-between">
+                  <Label htmlFor={field.key}>{field.label}</Label>
+                  <Switch
+                    id={field.key}
+                    checked={document[field.key] || false}
+                    onCheckedChange={(checked) => handleChange(field.key, checked)}
+                  />
                 </div>
               ))}
             </CardContent>
