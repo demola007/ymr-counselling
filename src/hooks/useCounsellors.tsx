@@ -14,7 +14,7 @@ export const useCounsellors = (searchQuery: string, currentPage: number, itemsPe
     queryFn: async () => {
       const response = await apiClient.get('counsellors', {
         params: {
-          searchQuery,
+          search: searchQuery, // Changed from searchQuery to search to match API expectations
           limit: itemsPerPage,
           skip: (currentPage - 1) * itemsPerPage,
         },
