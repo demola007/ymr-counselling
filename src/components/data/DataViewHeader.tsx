@@ -16,35 +16,39 @@ export const DataViewHeader = () => {
         />
         <h1 className="text-xl md:text-2xl font-bold text-white">Counselling Data</h1>
       </div>
-      <div className="flex items-center gap-4">
-        <Link to="/new-convert-manual">
-          <Button 
-            variant="secondary"
-            size="sm" 
-            className="bg-white text-[#1A1F2C] hover:bg-gray-100"
-          >
-            <UserPlus className="w-4 h-4 mr-2" />
-            Add Convert Manually
-          </Button>
-        </Link>
-        <Link to="/upload">
-          <Button 
-            variant="secondary"
-            size="sm" 
-            className="bg-white text-[#1A1F2C] hover:bg-gray-100"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Upload
-          </Button>
-        </Link>
+      <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+        <div className="flex flex-row gap-2">
+          <Link to="/new-convert-manual">
+            <Button 
+              variant="secondary"
+              size="sm" 
+              className="bg-white text-[#1A1F2C] hover:bg-gray-100 whitespace-nowrap"
+            >
+              <UserPlus className="w-4 h-4 sm:mr-2 hidden sm:block" />
+              <span className="hidden sm:inline">Add Convert Manually</span>
+              <span className="sm:hidden">Add</span>
+            </Button>
+          </Link>
+          <Link to="/upload">
+            <Button 
+              variant="secondary"
+              size="sm" 
+              className="bg-white text-[#1A1F2C] hover:bg-gray-100 whitespace-nowrap"
+            >
+              <ArrowLeft className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Back to Upload</span>
+              <span className="sm:hidden">Back</span>
+            </Button>
+          </Link>
+        </div>
         <Button 
           variant="destructive"
           size="sm"
           onClick={logout}
-          className="bg-red-500 hover:bg-red-600 ml-auto"
+          className="bg-red-500 hover:bg-red-600 whitespace-nowrap"
         >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
+          <LogOut className="w-4 h-4 sm:mr-2" />
+          <span className="hidden sm:inline">Logout</span>
         </Button>
       </div>
     </nav>
