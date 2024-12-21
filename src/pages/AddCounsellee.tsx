@@ -2,7 +2,6 @@ import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { FormField, SelectField } from "@/components/converts/ConvertFormFields";
 import { Loader2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CounselleeFormFields } from "@/components/counsellee/CounselleeFormFields";
@@ -13,7 +12,6 @@ const AddCounsellee = () => {
   const isLoading = false;
 
   const onSubmit = async (data: any) => {
-    // Handle form submission logic here
     try {
       // Submit data to your API or backend
       toast({
@@ -45,28 +43,6 @@ const AddCounsellee = () => {
             </CardHeader>
             <CardContent>
               <CounselleeFormFields />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Counsellor Remarks</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <FormField
-                  label="Counsellor Name"
-                  id="counsellor_name"
-                  required
-                />
-                <div className="space-y-2">
-                  <label className="text-gray-700">Counsellor Comments</label>
-                  <textarea
-                    {...form.register("counsellor_comments")}
-                    className="w-full min-h-[100px] p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300"
-                  />
-                </div>
-              </div>
             </CardContent>
           </Card>
 
