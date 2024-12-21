@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { FormField } from "@/components/converts/FormField";
 import { SelectField } from "@/components/converts/SelectField";
 import { useForm, FormProvider } from "react-hook-form";
+import { useEffect } from "react";
 
 interface EditConvertDialogProps {
   open: boolean;
@@ -22,27 +23,32 @@ export const EditConvertDialog = ({
   setEditingDocument,
   isLoading,
 }: EditConvertDialogProps) => {
-  const methods = useForm({
-    defaultValues: {
-      name: document?.name || "",
-      email: document?.email || "",
-      gender: document?.gender || "",
-      phone_number: document?.phone_number || "",
-      date_of_birth: document?.date_of_birth || "",
-      relationship_status: document?.relationship_status || "",
-      country: document?.country || "",
-      state: document?.state || "",
-      address: document?.address || "",
-      nearest_bus_stop: document?.nearest_bus_stop || "",
-      is_student: document?.is_student || false,
-      age_group: document?.age_group || "",
-      school: document?.school || "",
-      occupation: document?.occupation || "",
-      denomination: document?.denomination || "",
-      availability_for_follow_up: document?.availability_for_follow_up || true,
-      online: document?.online || false,
-    },
-  });
+  const methods = useForm();
+
+  // Reset form with document values when dialog opens or document changes
+  useEffect(() => {
+    if (document && open) {
+      methods.reset({
+        name: document.name || "",
+        email: document.email || "",
+        gender: document.gender || "",
+        phone_number: document.phone_number || "",
+        date_of_birth: document.date_of_birth || "",
+        relationship_status: document.relationship_status || "",
+        country: document.country || "",
+        state: document.state || "",
+        address: document.address || "",
+        nearest_bus_stop: document.nearest_bus_stop || "",
+        is_student: document.is_student || false,
+        age_group: document.age_group || "",
+        school: document.school || "",
+        occupation: document.occupation || "",
+        denomination: document.denomination || "",
+        availability_for_follow_up: document.availability_for_follow_up || false,
+        online: document.online || false,
+      });
+    }
+  }, [document, open, methods]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
