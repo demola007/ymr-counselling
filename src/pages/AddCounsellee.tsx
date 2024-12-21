@@ -15,14 +15,11 @@ const AddCounsellee = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   
-  // Get the previous path from location state
-  const from = location.state?.from;
-
   const handleBack = () => {
-    if (isAuthenticated && from === '/counsellee') {
-      navigate('/counsellee', { replace: true });
+    if (isAuthenticated) {
+      navigate('/counsellee');
     } else {
-      navigate('/', { replace: true });
+      navigate('/');
     }
   };
 
