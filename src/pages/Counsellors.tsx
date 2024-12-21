@@ -1,16 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CounsellorViewHeader } from "@/components/data/CounsellorViewHeader";
 import { DataViewFilters } from "@/components/data/DataViewFilters";
-import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
-import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
-import { DataViewActions } from "@/components/data/DataViewActions";
-import { EditDocumentDialog } from "@/components/data/EditDocumentDialog";
-import { useAuth } from "@/hooks/useAuth";
-import apiClient from "@/utils/apiClient";
+import { CounsellorList } from "@/components/counsellors/CounsellorList";
+import { useCounsellors } from "@/hooks/useCounsellors";
 import { ClipLoader } from "react-spinners";
 import "../contexts/loader.css";
 
@@ -19,161 +12,16 @@ const ITEMS_PER_PAGE = 5;
 const Counsellors = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectAll, setSelectAll] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [editingDocument, setEditingDocument] = useState<any>(null);
 
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const { userRole } = useAuth();
-  const queryClient = useQueryClient();
+  const {
+    counsellors,
+    totalRecords,
+    isLoading,
+    deleteMutation,
+    updateMutation,
+  } = useCounsellors(searchQuery, currentPage, ITEMS_PER_PAGE);
 
-  const { data: counsellors = [], isLoading } = useQuery({
-    queryKey: ['counsellors', searchQuery, currentPage],
-    queryFn: async () => {
-      const response = await apiClient.get('counsellors', {
-        params: {
-          searchQuery,
-          limit: ITEMS_PER_PAGE,
-          skip: (currentPage - 1) * ITEMS_PER_PAGE,
-        },
-      });
-      if (response.data.status === "success") {
-        return response.data;
-      } else {
-        throw new Error('Failed to fetch counsellors');
-      }
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (ids: number[]) => {
-      setLoading(true);
-      await apiClient.delete('counsellors/bulk-delete', {
-        data: { ids },
-      });
-      return ids;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['counsellors'] });
-      toast({
-        title: "Success",
-        description: "Counsellor(s) deleted successfully",
-      });
-      setIsDeleteDialogOpen(false);
-      setDeletingId(null);
-      setSelectedIds([]);
-      setSelectAll(false);
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error?.response?.data?.message || "Failed to delete counsellor(s)",
-        variant: "destructive",
-      });
-    },
-    onSettled: () => {
-      setLoading(false);
-    },
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: async (document: any) => {
-      await apiClient.put(`counsellors/${document.id}`, document);
-      return document;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['counsellors'] });
-      toast({
-        title: "Success",
-        description: "Counsellor updated successfully",
-      });
-      setIsEditDialogOpen(false);
-      setEditingDocument(null);
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error?.response?.data?.message || "Failed to update counsellor",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handleEditSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editingDocument) {
-      updateMutation.mutate(editingDocument);
-    }
-  };
-
-  const handleDeleteConfirm = () => {
-    const idsToDelete = deletingId ? [deletingId] : selectedIds;
-    deleteMutation.mutate(idsToDelete);
-  };
-
-  const handleRowClick = (id: number) => {
-    navigate(`/counsellors/${id}`);
-  };
-
-  const handleEditClick = (e: React.MouseEvent, document: any) => {
-    e.stopPropagation();
-    if (userRole !== "super-admin") {
-      toast({
-        title: "Access Denied",
-        description: "Only super-admin users can edit counsellors.",
-        variant: "destructive",
-      });
-      return;
-    }
-    setEditingDocument(document);
-    setIsEditDialogOpen(true);
-  };
-
-  const handleDeleteClick = (e: React.MouseEvent, id: number) => {
-    e.stopPropagation();
-    if (userRole !== "super-admin") {
-      toast({
-        title: "Access Denied",
-        description: "Only super-admin users can delete counsellors.",
-        variant: "destructive",
-      });
-      return;
-    }
-    setDeletingId(id);
-    setIsDeleteDialogOpen(true);
-  };
-
-  const handleSelectRow = (id: number) => {
-    setSelectedIds(prev => {
-      if (prev.includes(id)) {
-        return prev.filter(selectedId => selectedId !== id);
-      } else {
-        return [...prev, id];
-      }
-    });
-  };
-
-  const handleSelectAll = (checked: boolean) => {
-    setSelectAll(checked);
-    if (checked) {
-      setSelectedIds(counsellors?.data?.map(doc => doc.id) || []);
-    } else {
-      setSelectedIds([]);
-    }
-  };
-
-  const handleDeleteSelected = () => {
-    if (selectedIds.length === 0) return;
-    setIsDeleteDialogOpen(true);
-  };
-
-  const paginatedCounsellors = counsellors?.data || [];
-  const totalRecords = counsellors?.total || 0;
   const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
 
   return (
@@ -195,27 +43,12 @@ const Counsellors = () => {
           setGenderFilter={() => {}}
         />
 
-        <DataViewActions
-          selectedIds={selectedIds}
-          onDeleteSelected={handleDeleteSelected}
-          selectAll={selectAll}
-          onSelectAll={handleSelectAll}
-          userRole={userRole}
+        <CounsellorList
+          counsellors={counsellors}
+          isLoading={isLoading}
+          onUpdate={updateMutation.mutate}
+          onDelete={deleteMutation.mutate}
         />
-
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="overflow-x-auto">
-            <DocumentTable
-              documents={paginatedCounsellors}
-              selectedIds={selectedIds}
-              onSelectRow={handleSelectRow}
-              onRowClick={handleRowClick}
-              onEditClick={handleEditClick}
-              onDeleteClick={handleDeleteClick}
-              isLoading={isLoading}
-            />
-          </div>
-        </div>
 
         <div className="mt-6 flex flex-col gap-4">
           <DocumentPagination
@@ -235,23 +68,6 @@ const Counsellors = () => {
             </p>
           </div>
         </div>
-
-        <EditDocumentDialog
-          open={isEditDialogOpen}
-          onOpenChange={setIsEditDialogOpen}
-          document={editingDocument}
-          onSubmit={handleEditSubmit}
-          setEditingDocument={setEditingDocument}
-          isLoading={updateMutation.isPending}
-        />
-
-        <DeleteConfirmDialog
-          open={isDeleteDialogOpen}
-          onOpenChange={setIsDeleteDialogOpen}
-          onConfirm={handleDeleteConfirm}
-          isMultiple={selectedIds.length > 0}
-          isLoading={deleteMutation.isPending}
-        />
       </div>
     </div>
   );
