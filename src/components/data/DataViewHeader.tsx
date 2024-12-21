@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, LogOut, UserPlus } from "lucide-react";
+import { ArrowLeft, LogOut, UserPlus, FilePlus } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export const DataViewHeader = () => {
@@ -24,9 +24,10 @@ export const DataViewHeader = () => {
               size="sm" 
               className="bg-white text-[#1A1F2C] hover:bg-gray-100 whitespace-nowrap"
             >
-              <UserPlus className="w-4 h-4 sm:mr-2 hidden sm:block" />
+              <UserPlus className="w-4 h-4 sm:mr-2" />
+              <FilePlus className="w-4 h-4 mr-1 sm:hidden" />
               <span className="hidden sm:inline">Add Convert Manually</span>
-              <span className="sm:hidden">Add</span>
+              <span className="sm:hidden">New</span>
             </Button>
           </Link>
           <Link to="/upload">
