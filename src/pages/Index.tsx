@@ -11,9 +11,9 @@ import {
 
 const Landing = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#1A1F2C] via-[#2C3E50] to-[#1A1F2C]">
       {/* Navigation */}
-      <nav className="bg-[#1A1F2C] text-white py-4">
+      <nav className="bg-[#1A1F2C]/90 backdrop-blur-lg text-white py-4 fixed w-full z-50">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <img 
@@ -27,14 +27,16 @@ const Landing = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="flex-1 bg-gradient-to-b from-[#1A1F2C] to-[#2C3E50] text-white">
-        <div className="container mx-auto px-4 py-16">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 animate-fade-in">
-              <h1 className="text-4xl md:text-5xl font-bold">
-                Transform your life through spiritually sensitive and professional counseling
+      <section className="pt-24 flex-1 text-white">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center py-12">
+            <div className="space-y-8 animate-fade-in">
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                Transform Your Life Through 
+                <span className="text-blue-400"> Spiritually Sensitive</span> and 
+                <span className="text-purple-400"> Professional Counseling</span>
               </h1>
-              <p className="text-lg text-gray-300">
+              <p className="text-xl text-gray-300 leading-relaxed">
                 Take the first step towards personal spiritual growth and emotional well-being with our experienced counsellors
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -90,11 +92,12 @@ const Landing = () => {
                 </Dialog>
               </div>
             </div>
-            <div className="block">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg blur-xl"></div>
               <img 
-                src="/lovable-uploads/d98e5926-4e71-42da-ad1d-d3456c15fc86.png" 
-                alt="Counselling Session" 
-                className="rounded-lg shadow-xl animate-fade-in-up w-full"
+                src="/lovable-uploads/c07ff30e-bbf7-4646-9939-5661fa0ccacb.png" 
+                alt="YMR Floodgates" 
+                className="relative rounded-lg shadow-2xl hover:scale-[1.02] transition-transform duration-300 w-full"
               />
             </div>
           </div>
@@ -102,7 +105,7 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#1A1F2C] text-white py-8">
+      <footer className="bg-[#1A1F2C]/90 backdrop-blur-lg text-white py-8">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
