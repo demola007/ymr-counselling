@@ -5,6 +5,7 @@ import { Loader2, ArrowLeft } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CounselleeFormFields } from "@/components/counsellee/CounselleeFormFields";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const AddCounsellee = () => {
   const { toast } = useToast();
@@ -12,12 +13,19 @@ const AddCounsellee = () => {
   const isLoading = false;
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   
   // Check if we came from the counsellee page
   const isFromCounselleePage = location.state?.from === '/counsellee';
 
   const handleBack = () => {
-    navigate(isFromCounselleePage ? '/counsellee' : '/');
+    // If authenticated and came from counsellee page, go back there
+    if (isAuthenticated && isFromCounselleePage) {
+      navigate('/counsellee');
+    } else {
+      // Otherwise, go to index
+      navigate('/');
+    }
   };
 
   const onSubmit = async (data: any) => {
