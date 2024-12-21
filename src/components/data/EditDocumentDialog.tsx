@@ -28,6 +28,7 @@ interface EditDocumentDialogProps {
   onSubmit: (e: React.FormEvent) => void;
   setEditingDocument: (doc: any) => void;
   isLoading?: boolean;
+  fields?: Field[];
 }
 
 export const EditDocumentDialog = ({
@@ -37,6 +38,7 @@ export const EditDocumentDialog = ({
   onSubmit,
   setEditingDocument,
   isLoading = false,
+  fields,
 }: EditDocumentDialogProps) => {
   if (!document) return null;
 
@@ -143,6 +145,8 @@ export const EditDocumentDialog = ({
         );
     }
   };
+
+  const fieldsToRender = fields || [...counselleeFields, ...counsellorFields];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
