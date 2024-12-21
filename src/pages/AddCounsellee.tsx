@@ -16,14 +16,12 @@ const AddCounsellee = () => {
   const { isAuthenticated } = useAuth();
   
   // Check if we came from the counsellee page
-  const isFromCounselleePage = location.state?.from === '/counsellee';
+  const fromPath = location.state?.from || '/';
 
   const handleBack = () => {
-    // If authenticated and came from counsellee page, go back there
-    if (isAuthenticated && isFromCounselleePage) {
+    if (isAuthenticated && fromPath === '/counsellee') {
       navigate('/counsellee');
     } else {
-      // Otherwise, go to index
       navigate('/');
     }
   };
