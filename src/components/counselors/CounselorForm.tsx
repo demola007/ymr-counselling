@@ -27,6 +27,7 @@ export const CounselorForm = () => {
         ...data,
         years_of_experience: Number(data.years_of_experience)
       };
+      console.log("formData", formData)
       
       const response = await apiClient.post("/counsellors", formData);
       

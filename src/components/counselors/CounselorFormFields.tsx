@@ -33,6 +33,16 @@ export const CounselorFormFields = () => {
         ]}
       />
       <FormField 
+        label="Country" 
+        id="country" 
+        required 
+      />
+      <FormField 
+        label="State" 
+        id="state" 
+        required 
+      />
+      <FormField 
         label="Date of Birth" 
         id="date_of_birth" 
         type="date" 

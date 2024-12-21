@@ -112,7 +112,12 @@ export const CounsellorList = ({
     { key: "gender", label: "Gender" },
     { key: "country", label: "Country" },
     { key: "state", label: "State" },
-    { key: "address", label: "Address" },
+    { key: "country", label: "Country" },
+    { key: "years_of_experience", label: "Years of Experience" },
+    { key: "has_certification", label: "Certification" },
+    { key: "will_attend_ymr_2024", label: "Available @ YMR" },
+    { key: "is_available_for_training", label: "Training" },
+    { key: "denomination", label: "Denomination" },
   ];
 
   return (

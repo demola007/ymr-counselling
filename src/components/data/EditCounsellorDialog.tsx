@@ -41,6 +41,8 @@ export const EditCounsellorDialog = ({
       { value: "male", label: "Male" },
       { value: "female", label: "Female" }
     ]},
+    { key: "country", label: "Country", type: "text" as const },
+    { key: "state", label: "State", type: "text" as const },
     { key: "date_of_birth", label: "Date of Birth", type: "date" as const },
     { key: "address", label: "Address", type: "text" as const },
     { key: "years_of_experience", label: "Years of Experience", type: "number" as const },
