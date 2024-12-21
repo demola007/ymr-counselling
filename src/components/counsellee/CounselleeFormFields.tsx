@@ -8,17 +8,19 @@ export const CounselleeFormFields = () => {
   const form = useFormContext();
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
       <FormField 
         label="Name"
         id="name" 
         required 
+        className="bg-white"
       />
       <FormField 
         label="Email"
         id="email" 
         type="email" 
         required 
+        className="bg-white"
       />
       <FormField 
         label="Phone Number" 
@@ -26,12 +28,14 @@ export const CounselleeFormFields = () => {
         required 
         placeholder="+234 *********"
         hint="WhatsApp Enabled (e.g. +234 *********) Kindly include your country code"
+        className="bg-white"
       />
       <FormField 
         label="Date of Birth" 
         id="date_of_birth" 
         type="date" 
         required 
+        className="bg-white"
       />
       <SelectField
         label="Gender"
@@ -47,21 +51,25 @@ export const CounselleeFormFields = () => {
         label="Country" 
         id="country" 
         required 
+        className="bg-white"
       />
       <FormField 
         label="State" 
         id="state" 
         required 
+        className="bg-white"
       />
       <FormField 
         label="Address" 
         id="address" 
         required 
+        className="bg-white"
       />
       <FormField 
         label="Nearest Bus Stop" 
         id="nearest_bus_stop" 
         required 
+        className="bg-white"
       />
       <SelectField
         label="Relationship Status"
@@ -99,24 +107,27 @@ export const CounselleeFormFields = () => {
       <FormField 
         label="School" 
         id="school"
+        className="bg-white"
       />
       <FormField 
         label="Occupation" 
         id="occupation" 
         required 
+        className="bg-white"
       />
       <FormField 
         label="Denomination" 
         id="denomination" 
         required 
+        className="bg-white"
       />
-      <div className="col-span-2">
+      <div className="col-span-1 md:col-span-2">
         <FormItem className="space-y-2">
           <FormLabel className="text-gray-700">Counselling Reason</FormLabel>
           <FormControl>
             <Textarea
               {...form.register("counselling_reason")}
-              className="min-h-[100px] bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200"
+              className="min-h-[120px] bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200 resize-none"
               required
             />
           </FormControl>

@@ -61,7 +61,6 @@ const AddCounsellee = () => {
           title: "Success",
           description: "Counsellee registered successfully!",
         });
-        // Navigate based on where the user came from
         if (isAuthenticated) {
           navigate('/counsellee');
         } else {
@@ -82,50 +81,59 @@ const AddCounsellee = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <Button 
-        variant="outline"
-        size="sm" 
-        onClick={handleBack}
-        className="mb-6"
-      >
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Back
-      </Button>
+    <div className="min-h-screen bg-gray-50 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl">
+        <Button 
+          variant="outline"
+          size="sm" 
+          onClick={handleBack}
+          className="mb-6 w-auto"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
+        </Button>
 
-      <div className="text-center mb-8 space-y-4">
-        <h1 className="text-3xl font-bold text-gray-900">Register for Counselling</h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Welcome to YMR Counselling Unit - Please fill this short form providing your details, thereafter you can schedule your counselling session. God bless you
-        </p>
+        <div className="text-center mb-8 space-y-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            Register for Counselling
+          </h1>
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            Welcome to YMR Counselling Unit - Please fill this short form providing your details, thereafter you can schedule your counselling session. God bless you
+          </p>
+        </div>
+
+        <FormProvider {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <Card className="shadow-lg border-gray-100">
+              <CardHeader className="space-y-1 px-6 py-4 bg-gray-50 border-b">
+                <CardTitle className="text-xl text-gray-900">Counsellee Information</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 sm:p-6">
+                <CounselleeFormFields />
+              </CardContent>
+            </Card>
+
+            <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 mt-6">
+              <Button 
+                type="button" 
+                variant="outline"
+                onClick={handleBack}
+                className="w-full sm:w-auto order-2 sm:order-1"
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+                className="w-full sm:w-auto order-1 sm:order-2"
+              >
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Submit
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
       </div>
-
-      <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Counsellee Information</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CounselleeFormFields />
-            </CardContent>
-          </Card>
-
-          <div className="flex justify-end gap-4">
-            <Button 
-              type="button" 
-              variant="outline"
-              onClick={handleBack}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Submit
-            </Button>
-          </div>
-        </form>
-      </FormProvider>
     </div>
   );
 };
