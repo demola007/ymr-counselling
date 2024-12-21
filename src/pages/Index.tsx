@@ -39,21 +39,21 @@ const Landing = () => {
               <p className="text-xl text-gray-300 leading-relaxed">
                 Take the first step towards personal spiritual growth and emotional well-being with our experienced counsellors
               </p>
-              <div className="flex flex-wrap gap-4 pb-8">
-                <Link to="/login">
-                  <Button className="w-full sm:w-auto bg-white text-[#1A1F2C] hover:bg-gray-100">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap gap-4 pb-8">
+                <Link to="/login" className="w-full sm:w-auto">
+                  <Button className="w-full bg-white text-[#1A1F2C] hover:bg-gray-100">
                     <Upload className="mr-2 h-4 w-4" />
                     Access Portal
                   </Button>
                 </Link>
-                <Link to="/new-convert">
-                  <Button className="w-full sm:w-auto bg-green-600 hover:bg-green-700">
+                <Link to="/new-convert" className="w-full sm:w-auto">
+                  <Button className="w-full bg-green-600 hover:bg-green-700">
                     <UserPlus className="mr-2 h-4 w-4" />
                     New Converts
                   </Button>
                 </Link>
-                <Link to="/counselor-registration">
-                  <Button className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700">
+                <Link to="/counselor-registration" className="w-full sm:w-auto">
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700">
                     <UserPlus className="mr-2 h-4 w-4" />
                     Join Our Team
                   </Button>
