@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft } from "lucide-react";
@@ -54,7 +54,7 @@ const AddCounsellee = () => {
         </p>
       </div>
 
-      <Form {...form}>
+      <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <Card>
             <CardHeader>
@@ -79,7 +79,7 @@ const AddCounsellee = () => {
             </Button>
           </div>
         </form>
-      </Form>
+      </FormProvider>
     </div>
   );
 };
