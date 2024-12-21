@@ -4,16 +4,22 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Edit2, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { Convert, convertColumns } from "@/types/convert";
+import { Convert } from "@/types/convert";
+
+interface Column {
+  key: string;
+  label: string;
+}
 
 interface DocumentTableProps {
-  documents: Convert[];
+  documents: any[];
   selectedIds: number[];
   onSelectRow: (id: number) => void;
   onRowClick: (id: number) => void;
-  onEditClick: (e: React.MouseEvent, document: Convert) => void;
+  onEditClick: (e: React.MouseEvent, document: any) => void;
   onDeleteClick: (e: React.MouseEvent, id: number) => void;
   isLoading: boolean;
+  columns: Column[];
 }
 
 export const DocumentTable = ({
@@ -24,6 +30,7 @@ export const DocumentTable = ({
   onEditClick,
   onDeleteClick,
   isLoading,
+  columns
 }: DocumentTableProps) => {
   const { userRole } = useAuth();
 
@@ -49,7 +56,7 @@ export const DocumentTable = ({
       <TableHeader>
         <TableRow>
           {userRole === "super-admin" && <TableHead className="w-[50px]" />}
-          {convertColumns.map((column) => (
+          {columns.map((column) => (
             <TableHead key={column.key}>{column.label}</TableHead>
           ))}
           {userRole === "super-admin" && <TableHead>Actions</TableHead>}
@@ -71,9 +78,9 @@ export const DocumentTable = ({
                 />
               </TableCell>
             )}
-            {convertColumns.map((column) => (
+            {columns.map((column) => (
               <TableCell key={column.key}>
-                {formatValue(doc[column.key as keyof Convert])}
+                {formatValue(doc[column.key])}
               </TableCell>
             ))}
             {userRole === "super-admin" && (
