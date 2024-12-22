@@ -19,10 +19,70 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import apiClient from "@/utils/apiClient";
 
-const Landing = () => {
+// Let's split the page into smaller components for better maintainability
+const HeroSection = () => {
+  return (
+    <div className="space-y-8 animate-fade-in lg:sticky lg:top-24">
+      <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+        Transform Your Life Through 
+        <span className="text-blue-400"> Spiritually Sensitive</span> and 
+        <span className="text-purple-400"> Professional Counseling</span>
+      </h1>
+      <p className="text-xl text-gray-300 leading-relaxed">
+        Take the first step towards personal spiritual growth and emotional well-being with our experienced counsellors
+      </p>
+    </div>
+  );
+};
+
+const Footer = () => {
+  return (
+    <footer className="bg-[#1A1F2C]/90 backdrop-blur-lg text-white py-8">
+      <div className="container mx-auto px-4">
+        <div className="grid md:grid-cols-2 gap-8">
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
+            <div className="space-y-2">
+              <p className="flex items-center">
+                <span className="font-medium">Counselling HOD:</span>
+                <a href="tel:+2348162495328" className="ml-2 hover:text-blue-300 transition-colors">
+                  +234 816 249 5328
+                </a>
+              </p>
+              <p className="flex items-center">
+                <span className="font-medium">Counselling AHOD:</span>
+                <a href="tel:+2348141689142" className="ml-2 hover:text-blue-300 transition-colors">
+                  +234 814 168 9142
+                </a>
+              </p>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Book Counselling Session</h3>
+            <div className="space-y-2">
+              <a 
+                href="https://calendly.com/your-link" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block text-blue-300 hover:text-blue-400 transition-colors"
+              >
+                Schedule your session via Calendly
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="mt-6 pt-6 border-t border-gray-800 text-center">
+          <p>&copy; {new Date().getFullYear()} YMR Counselling Unit. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+const BookingDialog = () => {
   const [isVerificationOpen, setIsVerificationOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -53,6 +113,97 @@ const Landing = () => {
   };
 
   return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="w-full md:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]">
+          <Calendar className="mr-2 h-4 w-4" />
+          Book a Session
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-semibold">Book Your Counselling Session</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-6 py-4">
+          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <p className="text-blue-800 font-medium text-center">
+              Register for Counselling Session then Schedule your session
+            </p>
+          </div>
+          <Link to="/add-counsellee">
+            <Button className="w-full bg-purple-600 hover:bg-purple-700">
+              <UserPlus className="mr-2 h-4 w-4" />
+              Register for Counseling Session
+            </Button>
+          </Link>
+          <Button 
+            variant="outline" 
+            className="w-full border-2"
+            onClick={() => setIsVerificationOpen(true)}
+          >
+            <Calendar className="mr-2 h-4 w-4" />
+            Schedule Session
+          </Button>
+        </div>
+      </DialogContent>
+
+      <AlertDialog open={isVerificationOpen} onOpenChange={setIsVerificationOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Verify Your Registration</AlertDialogTitle>
+            <AlertDialogDescription>
+              Please enter the email address you used when registering for counselling session
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <form onSubmit={handleEmailVerification} className="space-y-4">
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Verifying..." : "Verify"}
+              </Button>
+            </AlertDialogFooter>
+          </form>
+        </AlertDialogContent>
+      </AlertDialog>
+    </Dialog>
+  );
+};
+
+const ActionButtons = () => {
+  return (
+    <div className="flex flex-col md:flex-row gap-4 pb-8">
+      <Link to="/login" className="w-full md:w-auto">
+        <Button className="w-full bg-white text-[#1A1F2C] hover:bg-gray-100">
+          <Upload className="mr-2 h-4 w-4" />
+          Access Portal
+        </Button>
+      </Link>
+      <Link to="/new-convert" className="w-full md:w-auto">
+        <Button className="w-full bg-green-600 hover:bg-green-700">
+          <UserPlus className="mr-2 h-4 w-4" />
+          New Converts
+        </Button>
+      </Link>
+      <Link to="/counselor-registration" className="w-full md:w-auto">
+        <Button className="w-full bg-purple-600 hover:bg-purple-700">
+          <UserPlus className="mr-2 h-4 w-4" />
+          Join Our Team
+        </Button>
+      </Link>
+      <BookingDialog />
+    </div>
+  );
+};
+
+const Landing = () => {
+  return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#1A1F2C] via-[#2C3E50] to-[#1A1F2C]">
       {/* Navigation */}
       <nav className="bg-[#1A1F2C]/90 backdrop-blur-lg text-white py-4 fixed w-full z-50">
@@ -72,96 +223,7 @@ const Landing = () => {
       <section className="pt-24 flex-1 text-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-start py-12">
-            <div className="space-y-8 animate-fade-in lg:sticky lg:top-24">
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                Transform Your Life Through 
-                <span className="text-blue-400"> Spiritually Sensitive</span> and 
-                <span className="text-purple-400"> Professional Counseling</span>
-              </h1>
-              <p className="text-xl text-gray-300 leading-relaxed">
-                Take the first step towards personal spiritual growth and emotional well-being with our experienced counsellors
-              </p>
-              <div className="flex flex-col md:flex-row gap-4 pb-8">
-                <Link to="/login" className="w-full md:w-auto">
-                  <Button className="w-full bg-white text-[#1A1F2C] hover:bg-gray-100">
-                    <Upload className="mr-2 h-4 w-4" />
-                    Access Portal
-                  </Button>
-                </Link>
-                <Link to="/new-convert" className="w-full md:w-auto">
-                  <Button className="w-full bg-green-600 hover:bg-green-700">
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    New Converts
-                  </Button>
-                </Link>
-                <Link to="/counselor-registration" className="w-full md:w-auto">
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    Join Our Team
-                  </Button>
-                </Link>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" className="w-full md:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]">
-                      <Calendar className="mr-2 h-4 w-4" />
-                      Book a Session
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                      <DialogTitle className="text-xl font-semibold">Book Your Counselling Session</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-6 py-4">
-                      <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                        <p className="text-blue-800 font-medium text-center">
-                          Register for Counselling Session then Schedule your session
-                        </p>
-                      </div>
-                      <Link to="/add-counsellee">
-                        <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                          <UserPlus className="mr-2 h-4 w-4" />
-                          Register for Counseling Session
-                        </Button>
-                      </Link>
-                      <Button 
-                        variant="outline" 
-                        className="w-full border-2"
-                        onClick={() => setIsVerificationOpen(true)}
-                      >
-                        <Calendar className="mr-2 h-4 w-4" />
-                        Schedule Session
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-
-                <AlertDialog open={isVerificationOpen} onOpenChange={setIsVerificationOpen}>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Verify Your Registration</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Please enter the email address you used when registering for counselling session
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <form onSubmit={handleEmailVerification} className="space-y-4">
-                      <Input
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <Button type="submit" disabled={isLoading}>
-                          {isLoading ? "Verifying..." : "Verify"}
-                        </Button>
-                      </AlertDialogFooter>
-                    </form>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
-            </div>
+            <HeroSection />
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg blur-xl"></div>
               <img 
@@ -171,49 +233,11 @@ const Landing = () => {
               />
             </div>
           </div>
+          <ActionButtons />
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#1A1F2C]/90 backdrop-blur-lg text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
-              <div className="space-y-2">
-                <p className="flex items-center">
-                  <span className="font-medium">Counselling HOD:</span>
-                  <a href="tel:+2348162495328" className="ml-2 hover:text-blue-300 transition-colors">
-                    +234 816 249 5328
-                  </a>
-                </p>
-                <p className="flex items-center">
-                  <span className="font-medium">Counselling AHOD:</span>
-                  <a href="tel:+2348141689142" className="ml-2 hover:text-blue-300 transition-colors">
-                    +234 814 168 9142
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Book Counselling Session</h3>
-              <div className="space-y-2">
-                <a 
-                  href="https://calendly.com/your-link" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-block text-blue-300 hover:text-blue-400 transition-colors"
-                >
-                  Schedule your session via Calendly
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="mt-6 pt-6 border-t border-gray-800 text-center">
-            <p>&copy; {new Date().getFullYear()} YMR Counselling Unit. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
