@@ -37,7 +37,6 @@ export const BookingDialog = () => {
     try {
       const response = await apiClient.get(`/counsellee/${email}`);
       if (response.data) {
-        // Open Calendly in a new tab
         const calendlyWindow = window.open("https://calendly.com/your-link", "_blank");
         if (calendlyWindow) {
           calendlyWindow.focus();
@@ -45,22 +44,24 @@ export const BookingDialog = () => {
         resetDialogStates();
       }
     } catch (error) {
+      resetDialogStates();
+      // Show toast after resetting dialog states
       toast({
         variant: "destructive",
         title: "Verification Failed",
         description: "Please register for counselling session first",
         className: "fixed top-4 right-4 bg-white text-black border border-red-500 z-[9999] max-w-[90vw] md:max-w-md",
       });
-      resetDialogStates();
-      // Use replace to prevent navigation stack issues
-      navigate("/", { replace: true });
+      // Use setTimeout to ensure state updates are processed before navigation
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 0);
     } finally {
       setIsLoading(false);
     }
   };
 
   const resetDialogStates = () => {
-    // Reset all states in a single batch
     setIsVerificationOpen(false);
     setIsDialogOpen(false);
     setEmail("");
@@ -75,7 +76,15 @@ export const BookingDialog = () => {
   };
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog 
+      open={isDialogOpen} 
+      onOpenChange={(open) => {
+        setIsDialogOpen(open);
+        if (!open) {
+          setEmail("");
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button 
           variant="outline" 
@@ -115,7 +124,12 @@ export const BookingDialog = () => {
 
       <AlertDialog 
         open={isVerificationOpen} 
-        onOpenChange={setIsVerificationOpen}
+        onOpenChange={(open) => {
+          setIsVerificationOpen(open);
+          if (!open) {
+            setEmail("");
+          }
+        }}
       >
         <AlertDialogContent className="w-[95vw] mx-auto max-w-md">
           <AlertDialogHeader>
