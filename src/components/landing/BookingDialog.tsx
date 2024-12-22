@@ -24,6 +24,7 @@ import apiClient from "@/utils/apiClient";
 
 export const BookingDialog = () => {
   const [isVerificationOpen, setIsVerificationOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -36,7 +37,9 @@ export const BookingDialog = () => {
     try {
       const response = await apiClient.get(`/counsellee/${email}`);
       if (response.data) {
-        window.location.href = "https://calendly.com/your-link";
+        window.open("https://calendly.com/your-link", "_blank");
+        setIsVerificationOpen(false);
+        setIsDialogOpen(false);
       }
     } catch (error) {
       toast({
@@ -45,15 +48,16 @@ export const BookingDialog = () => {
         description: "Please register for counselling session first",
         className: "bg-white text-black border border-red-500 z-[9999]",
       });
-      navigate("/");
+      setIsVerificationOpen(false);
+      setIsDialogOpen(false);
+      navigate("/", { replace: true });
     } finally {
       setIsLoading(false);
-      setIsVerificationOpen(false);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="w-full md:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]">
           <Calendar className="mr-2 h-4 w-4" />
