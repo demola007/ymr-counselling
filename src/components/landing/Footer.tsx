@@ -4,7 +4,7 @@ export const Footer = () => {
   return (
     <footer className="bg-[#1A1F2C]/90 backdrop-blur-lg text-white py-12">
       <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-2">
               Contact Us
@@ -13,7 +13,7 @@ export const Footer = () => {
           </div>
           
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4 items-center justify-center">
               <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
                 <Phone className="h-5 w-5 text-purple-400" />
                 <div>
@@ -48,13 +48,13 @@ export const Footer = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
+              <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300 w-full">
                 <Mail className="h-5 w-5 text-green-400 flex-shrink-0" />
-                <div className="min-w-0">
+                <div>
                   <p className="text-sm text-gray-400">Email Us</p>
                   <a 
                     href="mailto:ymrcounsellingfollowup@gmail.com" 
-                    className="text-white hover:text-green-400 transition-colors text-sm truncate block"
+                    className="text-white hover:text-green-400 transition-colors text-sm"
                   >
                     ymrcounsellingfollowup@gmail.com
                   </a>
