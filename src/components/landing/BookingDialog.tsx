@@ -35,7 +35,6 @@ export const BookingDialog = () => {
     setIsLoading(true);
 
     try {
-      // Add console.log to track the email being sent
       console.log('Verifying email:', email);
       
       const response = await apiClient.get(`/counsellee/${email}`, {
@@ -57,7 +56,6 @@ export const BookingDialog = () => {
     } catch (error) {
       console.error('Verification error:', error);
       
-      resetDialogStates();
       toast({
         variant: "destructive",
         title: "Verification Failed",
@@ -65,11 +63,7 @@ export const BookingDialog = () => {
         className: "fixed top-4 right-4 bg-white text-black border border-red-500 z-[9999] max-w-[90vw] md:max-w-md",
       });
       
-      // Ensure we're not in a dialog state before navigating
-      setIsVerificationOpen(false);
-      setIsDialogOpen(false);
-      
-      // Use requestAnimationFrame for smoother state transitions
+      resetDialogStates();
       requestAnimationFrame(() => {
         navigate("/", { replace: true });
       });
@@ -90,6 +84,11 @@ export const BookingDialog = () => {
 
   const handleVerificationOpen = () => {
     setIsVerificationOpen(true);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation(); // Prevent event bubbling
+    setEmail(e.target.value);
   };
 
   return (
@@ -157,14 +156,15 @@ export const BookingDialog = () => {
               Please enter the email address you used when registering for counselling session
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <form onSubmit={handleEmailVerification} className="space-y-4">
+          <form onSubmit={handleEmailVerification} className="space-y-4" onClick={(e) => e.stopPropagation()}>
             <Input
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
               required
               className="w-full"
+              onClick={(e) => e.stopPropagation()}
             />
             <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
               <AlertDialogCancel 
