@@ -35,7 +35,18 @@ export const BookingDialog = () => {
     setIsLoading(true);
 
     try {
-      const response = await apiClient.get(`/counsellee/${email}`);
+      // Add console.log to track the email being sent
+      console.log('Verifying email:', email);
+      
+      const response = await apiClient.get(`/counsellee/${email}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('API Response:', response);
+
       if (response.data) {
         const calendlyWindow = window.open("https://calendly.com/your-link", "_blank");
         if (calendlyWindow) {
@@ -44,18 +55,24 @@ export const BookingDialog = () => {
         resetDialogStates();
       }
     } catch (error) {
+      console.error('Verification error:', error);
+      
       resetDialogStates();
-      // Show toast after resetting dialog states
       toast({
         variant: "destructive",
         title: "Verification Failed",
         description: "Please register for counselling session first",
         className: "fixed top-4 right-4 bg-white text-black border border-red-500 z-[9999] max-w-[90vw] md:max-w-md",
       });
-      // Use setTimeout to ensure state updates are processed before navigation
-      setTimeout(() => {
+      
+      // Ensure we're not in a dialog state before navigating
+      setIsVerificationOpen(false);
+      setIsDialogOpen(false);
+      
+      // Use requestAnimationFrame for smoother state transitions
+      requestAnimationFrame(() => {
         navigate("/", { replace: true });
-      }, 0);
+      });
     } finally {
       setIsLoading(false);
     }
@@ -79,9 +96,10 @@ export const BookingDialog = () => {
     <Dialog 
       open={isDialogOpen} 
       onOpenChange={(open) => {
-        setIsDialogOpen(open);
         if (!open) {
-          setEmail("");
+          resetDialogStates();
+        } else {
+          setIsDialogOpen(open);
         }
       }}
     >
@@ -125,9 +143,10 @@ export const BookingDialog = () => {
       <AlertDialog 
         open={isVerificationOpen} 
         onOpenChange={(open) => {
-          setIsVerificationOpen(open);
           if (!open) {
-            setEmail("");
+            resetDialogStates();
+          } else {
+            setIsVerificationOpen(open);
           }
         }}
       >
