@@ -13,7 +13,7 @@ export const Footer = () => {
           </div>
           
           <div className="space-y-6">
-            <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center">
               <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
                 <Phone className="h-5 w-5 text-purple-400" />
                 <div>
@@ -32,7 +32,7 @@ export const Footer = () => {
               </div>
               
               <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
-                <Mail className="h-5 w-5 text-blue-400" />
+                <Phone className="h-5 w-5 text-blue-400" />
                 <div>
                   <p className="text-sm text-gray-400">Counselling AHOD</p>
                   <a 
@@ -44,6 +44,19 @@ export const Footer = () => {
                     }}
                   >
                     +234 814 168 9142
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
+                <Mail className="h-5 w-5 text-green-400" />
+                <div>
+                  <p className="text-sm text-gray-400">Email Us</p>
+                  <a 
+                    href="mailto:ymrcounsellingfollowup@gmail.com" 
+                    className="text-white hover:text-green-400 transition-colors text-sm"
+                  >
+                    ymrcounsellingfollowup@gmail.com
                   </a>
                 </div>
               </div>
