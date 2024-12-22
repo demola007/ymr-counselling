@@ -38,33 +38,41 @@ export const BookingDialog = () => {
       const response = await apiClient.get(`/counsellee/${email}`);
       if (response.data) {
         window.open("https://calendly.com/your-link", "_blank");
-        setIsVerificationOpen(false);
-        setIsDialogOpen(false);
+        handleClose();
       }
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Verification Failed",
         description: "Please register for counselling session first",
-        className: "bg-white text-black border border-red-500 z-[9999]",
+        className: "fixed top-4 right-4 bg-white text-black border border-red-500 z-[9999] max-w-[90vw] md:max-w-md",
       });
-      setIsVerificationOpen(false);
-      setIsDialogOpen(false);
+      handleClose();
       navigate("/", { replace: true });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleClose = () => {
+    setIsVerificationOpen(false);
+    setIsDialogOpen(false);
+    setEmail("");
+  };
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full md:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]">
+        <Button 
+          variant="outline" 
+          className="w-full md:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]"
+          onClick={() => setIsDialogOpen(true)}
+        >
           <Calendar className="mr-2 h-4 w-4" />
           Book a Session
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md w-[95vw] mx-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">Book Your Counselling Session</DialogTitle>
         </DialogHeader>
@@ -92,7 +100,7 @@ export const BookingDialog = () => {
       </DialogContent>
 
       <AlertDialog open={isVerificationOpen} onOpenChange={setIsVerificationOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="w-[95vw] mx-auto max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Verify Your Registration</AlertDialogTitle>
             <AlertDialogDescription>
@@ -106,10 +114,20 @@ export const BookingDialog = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="w-full"
             />
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <Button type="submit" disabled={isLoading}>
+            <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+              <AlertDialogCancel 
+                onClick={handleClose}
+                className="w-full sm:w-auto"
+              >
+                Cancel
+              </AlertDialogCancel>
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+                className="w-full sm:w-auto"
+              >
                 {isLoading ? "Verifying..." : "Verify"}
               </Button>
             </AlertDialogFooter>
