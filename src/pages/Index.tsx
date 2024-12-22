@@ -14,6 +14,8 @@ const Landing = () => {
               src="/lovable-uploads/7d495cc3-bdc8-42d6-ab11-263a4b0a731a.png" 
               alt="YMR Logo" 
               className="h-12 w-auto"
+              loading="eager"
+              fetchpriority="high"
             />
             <h1 className="text-2xl font-bold">YMR 2024 - FLOODGATES</h1>
           </div>
@@ -31,6 +33,8 @@ const Landing = () => {
                 src="/lovable-uploads/c07ff30e-bbf7-4646-9939-5661fa0ccacb.png" 
                 alt="YMR Floodgates" 
                 className="relative rounded-lg shadow-2xl hover:scale-[1.02] transition-transform duration-300 w-full"
+                loading="eager"
+                fetchpriority="high"
               />
             </div>
           </div>
