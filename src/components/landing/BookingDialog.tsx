@@ -38,7 +38,7 @@ export const BookingDialog = () => {
     console.log('Starting verification for email:', email);
 
     try {
-      const response = await apiClient.get(`/counsellee/${email.trim().toLowerCase()}`, {
+      const response = await apiClient.get(`/counsellee/${email}`, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
