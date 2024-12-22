@@ -49,12 +49,12 @@ export const Footer = () => {
               </div>
 
               <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
-                <Mail className="h-5 w-5 text-green-400" />
-                <div>
+                <Mail className="h-5 w-5 text-green-400 flex-shrink-0" />
+                <div className="min-w-0">
                   <p className="text-sm text-gray-400">Email Us</p>
                   <a 
                     href="mailto:ymrcounsellingfollowup@gmail.com" 
-                    className="text-white hover:text-green-400 transition-colors text-sm"
+                    className="text-white hover:text-green-400 transition-colors text-sm truncate block"
                   >
                     ymrcounsellingfollowup@gmail.com
                   </a>
