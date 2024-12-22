@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Calendar, UserPlus } from "lucide-react";
+import { Calendar, UserPlus, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -117,23 +117,36 @@ export const BookingDialog = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md w-[95vw] mx-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">Book Your Counselling Session</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent pb-2">
+            Book Your Counselling Session
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4">
-          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <p className="text-blue-800 font-medium text-center">
-              Register for Counselling Session then Schedule your session
+          <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg border border-purple-100 shadow-sm">
+            <div className="flex items-center justify-center space-x-4 mb-4">
+              <div className="flex items-center">
+                <div className="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">1</div>
+                <ArrowRight className="h-4 w-4 text-gray-400 mx-2" />
+                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">2</div>
+              </div>
+            </div>
+            <p className="text-gray-700 text-center leading-relaxed">
+              <span className="font-semibold text-purple-600 block mb-2">Step 1: Register</span>
+              Complete your counselling registration
+              <span className="block my-2 text-gray-400">then</span>
+              <span className="font-semibold text-blue-600 block mb-2">Step 2: Schedule</span>
+              Book your preferred time slot
             </p>
           </div>
           <Link to="/add-counsellee">
-            <Button className="w-full bg-purple-600 hover:bg-purple-700">
+            <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 transition-all duration-300">
               <UserPlus className="mr-2 h-4 w-4" />
               Register for Counseling Session
             </Button>
           </Link>
           <Button 
             variant="outline" 
-            className="w-full border-2"
+            className="w-full border-2 hover:bg-gray-50 transition-all duration-300"
             onClick={handleVerificationOpen}
           >
             <Calendar className="mr-2 h-4 w-4" />
@@ -154,8 +167,8 @@ export const BookingDialog = () => {
       >
         <AlertDialogContent className="w-[95vw] mx-auto max-w-md">
           <AlertDialogHeader>
-            <AlertDialogTitle>Verify Your Registration</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-xl font-semibold text-center">Verify Your Registration</AlertDialogTitle>
+            <AlertDialogDescription className="text-center">
               Please enter the email address you used when registering for counselling session
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -179,7 +192,7 @@ export const BookingDialog = () => {
               <Button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
               >
                 {isLoading ? "Verifying..." : "Verify"}
               </Button>
