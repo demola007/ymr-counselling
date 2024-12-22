@@ -17,7 +17,7 @@ const Landing = () => {
               loading="eager"
               fetchPriority="high"
             />
-            <h1 className="text-2xl font-bold">YMR 2024 - FLOODGATES</h1>
+            <h1 className="text-2xl font-bold">YMR 2024 - FLOODGATES ARE OPEN</h1>
           </div>
         </div>
       </nav>

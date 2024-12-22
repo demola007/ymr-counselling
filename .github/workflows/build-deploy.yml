@@ -29,23 +29,54 @@ jobs:
           name: build-files
           path: dist/
 
+  # deploy:
+  #   needs: build  # This ensures deploy only runs if build succeeds
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download Build Artifacts
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: build-files
+  #         path: dist/
+          
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ secrets.AWS_REGION }}
+          
+  #     - name: Deploy to S3
+  #       run: |
+  #         aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} --delete
+      
+      # - name: Invalidate CloudFront Cache
+      #   run: |
+      #     aws cloudfront create-invalidation \
+      #       --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+      #       --paths "/*"
+  
   deploy:
-    needs: build  # This ensures deploy only runs if build succeeds
     runs-on: ubuntu-latest
     steps:
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          name: build-files
-          path: dist/
+          node-version: '18'
           
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          
-      - name: Deploy to S3
-        run: |
-          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} --delete
+      - name: Install Dependencies
+        run: npm install
+        
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+        
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
