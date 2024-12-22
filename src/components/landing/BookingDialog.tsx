@@ -37,8 +37,12 @@ export const BookingDialog = () => {
     try {
       const response = await apiClient.get(`/counsellee/${email}`);
       if (response.data) {
-        window.open("https://calendly.com/your-link", "_blank");
-        handleClose();
+        // Open Calendly in a new tab
+        const calendlyWindow = window.open("https://calendly.com/your-link", "_blank");
+        if (calendlyWindow) {
+          calendlyWindow.focus();
+        }
+        resetDialogStates();
       }
     } catch (error) {
       toast({
@@ -47,17 +51,27 @@ export const BookingDialog = () => {
         description: "Please register for counselling session first",
         className: "fixed top-4 right-4 bg-white text-black border border-red-500 z-[9999] max-w-[90vw] md:max-w-md",
       });
-      handleClose();
+      resetDialogStates();
+      // Use replace to prevent navigation stack issues
       navigate("/", { replace: true });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleClose = () => {
+  const resetDialogStates = () => {
+    // Reset all states in a single batch
     setIsVerificationOpen(false);
     setIsDialogOpen(false);
     setEmail("");
+  };
+
+  const handleDialogOpen = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleVerificationOpen = () => {
+    setIsVerificationOpen(true);
   };
 
   return (
@@ -66,7 +80,7 @@ export const BookingDialog = () => {
         <Button 
           variant="outline" 
           className="w-full md:w-auto border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#1A1F2C]"
-          onClick={() => setIsDialogOpen(true)}
+          onClick={handleDialogOpen}
         >
           <Calendar className="mr-2 h-4 w-4" />
           Book a Session
@@ -91,7 +105,7 @@ export const BookingDialog = () => {
           <Button 
             variant="outline" 
             className="w-full border-2"
-            onClick={() => setIsVerificationOpen(true)}
+            onClick={handleVerificationOpen}
           >
             <Calendar className="mr-2 h-4 w-4" />
             Schedule Session
@@ -99,7 +113,10 @@ export const BookingDialog = () => {
         </div>
       </DialogContent>
 
-      <AlertDialog open={isVerificationOpen} onOpenChange={setIsVerificationOpen}>
+      <AlertDialog 
+        open={isVerificationOpen} 
+        onOpenChange={setIsVerificationOpen}
+      >
         <AlertDialogContent className="w-[95vw] mx-auto max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Verify Your Registration</AlertDialogTitle>
@@ -118,7 +135,7 @@ export const BookingDialog = () => {
             />
             <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
               <AlertDialogCancel 
-                onClick={handleClose}
+                onClick={resetDialogStates}
                 className="w-full sm:w-auto"
               >
                 Cancel
