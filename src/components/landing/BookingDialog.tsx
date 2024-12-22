@@ -43,6 +43,7 @@ export const BookingDialog = () => {
         variant: "destructive",
         title: "Verification Failed",
         description: "Please register for counselling session first",
+        className: "bg-white text-black border border-red-500 z-[9999]",
       });
       navigate("/");
     } finally {
