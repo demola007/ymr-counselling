@@ -15,7 +15,7 @@ const Landing = () => {
               alt="YMR Logo" 
               className="h-12 w-auto"
               loading="eager"
-              fetchpriority="high"
+              fetchPriority="high"
             />
             <h1 className="text-2xl font-bold">YMR 2024 - FLOODGATES</h1>
           </div>
@@ -34,7 +34,7 @@ const Landing = () => {
                 alt="YMR Floodgates" 
                 className="relative rounded-lg shadow-2xl hover:scale-[1.02] transition-transform duration-300 w-full"
                 loading="eager"
-                fetchpriority="high"
+                fetchPriority="high"
               />
             </div>
           </div>
