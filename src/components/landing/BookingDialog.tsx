@@ -32,11 +32,12 @@ export const BookingDialog = () => {
 
   const handleEmailVerification = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) return; // Prevent multiple submissions
+    
     setIsLoading(true);
+    console.log('Starting verification for email:', email);
 
     try {
-      console.log('Verifying email:', email);
-      
       const response = await apiClient.get(`/counsellee/${email}`, {
         headers: {
           'Accept': 'application/json',
@@ -44,9 +45,10 @@ export const BookingDialog = () => {
         }
       });
       
-      console.log('API Response:', response);
+      console.log('Verification response:', response);
 
       if (response.data) {
+        // Success case - open Calendly
         const calendlyWindow = window.open("https://calendly.com/your-link", "_blank");
         if (calendlyWindow) {
           calendlyWindow.focus();
@@ -62,11 +64,12 @@ export const BookingDialog = () => {
         description: "Please register for counselling session first",
         className: "fixed top-4 right-4 bg-white text-black border border-red-500 z-[9999] max-w-[90vw] md:max-w-md",
       });
-      
-      resetDialogStates();
-      requestAnimationFrame(() => {
+
+      // Delay the navigation and state reset to ensure the toast is visible
+      setTimeout(() => {
+        resetDialogStates();
         navigate("/", { replace: true });
-      });
+      }, 2000);
     } finally {
       setIsLoading(false);
     }
