@@ -13,32 +13,38 @@ export const Footer = () => {
           </div>
           
           <div className="space-y-6">
-            <div className="flex flex-col items-center justify-center space-y-4">
-              <div className="flex items-center justify-center space-x-6">
-                <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
-                  <Phone className="h-5 w-5 text-purple-400" />
-                  <div>
-                    <p className="text-sm text-gray-400">Counselling HOD</p>
-                    <a 
-                      href="tel:+2348162495328" 
-                      className="text-white hover:text-purple-400 transition-colors"
-                    >
-                      +234 816 249 5328
-                    </a>
-                  </div>
+            <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6">
+              <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
+                <Phone className="h-5 w-5 text-purple-400" />
+                <div>
+                  <p className="text-sm text-gray-400">Counselling HOD</p>
+                  <a 
+                    href="tel:+2348162495328" 
+                    className="text-white hover:text-purple-400 transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href = "tel:+2348162495328";
+                    }}
+                  >
+                    +234 816 249 5328
+                  </a>
                 </div>
-                
-                <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
-                  <Mail className="h-5 w-5 text-blue-400" />
-                  <div>
-                    <p className="text-sm text-gray-400">Counselling AHOD</p>
-                    <a 
-                      href="tel:+2348141689142" 
-                      className="text-white hover:text-blue-400 transition-colors"
-                    >
-                      +234 814 168 9142
-                    </a>
-                  </div>
+              </div>
+              
+              <div className="flex items-center space-x-3 bg-white/5 px-4 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
+                <Mail className="h-5 w-5 text-blue-400" />
+                <div>
+                  <p className="text-sm text-gray-400">Counselling AHOD</p>
+                  <a 
+                    href="tel:+2348141689142" 
+                    className="text-white hover:text-blue-400 transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href = "tel:+2348141689142";
+                    }}
+                  >
+                    +234 814 168 9142
+                  </a>
                 </div>
               </div>
             </div>
