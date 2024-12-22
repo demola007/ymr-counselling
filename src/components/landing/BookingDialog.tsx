@@ -35,8 +35,6 @@ export const BookingDialog = () => {
     if (isLoading) return; // Prevent multiple submissions
     
     setIsLoading(true);
-    console.log('Starting verification for email:', email);
-
     try {
       const response = await apiClient.get(`/counsellee/${email}`, {
         headers: {
@@ -45,8 +43,6 @@ export const BookingDialog = () => {
         }
       });
       
-      console.log('Verification response:', response);
-
       if (response.data) {
         // Success case - open Calendly
         const calendlyWindow = window.open("https://calendly.com/your-link", "_blank");
@@ -138,6 +134,7 @@ export const BookingDialog = () => {
               Book your preferred time slot
             </p>
           </div>
+          <div className="mt-4"></div>
           <Link to="/add-counsellee">
             <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 transition-all duration-300">
               <UserPlus className="mr-2 h-4 w-4" />
