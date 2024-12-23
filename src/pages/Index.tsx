@@ -15,12 +15,17 @@ const Landing = () => {
   const [api, setApi] = useState<any>();
   const [current, setCurrent] = useState(0);
 
-  // Auto-play functionality
+  // Auto-play functionality with continuous loop
   useEffect(() => {
     if (!api) return;
 
     const interval = setInterval(() => {
-      api.scrollNext();
+      if (api.selectedScrollSnap() === api.scrollSnapList().length - 1) {
+        // If we're at the last slide, smoothly scroll back to first
+        api.scrollTo(0, true);
+      } else {
+        api.scrollNext();
+      }
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
