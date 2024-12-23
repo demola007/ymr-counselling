@@ -1,4 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
+import { HeroSection } from "@/components/landing/HeroSection";
+import { ActionButtons } from "@/components/landing/ActionButtons";
+import { Footer } from "@/components/landing/Footer";
 import { 
   Carousel, 
   CarouselContent, 
@@ -63,7 +66,7 @@ const Landing = () => {
               alt="YMR Logo" 
               className="h-12 w-auto"
               loading="eager"
-              fetchpriority="high"
+              fetchPriority="high"
             />
             <h1 className="text-2xl font-bold">YMR 2024 - FLOODGATES</h1>
           </div>
@@ -88,7 +91,7 @@ const Landing = () => {
                           className="w-full rounded-lg shadow-2xl transform transition-all duration-500 hover:scale-[1.02] object-cover"
                           style={{ height: '500px' }}
                           loading={index === 0 ? "eager" : "lazy"}
-                          fetchpriority={index === 0 ? "high" : "auto"}
+                          fetchPriority={index === 0 ? "high" : "auto"}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
