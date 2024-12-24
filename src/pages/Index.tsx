@@ -62,7 +62,7 @@ const Landing = () => {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <img 
-              src="/lovable-uploads/7d495cc3-bdc8-42d6-ab11-263a4b0a731a.png" 
+              src="/lovable-uploads/7d495cc3-bdc8-42d6-ab11-263a4b0a731a.png"
               alt="YMR Logo" 
               className="h-12 w-auto"
               loading="eager"
