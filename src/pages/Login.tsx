@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,7 +35,8 @@ const Login = () => {
       if (response.status === 200) {
         const data = await response.data;
         login(data?.access_token, data?.user?.role);
-        navigate("/upload");
+        // Use replace instead of push to prevent back navigation issues
+        navigate("/upload", { replace: true });
       } else {
         toast({
           title: "Login failed",
@@ -110,8 +110,9 @@ const Login = () => {
           <Button 
             type="submit" 
             className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/40 backdrop-blur-lg transition-all duration-300"
+            disabled={loading}
           >
-            Login
+            {loading ? <ClipLoader size={20} color="#ffffff" /> : "Login"}
           </Button>
         </form>
         
