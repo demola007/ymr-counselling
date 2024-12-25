@@ -4,7 +4,7 @@ import axios from "axios";
 const getAccessToken = () => localStorage.getItem("access_token");
 
 const apiClient = axios.create({
-  baseURL: "https://apidatacapture.store/api",
+  baseURL: "https://apidatacapture.store/api/v1", // Updated to include /v1
   headers: {
     "Content-Type": "application/json",
   },
@@ -20,6 +20,17 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor to handle common errors
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 404) {
+      console.error("API endpoint not found:", error.config.url);
+    }
     return Promise.reject(error);
   }
 );
