@@ -4,7 +4,7 @@ import axios from "axios";
 const getAccessToken = () => localStorage.getItem("access_token");
 
 const apiClient = axios.create({
-  baseURL: "https://apidatacapture.store/api/v1", // Updated to include /v1
+  baseURL: "https://apidatacapture.store/api", // Updated to include /v1
   headers: {
     "Content-Type": "application/json",
   },
