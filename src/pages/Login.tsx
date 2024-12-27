@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import apiClient from "@/utils/apiClient";
 import { useToast } from "@/components/ui/use-toast";
@@ -11,6 +11,7 @@ import { useToast } from "@/components/ui/use-toast";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -35,7 +36,6 @@ const Login = () => {
       if (response.status === 200) {
         const data = await response.data;
         login(data?.access_token, data?.user?.role);
-        // Use replace instead of push to prevent back navigation issues
         navigate("/upload", { replace: true });
       } else {
         toast({
@@ -97,15 +97,22 @@ const Login = () => {
               className="w-full bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40"
             />
           </div>
-          <div>
+          <div className="relative">
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40"
+              className="w-full bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40 pr-10"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
           <Button 
             type="submit" 
