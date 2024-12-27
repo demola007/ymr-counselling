@@ -117,12 +117,16 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
           { value: "false", label: "No" }
         ]}
       />
-      <FormField 
-        label="Online Convert" 
-        id="online_convert" 
-        value={isOnlineConvert ? "Yes" : "No"} 
-        disabled 
-        className="bg-gray-100"
+      <SelectField
+        label="Online Convert"
+        id="online"
+        required
+        placeholder="Select option"
+        options={[
+          { value: "true", label: "Yes" },
+          { value: "false", label: "No" }
+        ]}
+        defaultValue={isOnlineConvert ? "true" : "false"}
       />
     </div>
   );
