@@ -75,6 +75,33 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formState = methods.formState;
+    
+    if (Object.keys(formState.errors).length > 0) {
+      const errorFields = Object.keys(formState.errors)
+        .map(field => {
+          // Convert camelCase to Title Case with spaces
+          const fieldName = field
+            .replace(/([A-Z])/g, ' $1')
+            .replace(/_/g, ' ')
+            .replace(/^./, str => str.toUpperCase());
+          return fieldName;
+        })
+        .join(', ');
+
+      toast({
+        title: "Required Fields Missing",
+        description: `Please fill in the following fields: ${errorFields}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    methods.handleSubmit(onSubmit)(e);
+  };
+
   const handleCancel = () => {
     navigate(isFromDataPage ? "/data" : "/");
   };
@@ -95,7 +122,7 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
       <ConvertFormHeader />
 
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
+        <form onSubmit={handleSubmit} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
           <ConvertFormFields isOnlineConvert={isOnlineConvert} />
 
           <div className="flex justify-end gap-4 mt-8">
@@ -106,7 +133,7 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading || !methods.formState.isValid}>
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
