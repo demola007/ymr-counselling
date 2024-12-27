@@ -16,4 +16,5 @@ export interface SelectFieldProps {
   required?: boolean;
   options: { value: string; label: string; }[];
   placeholder?: string;
+  defaultValue?: string;
 }

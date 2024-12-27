@@ -14,7 +14,8 @@ export const SelectField = ({
   id,
   required = false,
   options,
-  placeholder
+  placeholder,
+  defaultValue
 }: SelectFieldProps) => {
   const form = useFormContext();
   
@@ -31,7 +32,11 @@ export const SelectField = ({
         <FormItem className="space-y-2 w-full">
           <FormLabel className="text-gray-700">{label}</FormLabel>
           <FormControl>
-            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
+            <Select 
+              onValueChange={field.onChange} 
+              value={field.value} 
+              defaultValue={defaultValue}
+            >
               <SelectTrigger 
                 className="w-full bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200"
               >
