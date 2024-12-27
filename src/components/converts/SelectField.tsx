@@ -7,12 +7,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectFieldProps } from "./types";
-import { FormField as FormFieldUI, FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import { FormField as FormFieldUI, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 
 export const SelectField = ({
   label,
   id,
-  required = false,
+  required = true,
   options,
   placeholder,
   defaultValue
@@ -28,9 +28,13 @@ export const SelectField = ({
     <FormFieldUI
       control={form.control}
       name={id}
+      rules={{ required: "This field is required" }}
       render={({ field }) => (
         <FormItem className="space-y-2 w-full">
-          <FormLabel className="text-gray-700">{label}</FormLabel>
+          <FormLabel className="text-gray-700">
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </FormLabel>
           <FormControl>
             <Select 
               onValueChange={field.onChange} 
@@ -55,6 +59,7 @@ export const SelectField = ({
               </SelectContent>
             </Select>
           </FormControl>
+          <FormMessage />
         </FormItem>
       )}
     />

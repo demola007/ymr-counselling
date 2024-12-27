@@ -37,7 +37,8 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
     defaultValues: {
       is_student: false,
       availability_for_follow_up: false,
-    }
+    },
+    mode: "onChange"
   });
 
   const isFromDataPage = location.pathname === "/new-convert-manual";
@@ -105,7 +106,7 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading || !methods.formState.isValid}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
