@@ -1,8 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-
 export const HeroSection = () => {
-  return (
-    <div className="space-y-6 animate-slide-in-left">
+  return <div className="space-y-6 animate-slide-in-left">
       <Badge variant="outline" className="border-army-green/50 text-army-green bg-army-green/10 px-4 py-1">
         YMR 2025
       </Badge>
@@ -25,11 +23,11 @@ export const HeroSection = () => {
         <div className="flex items-center gap-3">
           <div className="w-1 h-12 bg-gradient-to-b from-army-green-light to-army-green-dark rounded-full"></div>
           <div>
-            <p className="text-sm text-muted-foreground">Theme</p>
+            <p className="text-sm text-muted-foreground">
+          </p>
             <p className="text-lg font-semibold text-foreground">Transform Your Life Through Divine Counsel</p>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
