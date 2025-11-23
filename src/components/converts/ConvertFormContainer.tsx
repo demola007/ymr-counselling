@@ -107,45 +107,58 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-8">
+    <div className="min-h-screen bg-background">
       {(isFromDataPage || isFromIndexPage) && (
-        <Button
-          variant="ghost"
-          onClick={handleCancel}
-          className="flex items-center gap-2 ml-4"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          {isFromDataPage ? 'Back to Data' : 'Back to Home'}
-        </Button>
+        <div className="container mx-auto px-4 pt-6">
+          <Button
+            variant="ghost"
+            onClick={handleCancel}
+            className="flex items-center gap-2 hover:bg-accent"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {isFromDataPage ? 'Back to Data' : 'Back to Home'}
+          </Button>
+        </div>
       )}
 
-      <ConvertFormHeader />
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <ConvertFormHeader />
 
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit} className="max-w-5xl mx-auto bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-lg">
-          <ConvertFormFields isOnlineConvert={isOnlineConvert} />
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+            <div className="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
+              <div className="p-6 md:p-8 lg:p-10">
+                <ConvertFormFields isOnlineConvert={isOnlineConvert} />
+              </div>
 
-          <div className="flex justify-end gap-4 mt-8">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                "Submit"
-              )}
-            </Button>
-          </div>
-        </form>
-      </FormProvider>
+              <div className="bg-muted/30 px-6 py-5 md:px-8 md:py-6 border-t border-border flex flex-col sm:flex-row justify-end gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancel}
+                  className="w-full sm:w-auto"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={isLoading}
+                  className="w-full sm:w-auto bg-army-green hover:bg-army-green-dark text-white"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit Registration"
+                  )}
+                </Button>
+              </div>
+            </div>
+          </form>
+        </FormProvider>
+      </div>
     </div>
   );
 };

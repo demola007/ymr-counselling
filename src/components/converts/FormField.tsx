@@ -27,18 +27,18 @@ export const FormField = ({
     <FormFieldUI
       control={form.control}
       name={id}
-      rules={{ required: "This field is required" }}
+      rules={{ required: required ? "This field is required" : false }}
       render={({ field }) => (
         <FormItem className="space-y-2 w-full">
-          <FormLabel className="text-gray-700">
+          <FormLabel className="text-sm font-medium text-foreground">
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
-            {hint && (
-              <span className="block text-sm text-muted-foreground mt-0.5">
-                {hint}
-              </span>
-            )}
+            {required && <span className="text-destructive ml-1">*</span>}
           </FormLabel>
+          {hint && (
+            <p className="text-xs text-muted-foreground mb-2">
+              {hint}
+            </p>
+          )}
           <FormControl>
             <Input
               {...field}
@@ -48,12 +48,14 @@ export const FormField = ({
               defaultValue={value}
               required={required}
               className={cn(
-                "w-full bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200",
+                "w-full h-11 bg-background border-border transition-colors",
+                "focus:border-army-green focus:ring-2 focus:ring-army-green/20",
+                "placeholder:text-muted-foreground/60",
                 className
               )}
             />
           </FormControl>
-          <FormMessage />
+          <FormMessage className="text-xs" />
         </FormItem>
       )}
     />

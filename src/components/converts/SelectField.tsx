@@ -28,12 +28,12 @@ export const SelectField = ({
     <FormFieldUI
       control={form.control}
       name={id}
-      rules={{ required: "This field is required" }}
+      rules={{ required: required ? "This field is required" : false }}
       render={({ field }) => (
         <FormItem className="space-y-2 w-full">
-          <FormLabel className="text-gray-700">
+          <FormLabel className="text-sm font-medium text-foreground">
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
+            {required && <span className="text-destructive ml-1">*</span>}
           </FormLabel>
           <FormControl>
             <Select 
@@ -42,16 +42,16 @@ export const SelectField = ({
               defaultValue={defaultValue}
             >
               <SelectTrigger 
-                className="w-full bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200"
+                className="w-full h-11 bg-background border-border transition-colors focus:border-army-green focus:ring-2 focus:ring-army-green/20"
               >
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
-              <SelectContent className="bg-white">
+              <SelectContent className="bg-popover border-border">
                 {options.map((option) => (
                   <SelectItem 
                     key={option.value} 
                     value={option.value}
-                    className="hover:bg-purple-50"
+                    className="hover:bg-accent hover:text-accent-foreground"
                   >
                     {option.label}
                   </SelectItem>
@@ -59,7 +59,7 @@ export const SelectField = ({
               </SelectContent>
             </Select>
           </FormControl>
-          <FormMessage />
+          <FormMessage className="text-xs" />
         </FormItem>
       )}
     />
