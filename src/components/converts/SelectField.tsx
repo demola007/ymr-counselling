@@ -42,16 +42,16 @@ export const SelectField = ({
               defaultValue={defaultValue}
             >
               <SelectTrigger 
-                className="w-full h-11 bg-background border-border transition-colors focus:border-army-green focus:ring-2 focus:ring-army-green/20"
+                className="w-full h-11 bg-card/50 backdrop-blur-sm border-army-green/30 text-foreground transition-all duration-200 focus:border-army-green focus:ring-2 focus:ring-army-green/20 focus:bg-card/70"
               >
-                <SelectValue placeholder={placeholder} />
+                <SelectValue placeholder={placeholder} className="text-muted-foreground/60" />
               </SelectTrigger>
-              <SelectContent className="bg-popover border-border">
+              <SelectContent className="bg-card/95 backdrop-blur-xl border-army-green/30">
                 {options.map((option) => (
                   <SelectItem 
                     key={option.value} 
                     value={option.value}
-                    className="hover:bg-accent hover:text-accent-foreground"
+                    className="text-foreground hover:bg-army-green/20 hover:text-army-green-light focus:bg-army-green/20 focus:text-army-green-light"
                   >
                     {option.label}
                   </SelectItem>

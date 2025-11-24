@@ -48,9 +48,7 @@ export const FormField = ({
               defaultValue={value}
               required={required}
               className={cn(
-                "w-full h-11 bg-background border-border transition-colors",
-                "focus:border-army-green focus:ring-2 focus:ring-army-green/20",
-                "placeholder:text-muted-foreground/60",
+                "w-full h-11",
                 className
               )}
             />
