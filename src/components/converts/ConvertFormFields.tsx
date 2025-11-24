@@ -8,7 +8,7 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
     <div className="space-y-8">
       {/* Personal Information */}
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border">
+        <h3 className="text-lg font-semibold text-army-green-light mb-4 pb-2 border-b border-army-green/20">
           Personal Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -65,7 +65,7 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
 
       {/* Location Information */}
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border">
+        <h3 className="text-lg font-semibold text-army-green-light mb-4 pb-2 border-b border-army-green/20">
           Location Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -99,7 +99,7 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
 
       {/* Background Information */}
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border">
+        <h3 className="text-lg font-semibold text-army-green-light mb-4 pb-2 border-b border-army-green/20">
           Background Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -146,7 +146,7 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
 
       {/* Follow-up Preferences */}
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border">
+        <h3 className="text-lg font-semibold text-army-green-light mb-4 pb-2 border-b border-army-green/20">
           Follow-up Preferences
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
