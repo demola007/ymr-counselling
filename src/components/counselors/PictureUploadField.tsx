@@ -43,21 +43,22 @@ export const PictureUploadField = ({ value, onChange, required = false }: Pictur
   };
 
   return (
-    <div className="space-y-2 w-full">
+    <div className="space-y-3 w-full">
       <FormLabel className="text-sm font-medium text-foreground">
         Profile Picture
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
-      <p className="text-xs text-muted-foreground mb-2">
+      <p className="text-xs text-muted-foreground">
         Upload a professional photo (JPEG, PNG, max 5MB)
       </p>
 
-      <div className="flex flex-col sm:flex-row gap-4 items-start">
-        {/* Preview Area */}
+      {/* Mobile-First Layout */}
+      <div className="flex flex-col items-center gap-4 w-full">
+        {/* Preview Area - Centered */}
         <div className="relative">
           <div className={cn(
-            "w-32 h-32 rounded-xl border-2 overflow-hidden bg-card/50 backdrop-blur-sm flex items-center justify-center transition-all",
-            preview ? "border-army-green/50" : "border-army-green/30"
+            "w-28 h-28 sm:w-32 sm:h-32 rounded-2xl border-2 overflow-hidden bg-card/50 backdrop-blur-sm flex items-center justify-center transition-all",
+            preview ? "border-army-gold/50 shadow-[0_0_20px_hsl(40_100%_50%/0.2)]" : "border-army-gold/30"
           )}>
             {preview ? (
               <img 
@@ -66,25 +67,28 @@ export const PictureUploadField = ({ value, onChange, required = false }: Pictur
                 className="w-full h-full object-cover"
               />
             ) : (
-              <User className="w-12 h-12 text-muted-foreground/50" />
+              <User className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground/50" />
             )}
           </div>
           {preview && (
             <button
               type="button"
               onClick={clearImage}
-              className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1 shadow-lg hover:bg-destructive/90 transition-colors"
+              className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1.5 shadow-lg hover:bg-destructive/90 transition-all active:scale-95"
+              aria-label="Remove picture"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
 
-        {/* Upload Area */}
+        {/* Upload Area - Full Width on Mobile */}
         <div
           className={cn(
-            "flex-1 border-2 border-dashed rounded-xl p-6 transition-all cursor-pointer",
-            isDragging ? "border-army-green bg-army-green/5" : "border-army-green/30 hover:border-army-green/50 bg-card/30 backdrop-blur-sm"
+            "w-full border-2 border-dashed rounded-xl p-5 sm:p-6 transition-all cursor-pointer min-h-[120px] flex items-center justify-center",
+            isDragging 
+              ? "border-army-gold bg-army-gold/10 scale-[0.98]" 
+              : "border-army-gold/30 hover:border-army-gold/50 bg-card/30 backdrop-blur-sm active:scale-[0.98]"
           )}
           onDragOver={(e) => {
             e.preventDefault();
@@ -95,15 +99,15 @@ export const PictureUploadField = ({ value, onChange, required = false }: Pictur
           onClick={() => document.getElementById("picture-upload")?.click()}
         >
           <div className="flex flex-col items-center justify-center gap-3 text-center">
-            <div className="rounded-lg bg-army-green/15 p-3">
-              <Upload className="w-6 h-6 text-army-green-light" />
+            <div className="rounded-xl bg-army-gold/15 p-3 transition-transform hover:scale-110">
+              <Upload className="w-5 h-5 sm:w-6 sm:h-6 text-army-gold" />
             </div>
             <div>
               <p className="text-sm font-medium text-foreground mb-1">
                 {preview ? "Change Picture" : "Upload Picture"}
               </p>
               <p className="text-xs text-muted-foreground">
-                Drag & drop or click to browse
+                Tap to browse or drag & drop
               </p>
             </div>
           </div>
