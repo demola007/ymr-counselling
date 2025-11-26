@@ -7,6 +7,7 @@ import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import apiClient from "@/utils/apiClient";
 import { useToast } from "@/components/ui/use-toast";
+import { checkDevCredentials, DEV_MODE } from "@/config/devCredentials";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,23 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    
     try {
+      // Check development credentials first
+      const devCred = checkDevCredentials(email, password);
+      if (devCred) {
+        console.log("🔧 DEV MODE: Logging in with development credentials");
+        login(devCred.token, devCred.role);
+        navigate("/upload", { replace: true });
+        toast({
+          title: "Development Login",
+          description: `Logged in as ${devCred.role} (dev mode)`,
+          className: "bg-yellow-500 text-black border-none",
+        });
+        return;
+      }
+      
+      // Production API call
       const response = await apiClient.post(
         "login",
         new URLSearchParams({
@@ -84,6 +101,16 @@ const Login = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2 text-white">YMR Global</h1>
           <p className="text-white/80">AI-Powered Data Capture System</p>
+          {DEV_MODE && (
+            <div className="mt-4 p-3 bg-yellow-500/20 border border-yellow-500/50 rounded-lg">
+              <p className="text-xs text-yellow-200 font-semibold">🔧 DEV MODE ACTIVE</p>
+              <div className="text-xs text-yellow-100 mt-2 space-y-1">
+                <p>user@dev.local / user123</p>
+                <p>admin@dev.local / admin123</p>
+                <p>superadmin@dev.local / superadmin123</p>
+              </div>
+            </div>
+          )}
         </div>
         
         <form onSubmit={handleLogin} className="space-y-6">
