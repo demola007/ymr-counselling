@@ -59,10 +59,10 @@ export const ResultsReview = ({ converts, onSubmitAll, onCancel, isSubmitting }:
         <CardContent className="relative z-10 space-y-4">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">
-              {validCount} of {converts.length} forms validated
+              {validCount} of {converts.length} forms complete
             </span>
             <span className={allValid ? "text-green-600 font-medium" : "text-orange-600 font-medium"}>
-              {allValid ? "All forms ready" : "Review required fields"}
+              {allValid ? "All forms complete" : "Some fields missing"}
             </span>
           </div>
           <Progress value={progressPercentage} className="h-2" />
@@ -71,7 +71,7 @@ export const ResultsReview = ({ converts, onSubmitAll, onCancel, isSubmitting }:
             <div className="flex items-center gap-2 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
               <AlertTriangle className="h-4 w-4 text-orange-600 flex-shrink-0" />
               <p className="text-sm text-orange-600">
-                Some forms have missing required fields. Please review and complete them before submitting.
+                Some forms have missing fields. You can still submit, but consider completing them for better data quality.
               </p>
             </div>
           )}
@@ -111,7 +111,7 @@ export const ResultsReview = ({ converts, onSubmitAll, onCancel, isSubmitting }:
             <Button
               size="lg"
               onClick={() => onSubmitAll(editedConverts)}
-              disabled={!allValid || isSubmitting}
+              disabled={isSubmitting}
               className="min-w-48 bg-army-gold hover:bg-army-gold/90 text-army-black font-semibold shadow-[0_0_20px_hsl(40_100%_50%/0.3)] hover:shadow-[0_0_30px_hsl(40_100%_50%/0.4)] transition-all"
             >
               {isSubmitting ? (

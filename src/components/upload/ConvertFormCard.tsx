@@ -26,7 +26,7 @@ export const ConvertFormCard = ({
     mode: "onChange"
   });
 
-  const { watch, formState } = methods;
+  const { watch } = methods;
 
   // Watch all form changes
   useEffect(() => {
@@ -36,10 +36,11 @@ export const ConvertFormCard = ({
     return () => subscription.unsubscribe();
   }, [watch, index, onUpdate]);
 
-  // Track validation state
+  // Check if critical fields are empty for warning
   useEffect(() => {
-    onValidationChange(index, formState.isValid);
-  }, [formState.isValid, index, onValidationChange]);
+    const hasEmptyFields = !convert.name || !convert.email || !convert.phone_number;
+    onValidationChange(index, !hasEmptyFields);
+  }, [convert, index, onValidationChange]);
 
   return (
     <Card className="relative overflow-hidden bg-card/60 backdrop-blur-xl border-border/40 hover:border-army-gold/50 transition-all duration-300">
