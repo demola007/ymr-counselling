@@ -5,26 +5,27 @@ import { StatsCards } from "@/components/dashboard/StatsCards";
 import { ModernUploadSection } from "@/components/dashboard/ModernUploadSection";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
-import { ImagePreview } from "@/components/ImagePreview";
+import { ResultsReview } from "@/components/upload/ResultsReview";
 import { useToast } from "@/components/ui/use-toast";
-import axios from "axios";
-import apiClient from "@/utils/apiClient";
+import { Convert } from "@/types/convert";
+import { processDocumentsWithAI, bulkSubmitConverts } from "@/utils/mockConvertApi";
+import { Loader2 } from "lucide-react";
 
 const Upload = () => {
   const [isDragging, setIsDragging] = useState(false);
-  const [uploadErrors, setUploadErrors] = useState<string[]>([]);
-  const [uploadProgress, setUploadProgress] = useState<number[]>([]);
-  const [isUploading, setIsUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processedConverts, setProcessedConverts] = useState<Convert[] | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const processFile = async (files: FileList) => {
     const validFiles = Array.from(files).filter(file => {
-      const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+      const validTypes = ["image/jpeg", "image/jpg", "image/png", "application/pdf"];
       if (!validTypes.includes(file.type)) {
         toast({
           title: "Invalid file type",
-          description: "Please upload only JPEG, JPG, or PNG images.",
+          description: "Please upload only JPEG, JPG, PNG images or PDF documents.",
           variant: "destructive",
         });
         return false;
@@ -34,104 +35,81 @@ const Upload = () => {
 
     if (validFiles.length === 0) return;
 
-    setSelectedFiles(prev => [...prev, ...validFiles]);
-    setUploadProgress((prev) => [...prev, ...Array(validFiles.length).fill(0)]);
+    setSelectedFiles(validFiles);
     toast({
-      title: "Images Selected",
-      description: `${validFiles.length} image${validFiles.length > 1 ? 's' : ''} added to staging area`,
+      title: "Documents Selected",
+      description: `${validFiles.length} document${validFiles.length > 1 ? 's' : ''} ready for AI processing`,
     });
   };
 
-  const getPresignedUrls = async (files: File[]) => {
-    try {
-      const formData = new FormData();
-      files.forEach((file) => {
-        formData.append("files", file);
-      });
-      const response = await apiClient.post("uploads/generate-presigned-urls", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      return response.data.upload_urls;
-    } catch (error) {
-      toast({
-        title: "Error generating presigned URLs",
-        description: "Unable to fetch presigned URLs. Please try again later.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-
-  const uploadFileToS3 = async (file: File, url: string, index: number) => {
-    try {
-      await axios.put(url, file, {
-        headers: { "Content-Type": file.type },
-        onUploadProgress: (event) => {
-          const progress = Math.round((event.loaded * 100) / event.total);
-          setUploadProgress((prev) => {
-            const updatedProgress = [...prev];
-            updatedProgress[index] = progress;
-            return updatedProgress;
-          });
-        },
-      });
-      return true;
-    } catch (error) {
-      toast({
-        title: "Upload Error",
-        description: `Failed to upload ${file.name}.`,
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-  
-  const handleUpload = async () => {
+  const handleProcessDocuments = async () => {
     if (selectedFiles.length === 0) {
       toast({
-        title: "No files selected",
-        description: "Please select files to upload first.",
+        title: "No documents selected",
+        description: "Please select documents to process first.",
         variant: "destructive",
       });
       return;
     }
 
-    setIsUploading(true);
-    setUploadProgress(new Array(selectedFiles.length).fill(0));
-    setUploadErrors(new Array(selectedFiles.length).fill(""));
-
+    setIsProcessing(true);
+    
     try {
-      const presignedUrls = await getPresignedUrls(selectedFiles);
-      const uploadPromises = selectedFiles.map((file, index) =>
-        uploadFileToS3(file, presignedUrls[index].upload_url, index)
-      );
-
-      await Promise.all(uploadPromises);
-
       toast({
-        title: "Upload Complete",
-        description: `Successfully uploaded ${selectedFiles.length} image${
-          selectedFiles.length > 1 ? "s" : ""
-        }.`,
+        title: "Processing Started",
+        description: "AI is extracting data from your documents...",
       });
 
-      setSelectedFiles([]);
-      setUploadProgress([]);
-    } catch {
-      // Errors are handled individually
+      const results = await processDocumentsWithAI(selectedFiles);
+      
+      setProcessedConverts(results);
+      
+      toast({
+        title: "Processing Complete",
+        description: `Successfully extracted ${results.length} convert record${results.length > 1 ? 's' : ''} from your documents.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Processing Failed",
+        description: "Unable to process documents. Please try again.",
+        variant: "destructive",
+      });
     } finally {
-      setIsUploading(false);
+      setIsProcessing(false);
     }
   };
 
-  const removeFile = (index: number) => {
-    setSelectedFiles(files => files.filter((_, i) => i !== index));
-    setUploadProgress((progress) => progress.filter((_, i) => i !== index));
+  const handleSubmitAll = async (converts: Convert[]) => {
+    setIsSubmitting(true);
+    
+    try {
+      await bulkSubmitConverts(converts);
+      
+      toast({
+        title: "Success",
+        description: `${converts.length} convert record${converts.length > 1 ? 's' : ''} successfully saved to database.`,
+      });
+
+      // Reset state
+      setProcessedConverts(null);
+      setSelectedFiles([]);
+    } catch (error) {
+      toast({
+        title: "Submission Failed",
+        description: "Unable to save converts to database. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCancelReview = () => {
+    setProcessedConverts(null);
+    setSelectedFiles([]);
     toast({
-      title: "Image Removed",
-      description: "Image removed from staging area",
+      title: "Review Cancelled",
+      description: "You can upload new documents to start over.",
     });
   };
 
@@ -154,33 +132,71 @@ const Upload = () => {
 
           {/* Main content */}
           <div className="p-6 space-y-6">
-            <StatsCards />
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-6">
-                <ModernUploadSection 
-                  onFileSelect={processFile}
-                  isDragging={isDragging}
-                  setIsDragging={setIsDragging}
-                />
+            {!processedConverts ? (
+              <>
+                <StatsCards />
                 
-                {selectedFiles.length > 0 && (
-                  <ImagePreview
-                    selectedFiles={selectedFiles}
-                    removeFile={removeFile}
-                    isUploading={isUploading}
-                    uploadProgress={uploadProgress}
-                    handleUpload={handleUpload}
-                  />
-                )}
-                
-                <QuickActions />
-              </div>
-              
-              <div className="space-y-6">
-                <RecentActivity />
-              </div>
-            </div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="lg:col-span-2 space-y-6">
+                    <ModernUploadSection 
+                      onFileSelect={processFile}
+                      isDragging={isDragging}
+                      setIsDragging={setIsDragging}
+                    />
+                    
+                    {selectedFiles.length > 0 && (
+                      <div className="bg-card/60 backdrop-blur-xl border border-border/40 rounded-2xl p-6 space-y-4">
+                        <div>
+                          <h3 className="text-lg font-semibold text-foreground mb-2">
+                            Selected Documents ({selectedFiles.length})
+                          </h3>
+                          <div className="space-y-2">
+                            {selectedFiles.map((file, index) => (
+                              <div key={index} className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
+                                <span className="text-sm text-foreground truncate flex-1">{file.name}</span>
+                                <span className="text-xs text-muted-foreground ml-2">
+                                  {(file.size / 1024).toFixed(1)} KB
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <button
+                          onClick={handleProcessDocuments}
+                          disabled={isProcessing}
+                          className="w-full py-4 px-6 bg-army-gold hover:bg-army-gold/90 text-army-black font-semibold rounded-xl shadow-[0_0_20px_hsl(40_100%_50%/0.3)] hover:shadow-[0_0_30px_hsl(40_100%_50%/0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                          {isProcessing ? (
+                            <>
+                              <Loader2 className="h-5 w-5 animate-spin" />
+                              Processing with AI...
+                            </>
+                          ) : (
+                            <>
+                              Process Documents with AI
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                    
+                    <QuickActions />
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <RecentActivity />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <ResultsReview
+                converts={processedConverts}
+                onSubmitAll={handleSubmitAll}
+                onCancel={handleCancelReview}
+                isSubmitting={isSubmitting}
+              />
+            )}
           </div>
         </main>
       </div>
