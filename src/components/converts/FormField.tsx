@@ -27,7 +27,6 @@ export const FormField = ({
     <FormFieldUI
       control={form.control}
       name={id}
-      rules={{ required: required ? "This field is required" : false }}
       render={({ field }) => (
         <FormItem className="space-y-2 w-full">
           <FormLabel className="text-sm font-medium text-foreground">
