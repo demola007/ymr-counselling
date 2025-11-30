@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataViewHeader } from "@/components/data/DataViewHeader";
 import { DataViewFilters } from "@/components/data/DataViewFilters";
+import { DataStats } from "@/components/data/DataStats";
+import { ConvertCard } from "@/components/data/ConvertCard";
 import { EditConvertDialog } from "@/components/data/EditConvertDialog";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { DataViewActions } from "@/components/data/DataViewActions";
-import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { useAuth } from "@/hooks/useAuth";
 import { ClipLoader } from "react-spinners";
+import { Skeleton } from "@/components/ui/skeleton";
 import apiClient from "@/utils/apiClient";
 import "../contexts/loader.css";
 
@@ -158,61 +160,82 @@ const DataView = () => {
     }
   };
 
-  const columns = [
-    { key: "name", label: "Name" },
-    { key: "gender", label: "Gender" },
-    { key: "email", label: "Email" },
-    { key: "phone_number", label: "Phone" },
-    { key: "date_of_birth", label: "Date of Birth" },
-    { key: "country", label: "Country" },
-    { key: "state", label: "State" },
-    { key: "address", label: "Address" },
-    { key: "is_student", label: "Student" },
-    { key: "age_group", label: "Age Group" },
-    { key: "denomination", label: "Denomination" },
-    { key: "availability_for_follow_up", label: "Available for Follow-up" },
-    { key: "online", label: "Online" },
-  ];
+  // Calculate stats
+  const onlineCount = useMemo(() => 
+    paginatedDocuments.filter(doc => doc.online).length, 
+    [paginatedDocuments]
+  );
+  
+  const studentCount = useMemo(() => 
+    paginatedDocuments.filter(doc => doc.is_student).length, 
+    [paginatedDocuments]
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-background via-army-gold/5 to-army-olive/5">
       {loading && (
         <div className="loader-overlay">
-          <ClipLoader color="#3498db" size={50} />
+          <ClipLoader color="#B8860B" size={50} />
         </div>
       )}
+      
       <div className="container px-4 py-6 mx-auto max-w-7xl">
         <DataViewHeader />
+        
+        <DataStats 
+          totalRecords={totalRecords}
+          currentPageCount={paginatedDocuments.length}
+          onlineCount={onlineCount}
+          studentCount={studentCount}
+        />
         
         <DataViewFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
 
-        <DataViewActions
-          selectedIds={selectedIds}
-          onDeleteSelected={handleDeleteSelected}
-          selectAll={selectedIds?.length === paginatedDocuments?.length}
-          onSelectAll={handleSelectAll}
-          userRole={userRole}
-        />
+        {userRole === "super-admin" && (
+          <DataViewActions
+            selectedIds={selectedIds}
+            onDeleteSelected={handleDeleteSelected}
+            selectAll={selectedIds?.length === paginatedDocuments?.length && paginatedDocuments?.length > 0}
+            onSelectAll={handleSelectAll}
+            userRole={userRole}
+          />
+        )}
 
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="overflow-x-auto">
-            <DocumentTable
-              documents={paginatedDocuments}
-              selectedIds={selectedIds}
-              onSelectRow={handleSelectRow}
-              onRowClick={handleRowClick}
-              onEditClick={handleEditClick}
-              onDeleteClick={handleDeleteClick}
-              isLoading={isLoadingDocuments}
-              columns={columns}
-            />
-          </div>
+        {/* Cards Grid */}
+        <div className="space-y-4 mb-6">
+          {isLoadingDocuments ? (
+            // Loading skeletons
+            Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-48 w-full rounded-xl" />
+            ))
+          ) : paginatedDocuments.length === 0 ? (
+            // Empty state
+            <div className="text-center py-16 bg-card/40 backdrop-blur-sm border border-border/40 rounded-xl">
+              <p className="text-lg font-medium text-muted-foreground">No converts found</p>
+              <p className="text-sm text-muted-foreground mt-2">Try adjusting your search query</p>
+            </div>
+          ) : (
+            // Convert cards
+            paginatedDocuments.map((doc) => (
+              <ConvertCard
+                key={doc.id}
+                convert={doc}
+                isSelected={selectedIds.includes(doc.id)}
+                onSelect={() => handleSelectRow(doc.id)}
+                onClick={() => handleRowClick(doc.id)}
+                onEdit={(e) => handleEditClick(e, doc)}
+                onDelete={(e) => handleDeleteClick(e, doc.id)}
+                showActions={userRole === "super-admin"}
+              />
+            ))
+          )}
         </div>
 
-        <div className="mt-6 flex flex-col gap-4">
+        {/* Pagination */}
+        <div className="space-y-4">
           <DocumentPagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -220,12 +243,9 @@ const DataView = () => {
             isLoading={isLoadingDocuments}
           />
 
-          <div className="bg-white p-4 rounded-lg shadow text-center">
-            <p className="text-lg font-semibold text-purple-800">
-              Total Records: {totalRecords}
-            </p>
-            <p className="text-sm text-gray-600">
-              Showing {startIndex + 1} - {Math.min(endIndex, totalRecords)} of {totalRecords}
+          <div className="text-center p-4 bg-card/40 backdrop-blur-sm border border-border/40 rounded-xl">
+            <p className="text-sm text-muted-foreground">
+              Showing <span className="font-semibold text-foreground">{startIndex + 1}</span> - <span className="font-semibold text-foreground">{Math.min(endIndex, totalRecords)}</span> of <span className="font-semibold text-foreground">{totalRecords}</span> records
             </p>
           </div>
         </div>
