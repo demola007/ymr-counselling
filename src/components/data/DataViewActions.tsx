@@ -22,15 +22,22 @@ export const DataViewActions = ({
   }
 
   return (
-    <div className="flex items-center gap-4 mb-4">
-      <div className="flex items-center gap-2">
+    <div className="flex items-center justify-between gap-4 mb-6 p-4 bg-card/40 backdrop-blur-sm border border-border/40 rounded-xl">
+      <div className="flex items-center gap-3">
         <Checkbox
           checked={selectAll}
           onCheckedChange={onSelectAll}
           aria-label="Select all"
+          className="border-2"
         />
-        <span className="text-sm text-gray-600">
-          {selectedIds.length} selected
+        <span className="text-sm font-medium text-foreground">
+          {selectedIds.length === 0 ? (
+            "Select items"
+          ) : (
+            <span className="text-army-gold">
+              {selectedIds.length} selected
+            </span>
+          )}
         </span>
       </div>
       {selectedIds.length > 0 && (
@@ -38,10 +45,10 @@ export const DataViewActions = ({
           variant="destructive"
           size="sm"
           onClick={onDeleteSelected}
-          className="ml-auto"
+          className="shadow-lg hover:shadow-xl transition-shadow"
         >
           <Trash2 className="w-4 h-4 mr-2" />
-          Delete Selected
+          Delete ({selectedIds.length})
         </Button>
       )}
     </div>
