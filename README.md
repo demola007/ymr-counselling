@@ -1,6 +1,6 @@
-# YMR 2025 - Youth Ministers' Retreat
+# YMR 2025 - Young Ministers' Retreat
 
-A web application for managing the Youth Ministers' Retreat 2025 event.
+A web application for managing the Young Ministers' Retreat 2025 event.
 
 ## Features
 
