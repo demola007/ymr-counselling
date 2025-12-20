@@ -4,7 +4,6 @@ import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { StatsCards } from "@/components/dashboard/StatsCards";
 import { ModernUploadSection } from "@/components/dashboard/ModernUploadSection";
 import { QuickActions } from "@/components/dashboard/QuickActions";
-import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { ResultsReview } from "@/components/upload/ResultsReview";
 import { useToast } from "@/components/ui/use-toast";
 import { Convert } from "@/types/convert";
@@ -136,57 +135,51 @@ const Upload = () => {
               <>
                 <StatsCards />
                 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="lg:col-span-2 space-y-6">
-                    <ModernUploadSection 
-                      onFileSelect={processFile}
-                      isDragging={isDragging}
-                      setIsDragging={setIsDragging}
-                    />
-                    
-                    {selectedFiles.length > 0 && (
-                      <div className="bg-card/60 backdrop-blur-xl border border-border/40 rounded-2xl p-6 space-y-4">
-                        <div>
-                          <h3 className="text-lg font-semibold text-foreground mb-2">
-                            Selected Documents ({selectedFiles.length})
-                          </h3>
-                          <div className="space-y-2">
-                            {selectedFiles.map((file, index) => (
-                              <div key={index} className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
-                                <span className="text-sm text-foreground truncate flex-1">{file.name}</span>
-                                <span className="text-xs text-muted-foreground ml-2">
-                                  {(file.size / 1024).toFixed(1)} KB
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        <button
-                          onClick={handleProcessDocuments}
-                          disabled={isProcessing}
-                          className="w-full py-4 px-6 bg-army-gold hover:bg-army-gold/90 text-army-black font-semibold rounded-xl shadow-[0_0_20px_hsl(40_100%_50%/0.3)] hover:shadow-[0_0_30px_hsl(40_100%_50%/0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                          {isProcessing ? (
-                            <>
-                              <Loader2 className="h-5 w-5 animate-spin" />
-                              Processing with AI...
-                            </>
-                          ) : (
-                            <>
-                              Process Documents with AI
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    )}
-                    
-                    <QuickActions />
-                  </div>
+                <div className="space-y-6">
+                  <ModernUploadSection 
+                    onFileSelect={processFile}
+                    isDragging={isDragging}
+                    setIsDragging={setIsDragging}
+                  />
                   
-                  <div className="space-y-6">
-                    <RecentActivity />
-                  </div>
+                  {selectedFiles.length > 0 && (
+                    <div className="bg-card/60 backdrop-blur-xl border border-border/40 rounded-2xl p-6 space-y-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">
+                          Selected Documents ({selectedFiles.length})
+                        </h3>
+                        <div className="space-y-2">
+                          {selectedFiles.map((file, index) => (
+                            <div key={index} className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
+                              <span className="text-sm text-foreground truncate flex-1">{file.name}</span>
+                              <span className="text-xs text-muted-foreground ml-2">
+                                {(file.size / 1024).toFixed(1)} KB
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <button
+                        onClick={handleProcessDocuments}
+                        disabled={isProcessing}
+                        className="w-full py-4 px-6 bg-army-gold hover:bg-army-gold/90 text-army-black font-semibold rounded-xl shadow-[0_0_20px_hsl(40_100%_50%/0.3)] hover:shadow-[0_0_30px_hsl(40_100%_50%/0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        {isProcessing ? (
+                          <>
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                            Processing with AI...
+                          </>
+                        ) : (
+                          <>
+                            Process Documents with AI
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
+                  
+                  <QuickActions />
                 </div>
               </>
             ) : (

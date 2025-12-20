@@ -57,7 +57,7 @@ export function DashboardSidebar() {
           />
           {!isCollapsed && (
             <div>
-              <h1 className="text-lg font-bold text-army-gold">FLOODGATES</h1>
+              <h1 className="text-lg font-bold text-army-gold">THE NEW ARMY</h1>
               <p className="text-xs text-muted-foreground">YMR Global</p>
             </div>
           )}

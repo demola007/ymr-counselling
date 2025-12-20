@@ -1,4 +1,4 @@
-import { FileText, Users, UserCheck, TrendingUp } from "lucide-react";
+import { FileText, Users, UserCheck } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export const StatsCards = () => {
@@ -6,7 +6,6 @@ export const StatsCards = () => {
     {
       title: "Total Converts",
       value: "0",
-      change: "+0%",
       icon: FileText,
       color: "text-blue-500",
       bgColor: "bg-blue-500/10",
@@ -14,7 +13,6 @@ export const StatsCards = () => {
     {
       title: "Counsellors",
       value: "0",
-      change: "+0%",
       icon: Users,
       color: "text-green-500",
       bgColor: "bg-green-500/10",
@@ -22,23 +20,14 @@ export const StatsCards = () => {
     {
       title: "Counsellees",
       value: "0",
-      change: "+0%",
       icon: UserCheck,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
     },
-    {
-      title: "Growth",
-      value: "0%",
-      change: "+0%",
-      icon: TrendingUp,
-      color: "text-army-gold",
-      bgColor: "bg-army-gold/10",
-    },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       {stats.map((stat, index) => (
         <Card
           key={stat.title}
@@ -54,9 +43,6 @@ export const StatsCards = () => {
                 <h3 className="text-3xl font-bold text-foreground">
                   {stat.value}
                 </h3>
-                <p className={`text-xs mt-2 ${stat.color} font-semibold`}>
-                  {stat.change} from last month
-                </p>
               </div>
               <div className={`${stat.bgColor} ${stat.color} p-3 rounded-xl group-hover:scale-110 transition-transform duration-300`}>
                 <stat.icon className="h-6 w-6" />
