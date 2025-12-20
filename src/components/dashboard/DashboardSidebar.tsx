@@ -1,4 +1,4 @@
-import { Home, Upload, Users, UserCheck, FileText, Bell, Activity, Settings, LogOut } from "lucide-react";
+import { Home, Upload, Users, UserCheck, FileText, Bell, Activity, Settings, LogOut, UserCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -28,7 +28,7 @@ export function DashboardSidebar() {
 
   const mainItems = [
     { title: "Dashboard", url: "/upload", icon: Home },
-    { title: "Upload", url: "/upload#upload", icon: Upload },
+    { title: "My Profile", url: "/profile", icon: UserCircle },
   ];
 
   const portalItems = isAdmin ? [
