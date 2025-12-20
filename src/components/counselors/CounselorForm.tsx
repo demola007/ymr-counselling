@@ -61,7 +61,11 @@ export const CounselorForm = () => {
   const isFromCounsellorsPage = location.pathname.includes("/counsellors");
 
   const handleCancel = () => {
-    navigate(isAuthenticated && isFromCounsellorsPage ? "/counsellors" : "/");
+    if (isAuthenticated) {
+      navigate(isFromCounsellorsPage ? "/counsellors" : "/upload");
+    } else {
+      navigate("/");
+    }
   };
 
   return (
@@ -80,7 +84,7 @@ export const CounselorForm = () => {
           className="flex items-center gap-2 hover:bg-card/50 backdrop-blur-sm border border-army-gold/20 text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
-          {isAuthenticated && isFromCounsellorsPage ? 'Back to Counsellors' : 'Back to Home'}
+          {isAuthenticated ? (isFromCounsellorsPage ? 'Back to Counsellors' : 'Back to Dashboard') : 'Back to Home'}
         </Button>
       </div>
 
