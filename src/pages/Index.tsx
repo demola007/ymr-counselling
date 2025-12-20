@@ -2,10 +2,46 @@ import { Toaster } from "@/components/ui/toaster";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { ActionButtons } from "@/components/landing/ActionButtons";
 import { Footer } from "@/components/landing/Footer";
-import { Shield, Swords, Users, Calendar } from "lucide-react";
+import { Shield, Swords, Users, Calendar, Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { useState, useRef } from "react";
 import theNewArmyImage from "@/assets/the-new-army.jpeg";
+import ymrMinistersImage from "@/assets/ymr-ministers.jpeg";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Landing = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const images = [
+    { src: theNewArmyImage, alt: "The New Army - YMR 2025" },
+    { src: ymrMinistersImage, alt: "YMR 2025 Ministers Lineup" },
+  ];
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-black relative overflow-hidden">
       {/* Animated Background */}
@@ -51,23 +87,120 @@ const Landing = () => {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-16">
             <HeroSection />
             
-            {/* Event Image */}
+            {/* Image Carousel */}
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-army-green via-army-green-light to-army-green rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-500 animate-glow-pulse"></div>
               <div className="relative">
-                <img 
-                  src={theNewArmyImage}
-                  alt="The New Army - YMR 2025"
-                  className="w-full rounded-2xl shadow-2xl border border-army-green/30"
-                  loading="eager"
-                  fetchPriority="high"
-                />
+                <Carousel className="w-full" opts={{ loop: true }}>
+                  <CarouselContent>
+                    {images.map((image, index) => (
+                      <CarouselItem key={index}>
+                        <div className="relative overflow-hidden rounded-2xl">
+                          <img 
+                            src={image.src}
+                            alt={image.alt}
+                            className="w-full rounded-2xl shadow-2xl border border-army-green/30 transition-transform duration-700 hover:scale-105"
+                            loading={index === 0 ? "eager" : "lazy"}
+                            fetchPriority={index === 0 ? "high" : "auto"}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-2xl"></div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-4 bg-black/60 border-army-green/50 text-army-green hover:bg-army-green hover:text-black transition-all" />
+                  <CarouselNext className="right-4 bg-black/60 border-army-green/50 text-army-green hover:bg-army-green hover:text-black transition-all" />
+                </Carousel>
+                
+                {/* Carousel Indicators */}
+                <div className="flex justify-center gap-2 mt-4">
+                  {images.map((_, index) => (
+                    <div 
+                      key={index}
+                      className="w-2 h-2 rounded-full bg-army-green/50 transition-all"
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
           <ActionButtons />
+
+          {/* Video Section */}
+          <div className="my-16">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-4xl font-bold text-foreground mb-2">
+                Experience <span className="text-army-green-light">The Movement</span>
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Watch and feel the power of YMR 2025 - where young ministers rise
+              </p>
+            </div>
+            
+            <div className="relative max-w-4xl mx-auto group">
+              {/* Video Glow Effect */}
+              <div className="absolute -inset-2 bg-gradient-to-r from-army-green via-army-green-light to-army-green rounded-3xl blur-lg opacity-20 group-hover:opacity-40 transition-all duration-500"></div>
+              
+              {/* Video Container */}
+              <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-army-green/30 overflow-hidden">
+                <div className="relative aspect-video">
+                  <video
+                    ref={videoRef}
+                    className="w-full h-full object-cover"
+                    poster={theNewArmyImage}
+                    muted={isMuted}
+                    loop
+                    playsInline
+                    onEnded={() => setIsPlaying(false)}
+                  >
+                    <source src="/videos/ymr-promo.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  
+                  {/* Video Overlay */}
+                  <div className={`absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity duration-300 ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+                    {/* Play Button */}
+                    <button
+                      onClick={togglePlay}
+                      className="group/btn relative"
+                    >
+                      <div className="absolute inset-0 bg-army-green rounded-full blur-xl opacity-50 group-hover/btn:opacity-75 transition-opacity scale-150"></div>
+                      <div className="relative w-20 h-20 md:w-24 md:h-24 bg-army-green/90 hover:bg-army-green rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-2xl">
+                        {isPlaying ? (
+                          <Pause className="w-8 h-8 md:w-10 md:h-10 text-black" />
+                        ) : (
+                          <Play className="w-8 h-8 md:w-10 md:h-10 text-black ml-1" />
+                        )}
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* Video Controls */}
+                  <div className="absolute bottom-4 right-4 flex gap-2">
+                    <button
+                      onClick={toggleMute}
+                      className="w-10 h-10 bg-black/60 hover:bg-black/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-army-green/30 transition-all hover:border-army-green"
+                    >
+                      {isMuted ? (
+                        <VolumeX className="w-5 h-5 text-army-green" />
+                      ) : (
+                        <Volume2 className="w-5 h-5 text-army-green" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Video Caption */}
+                <div className="p-4 bg-gradient-to-r from-army-green-dark/20 via-transparent to-army-green-dark/20 border-t border-army-green/20">
+                  <p className="text-center text-sm text-muted-foreground">
+                    <span className="text-army-green font-semibold">YMR 2025</span> • The New Army Rises
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Features Section */}
           <div className="grid md:grid-cols-3 gap-6 mt-16 mb-16">
