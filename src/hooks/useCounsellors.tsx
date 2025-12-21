@@ -51,7 +51,7 @@ export const useCounsellors = (searchQuery: string, currentPage: number, itemsPe
 
   const updateMutation = useMutation({
     mutationFn: async (document: any) => {
-      await apiClient.put(`counsellors/${document.id}/`, document);
+      await apiClient.put(`counsellors/${document.id}`, document);
       return document;
     },
     onSuccess: () => {
