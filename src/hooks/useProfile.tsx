@@ -32,7 +32,7 @@ export const useProfile = () => {
   } = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
-      const response = await apiClient.get('me');
+      const response = await apiClient.get('counsellors/me');
       if (response.data) {
         return response.data as CounsellorProfile;
       }

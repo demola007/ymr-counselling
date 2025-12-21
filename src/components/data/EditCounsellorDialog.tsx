@@ -54,11 +54,11 @@ export const EditCounsellorDialog = ({
     
     // Validate password if it's being changed
     if (document.password) {
-      if (document.password.length < 8) {
-        setPasswordError("Password must be at least 8 characters");
+      if (document.password.length < 5) {
+        setPasswordError("Password must be at least 5 characters");
         toast({
           title: "Validation Error",
-          description: "Password must be at least 8 characters",
+          description: "Password must be at least 5 characters",
           variant: "destructive",
         });
         return;
