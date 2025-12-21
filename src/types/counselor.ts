@@ -12,4 +12,5 @@ export interface CounselorFormData {
   denomination: string;
   will_attend_ymr_2024: string;
   is_available_for_training: string;
+  picture_url?: string;
 }

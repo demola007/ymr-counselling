@@ -24,21 +24,32 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
         primary: {
-          DEFAULT: "#6B46C1",
-          foreground: "#FFFFFF",
+          DEFAULT: "hsl(var(--army-green))",
+          foreground: "hsl(0 0% 0%)",
         },
         secondary: {
-          DEFAULT: "#9F7AEA",
-          foreground: "#FFFFFF",
+          DEFAULT: "hsl(var(--army-green-dark))",
+          foreground: "hsl(0 0% 100%)",
         },
         accent: {
-          DEFAULT: "#B794F4",
-          foreground: "#FFFFFF",
+          DEFAULT: "hsl(var(--army-gold))",
+          foreground: "hsl(0 0% 0%)",
         },
         muted: {
-          DEFAULT: "#F3F4F6",
-          foreground: "#6B7280",
+          DEFAULT: "hsl(120 20% 15%)",
+          foreground: "hsl(0 0% 70%)",
+        },
+        army: {
+          green: "hsl(var(--army-green))",
+          "green-light": "hsl(var(--army-green-light))",
+          "green-dark": "hsl(var(--army-green-dark))",
+          gold: "hsl(var(--army-gold))",
+          black: "hsl(var(--army-black))",
         },
       },
       fontFamily: {
@@ -70,10 +81,25 @@ export default {
           "0%": { opacity: "0", transform: "translateY(20px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 20px hsl(120 100% 50% / 0.3)" },
+          "50%": { boxShadow: "0 0 40px hsl(120 100% 50% / 0.6)" },
+        },
+        "slide-in-left": {
+          "0%": { opacity: "0", transform: "translateX(-50px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "slide-in-right": {
+          "0%": { opacity: "0", transform: "translateX(50px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.6s ease-out",
         "fade-in-up": "fade-in-up 0.8s ease-out",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "slide-in-left": "slide-in-left 0.8s ease-out",
+        "slide-in-right": "slide-in-right 0.8s ease-out",
       },
     },
   },

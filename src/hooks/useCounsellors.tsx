@@ -12,7 +12,7 @@ export const useCounsellors = (searchQuery: string, currentPage: number, itemsPe
   } = useQuery({
     queryKey: ['counsellors', searchQuery, currentPage],
     queryFn: async () => {
-      const response = await apiClient.get('counsellors', {
+      const response = await apiClient.get('counsellors/', {
         params: {
           search: searchQuery, // Changed from searchQuery to search to match API expectations
           limit: itemsPerPage,
@@ -28,7 +28,7 @@ export const useCounsellors = (searchQuery: string, currentPage: number, itemsPe
 
   const deleteMutation = useMutation({
     mutationFn: async (ids: number[]) => {
-      await apiClient.delete('counsellors/bulk-delete', {
+      await apiClient.delete('counsellors/bulk-delete/', {
         data: { ids },
       });
       return ids;

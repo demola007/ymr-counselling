@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Index from "./pages/Index";
 import Upload from "./pages/Upload";
+import Profile from "./pages/Profile";
 import DataView from "./pages/DataView";
 import DetailView from "./pages/DetailView";
 import Login from "./pages/Login";
@@ -39,6 +40,11 @@ const App = () => {
               <Route path="/upload" element={
                 <ProtectedRoute>
                   <Upload />
+                </ProtectedRoute>
+              } />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               } />
               <Route path="/counsellors" element={

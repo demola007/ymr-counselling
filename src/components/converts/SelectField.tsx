@@ -12,7 +12,7 @@ import { FormField as FormFieldUI, FormItem, FormLabel, FormControl, FormMessage
 export const SelectField = ({
   label,
   id,
-  required = true,
+  required = false,
   options,
   placeholder,
   defaultValue
@@ -28,12 +28,12 @@ export const SelectField = ({
     <FormFieldUI
       control={form.control}
       name={id}
-      rules={{ required: "This field is required" }}
+      rules={{ required: required ? "This field is required" : false }}
       render={({ field }) => (
         <FormItem className="space-y-2 w-full">
-          <FormLabel className="text-gray-700">
+          <FormLabel className="text-sm font-medium text-foreground">
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
+            {required && <span className="text-destructive ml-1">*</span>}
           </FormLabel>
           <FormControl>
             <Select 
@@ -42,16 +42,16 @@ export const SelectField = ({
               defaultValue={defaultValue}
             >
               <SelectTrigger 
-                className="w-full bg-white border-gray-200 focus:border-purple-300 focus:ring-purple-200"
+                className="w-full h-11 bg-card/50 backdrop-blur-sm border-army-green/30 text-foreground transition-all duration-200 focus:border-army-green focus:ring-2 focus:ring-army-green/20 focus:bg-card/70"
               >
-                <SelectValue placeholder={placeholder} />
+                <SelectValue placeholder={placeholder} className="text-muted-foreground/60" />
               </SelectTrigger>
-              <SelectContent className="bg-white">
+              <SelectContent className="bg-card/95 backdrop-blur-xl border-army-green/30">
                 {options.map((option) => (
                   <SelectItem 
                     key={option.value} 
                     value={option.value}
-                    className="hover:bg-purple-50"
+                    className="text-foreground hover:bg-army-green/20 hover:text-army-green-light focus:bg-army-green/20 focus:text-army-green-light"
                   >
                     {option.label}
                   </SelectItem>
@@ -59,7 +59,7 @@ export const SelectField = ({
               </SelectContent>
             </Select>
           </FormControl>
-          <FormMessage />
+          <FormMessage className="text-xs" />
         </FormItem>
       )}
     />
