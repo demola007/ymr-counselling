@@ -96,7 +96,7 @@ export const EditCounsellorDialog = ({
 
   const toggleFields = [
     { key: "has_certification", label: "Has Professional Counselling Certification" },
-    { key: "will_attend_ymr_2024", label: "Will Attend YMR 2024 - FLOODGATES" },
+    { key: "will_attend_ymr_2024", label: "Will Attend YMR - THE NEW ARMY" },
     { key: "is_available_for_training", label: "Available for Training" }
   ];
 
