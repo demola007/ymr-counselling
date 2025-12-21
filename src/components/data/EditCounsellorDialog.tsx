@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -248,15 +249,47 @@ export const EditCounsellorDialog = ({
             <CardHeader>
               <CardTitle>Additional Information</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3">
               {toggleFields.map((field) => (
-                <div key={field.key} className="flex items-center justify-between">
-                  <Label htmlFor={field.key}>{field.label}</Label>
-                  <Switch
-                    id={field.key}
-                    checked={document[field.key] || false}
-                    onCheckedChange={(checked) => handleChange(field.key, checked)}
-                  />
+                <div 
+                  key={field.key} 
+                  className={cn(
+                    "flex items-center justify-between p-4 rounded-lg border-2 transition-all duration-200",
+                    document[field.key] 
+                      ? "bg-primary/10 border-primary/40" 
+                      : "bg-muted/30 border-muted-foreground/20"
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={cn(
+                      "w-2 h-2 rounded-full",
+                      document[field.key] ? "bg-primary" : "bg-muted-foreground/40"
+                    )} />
+                    <Label 
+                      htmlFor={field.key} 
+                      className={cn(
+                        "cursor-pointer transition-colors",
+                        document[field.key] ? "text-foreground font-medium" : "text-muted-foreground"
+                      )}
+                    >
+                      {field.label}
+                    </Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={cn(
+                      "text-xs font-medium px-2 py-0.5 rounded",
+                      document[field.key] 
+                        ? "bg-primary/20 text-primary" 
+                        : "bg-muted text-muted-foreground"
+                    )}>
+                      {document[field.key] ? "ON" : "OFF"}
+                    </span>
+                    <Switch
+                      id={field.key}
+                      checked={document[field.key] || false}
+                      onCheckedChange={(checked) => handleChange(field.key, checked)}
+                    />
+                  </div>
                 </div>
               ))}
             </CardContent>
