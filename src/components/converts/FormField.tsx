@@ -9,7 +9,7 @@ export const FormField = ({
   label, 
   id, 
   type = "text", 
-  required = true,
+  required = false,
   placeholder,
   disabled,
   value,
@@ -27,6 +27,7 @@ export const FormField = ({
     <FormFieldUI
       control={form.control}
       name={id}
+      rules={{ required: required ? "This field is required" : false }}
       render={({ field }) => (
         <FormItem className="space-y-2 w-full">
           <FormLabel className="text-sm font-medium text-foreground">
@@ -45,7 +46,7 @@ export const FormField = ({
               placeholder={placeholder}
               disabled={disabled}
               defaultValue={value}
-              required={required}
+              value={field.value ?? ""}
               className={cn(
                 "w-full h-11",
                 className
