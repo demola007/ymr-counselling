@@ -38,7 +38,7 @@ const DataView = () => {
   const { data: filteredDocuments = [], isLoading: isLoadingDocuments } = useQuery({
     queryKey: ['converts', searchQuery, studentFilter, genderFilter, currentPage],
     queryFn: async () => {
-      const response = await apiClient.get('converts', {
+      const response = await apiClient.get('converts/', {
         params: {
           searchQuery,
           limit: ITEMS_PER_PAGE,
