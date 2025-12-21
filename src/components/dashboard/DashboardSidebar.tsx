@@ -45,7 +45,7 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar
-      className={`border-r border-border/40 bg-card/50 backdrop-blur-xl ${isCollapsed ? "w-16" : "w-64"}`}
+      className={`border-r border-border/40 bg-card backdrop-blur-xl ${isCollapsed ? "w-16" : "w-64"}`}
     >
       <SidebarContent>
         {/* Logo Section */}
