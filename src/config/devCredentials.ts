@@ -1,6 +1,6 @@
 // ⚠️ DEVELOPMENT ONLY - Remove before production deployment
 // Set to false to disable development credentials
-export const DEV_MODE = true;
+export const DEV_MODE = false;
 
 export const DEV_CREDENTIALS = {
   user: {
