@@ -140,7 +140,7 @@ export const CounsellorCard = ({
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex flex-col gap-1.5 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
             <Button
               variant="ghost"
               size="icon"
