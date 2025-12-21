@@ -48,7 +48,7 @@ export const ProfileCard = ({ profile, onEdit }: ProfileCardProps) => {
             <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 -mt-16">
               {/* Avatar */}
               <Avatar className="h-28 w-28 border-4 border-card shadow-lg ring-2 ring-primary/30">
-                <AvatarImage src={profile.profile_image_url} alt={profile.name} />
+                <AvatarImage src={profile.profile_image} alt={profile.name} />
                 <AvatarFallback className="bg-gradient-to-br from-primary to-army-green-dark text-primary-foreground text-2xl font-bold">
                   {getInitials(profile.name)}
                 </AvatarFallback>
