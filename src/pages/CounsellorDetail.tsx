@@ -10,7 +10,7 @@ const CounsellorDetail = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["counsellor", id],
     queryFn: async () => {
-      const response = await apiClient.get(`counsellors/${id}/`);
+      const response = await apiClient.get(`counsellors/${id}`);
       return response.data?.data;
     },
     retry: 1,
