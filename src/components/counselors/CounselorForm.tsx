@@ -49,7 +49,7 @@ export const CounselorForm = () => {
           // Convert base64 to blob
           const response = await fetch(data.picture_url);
           const blob = await response.blob();
-          formData.append("picture", blob, "profile.jpg");
+          formData.append("profile_image", blob, "profile.jpg");
         }
       }
       
