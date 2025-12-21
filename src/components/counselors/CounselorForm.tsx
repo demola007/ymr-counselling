@@ -25,16 +25,43 @@ export const CounselorForm = () => {
     setIsLoading(true);
     
     try {
-      // Parse years_of_experience to number before sending to API
-      const formData = {
-        ...data,
-        years_of_experience: Number(data.years_of_experience)
-      };
-      console.log("formData", formData)
+      // Create FormData for file upload
+      const formData = new FormData();
       
-      const response = await apiClient.post("/counsellors", formData);
+      // Append all text fields
+      formData.append("name", data.name);
+      formData.append("gender", data.gender);
+      formData.append("email", data.email);
+      formData.append("phone_number", data.phone_number);
+      formData.append("country", data.country);
+      formData.append("state", data.state);
+      formData.append("address", data.address);
+      formData.append("date_of_birth", data.date_of_birth);
+      formData.append("years_of_experience", String(data.years_of_experience));
+      formData.append("has_certification", data.has_certification);
+      formData.append("denomination", data.denomination);
+      formData.append("will_attend_ymr_2024", data.will_attend_ymr_2024);
+      formData.append("is_available_for_training", data.is_available_for_training);
       
-      if (response.status === 201 && response.data?.status === "success") {
+      // Handle picture - convert base64 to blob if needed
+      if (data.picture_url) {
+        if (data.picture_url.startsWith("data:")) {
+          // Convert base64 to blob
+          const response = await fetch(data.picture_url);
+          const blob = await response.blob();
+          formData.append("picture", blob, "profile.jpg");
+        }
+      }
+      
+      console.log("Submitting counsellor with FormData");
+      
+      const response = await apiClient.post("counsellors/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      
+      if (response.status === 201 || response.data?.status === "success") {
         toast({
           title: "Success",
           description: "Your application has been submitted successfully",
