@@ -32,7 +32,7 @@ export const useProfile = () => {
   } = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
-      const response = await apiClient.get('counsellor/me');
+      const response = await apiClient.get('me');
       if (response.data) {
         return response.data as CounsellorProfile;
       }
@@ -42,7 +42,7 @@ export const useProfile = () => {
 
   const updateProfileMutation = useMutation({
     mutationFn: async (updatedProfile: Partial<CounsellorProfile>) => {
-      const response = await apiClient.put('counsellor/me', updatedProfile);
+      const response = await apiClient.put('me', updatedProfile);
       return response.data;
     },
     onSuccess: () => {
@@ -63,7 +63,7 @@ export const useProfile = () => {
 
   const changePasswordMutation = useMutation({
     mutationFn: async ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) => {
-      const response = await apiClient.post('counsellor/change-password', {
+      const response = await apiClient.put('me/password', {
         current_password: currentPassword,
         new_password: newPassword,
       });
