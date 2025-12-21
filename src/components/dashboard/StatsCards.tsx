@@ -1,14 +1,19 @@
 import { FileText, Users, UserCheck } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
 
 export const StatsCards = () => {
-  const stats = [
+  const { userRole } = useAuth();
+  const isAdmin = userRole === "admin" || userRole === "super-admin";
+
+  const allStats = [
     {
       title: "Total Converts",
       value: "0",
       icon: FileText,
       color: "text-blue-500",
       bgColor: "bg-blue-500/10",
+      adminOnly: false,
     },
     {
       title: "Counsellors",
@@ -16,6 +21,7 @@ export const StatsCards = () => {
       icon: Users,
       color: "text-green-500",
       bgColor: "bg-green-500/10",
+      adminOnly: true,
     },
     {
       title: "Counsellees",
@@ -23,11 +29,14 @@ export const StatsCards = () => {
       icon: UserCheck,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
+      adminOnly: false,
     },
   ];
 
+  const stats = allStats.filter(stat => !stat.adminOnly || isAdmin);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div className={`grid grid-cols-1 ${stats.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 mb-6`}>
       {stats.map((stat, index) => (
         <Card
           key={stat.title}
