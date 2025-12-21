@@ -46,16 +46,25 @@ export const ProfileCard = ({ profile, onEdit }: ProfileCardProps) => {
           {/* Profile info */}
           <CardContent className="relative px-6 pb-6">
             <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 -mt-16">
-              {/* Avatar */}
-              <Avatar className="h-28 w-28 border-4 border-card shadow-lg ring-2 ring-primary/30">
-                <AvatarImage
-                  src={profile.profile_image ?? profile.profile_image_url}
-                  alt={`${profile.name} profile picture`}
-                />
-                <AvatarFallback className="bg-gradient-to-br from-primary to-army-green-dark text-primary-foreground text-2xl font-bold">
-                  {getInitials(profile.name)}
-                </AvatarFallback>
-              </Avatar>
+              {/* Avatar with enhanced styling */}
+              <div className="relative group">
+                {/* Glow effect behind avatar */}
+                <div className="absolute -inset-1 bg-gradient-to-br from-primary/40 via-accent/30 to-primary/40 rounded-full blur-md opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute -inset-0.5 bg-gradient-to-br from-primary to-accent rounded-full opacity-80" />
+                <Avatar 
+                  size="2xl" 
+                  className="relative border-4 border-card shadow-2xl"
+                >
+                  <AvatarImage
+                    src={profile.profile_image ?? profile.profile_image_url}
+                    alt={`${profile.name} profile picture`}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="bg-gradient-to-br from-primary via-primary/80 to-accent text-primary-foreground font-bold">
+                    {getInitials(profile.name)}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
               
               {/* Name and badges */}
               <div className="flex-1 text-center sm:text-left space-y-3">
