@@ -73,7 +73,7 @@ const CounsellorDetail = () => {
   const displayName = data.name || `${data.first_name || ""} ${data.last_name || ""}`.trim() || "Counsellor";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50/30">
+    <div className="min-h-screen bg-white">
       {/* Subtle Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-slate-100">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -273,8 +273,8 @@ const CounsellorDetail = () => {
 
         {/* Timestamp Footer */}
         {data.created_at && (
-          <div className="mt-12 pt-8 border-t border-slate-100 text-center">
-            <p className="text-xs text-slate-400 font-light">
+          <div className="mt-12 pt-8 border-t border-slate-200 text-center">
+            <p className="text-sm text-slate-600">
               Member since {formatDate(data.created_at)}
             </p>
           </div>
