@@ -2,8 +2,13 @@ import { FileText, Users, UserCheck, Plus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 export const QuickActions = () => {
+  const { userRole } = useAuth();
+  
+  const isAdminOrSuperAdmin = userRole === "admin" || userRole === "super-admin";
+
   const actions = [
     {
       title: "New Convert",
@@ -12,6 +17,7 @@ export const QuickActions = () => {
       href: "/new-convert-manual",
       color: "text-blue-500",
       bgColor: "bg-blue-500/10",
+      showForAll: true,
     },
     {
       title: "Add Counsellor",
@@ -20,6 +26,7 @@ export const QuickActions = () => {
       href: "/counselor-registration",
       color: "text-green-500",
       bgColor: "bg-green-500/10",
+      showForAll: false, // Only for admin/super-admin
     },
     {
       title: "Add Counsellee",
@@ -28,8 +35,13 @@ export const QuickActions = () => {
       href: "/add-counsellee",
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
+      showForAll: true,
     },
   ];
+
+  const visibleActions = actions.filter(
+    (action) => action.showForAll || isAdminOrSuperAdmin
+  );
 
   return (
     <Card className="bg-card/40 backdrop-blur-sm border-border/40">
@@ -40,8 +52,8 @@ export const QuickActions = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {actions.map((action) => (
+        <div className={`grid grid-cols-1 ${visibleActions.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4`}>
+          {visibleActions.map((action) => (
             <Link key={action.title} to={action.href}>
               <Button
                 variant="outline"
