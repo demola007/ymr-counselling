@@ -29,16 +29,16 @@ const DataView = () => {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const { userRole } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: filteredDocuments = [], isLoading: isLoadingDocuments } = useQuery({
-    queryKey: ['converts', searchQuery, studentFilter, genderFilter, currentPage],
+    queryKey: ["converts", searchQuery, studentFilter, genderFilter, currentPage],
     queryFn: async () => {
-      const response = await apiClient.get('converts/', {
+      const response = await apiClient.get("converts/", {
         params: {
           searchQuery,
           limit: ITEMS_PER_PAGE,
@@ -48,7 +48,7 @@ const DataView = () => {
       if (response.data.status === "success") {
         return response.data;
       }
-      throw new Error('Failed to fetch documents');
+      throw new Error("Failed to fetch documents");
     },
   });
 
@@ -57,17 +57,17 @@ const DataView = () => {
   const paginatedDocuments = filteredDocuments?.data || [];
   const totalRecords = filteredDocuments?.total || 0;
   const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
-  
+
   const deleteMutation = useMutation({
     mutationFn: async (ids: number[]) => {
       setLoading(true);
-      await apiClient.delete('converts/bulk-delete', {
+      await apiClient.delete("converts/bulk-delete", {
         data: { ids },
       });
       return ids;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['converts'] });
+      queryClient.invalidateQueries({ queryKey: ["converts"] });
       toast({
         title: "Success",
         description: "Convert data deleted successfully",
@@ -94,7 +94,7 @@ const DataView = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['converts'] });
+      queryClient.invalidateQueries({ queryKey: ["converts"] });
       toast({
         title: "Success",
         description: "Convert data updated successfully",
@@ -143,9 +143,9 @@ const DataView = () => {
   };
 
   const handleSelectRow = (id: number) => {
-    setSelectedIds(prev => {
+    setSelectedIds((prev) => {
       if (prev.includes(id)) {
-        return prev.filter(selectedId => selectedId !== id);
+        return prev.filter((selectedId) => selectedId !== id);
       } else {
         return [...prev, id];
       }
@@ -154,22 +154,16 @@ const DataView = () => {
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedIds(paginatedDocuments.map(doc => doc.id));
+      setSelectedIds(paginatedDocuments.map((doc) => doc.id));
     } else {
       setSelectedIds([]);
     }
   };
 
   // Calculate stats
-  const onlineCount = useMemo(() => 
-    paginatedDocuments.filter(doc => doc.online).length, 
-    [paginatedDocuments]
-  );
-  
-  const studentCount = useMemo(() => 
-    paginatedDocuments.filter(doc => doc.is_student).length, 
-    [paginatedDocuments]
-  );
+  const onlineCount = useMemo(() => paginatedDocuments.filter((doc) => doc.online).length, [paginatedDocuments]);
+
+  const studentCount = useMemo(() => paginatedDocuments.filter((doc) => doc.is_student).length, [paginatedDocuments]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-army-gold/5 to-army-olive/5">
@@ -178,21 +172,18 @@ const DataView = () => {
           <ClipLoader color="#B8860B" size={50} />
         </div>
       )}
-      
+
       <div className="container px-4 py-6 mx-auto max-w-7xl">
         <DataViewHeader />
-        
-        <DataStats 
+
+        <DataStats
           totalRecords={totalRecords}
           currentPageCount={paginatedDocuments.length}
           onlineCount={onlineCount}
           studentCount={studentCount}
         />
-        
-        <DataViewFilters
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+
+        <DataViewFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         {userRole === "super-admin" && (
           <DataViewActions
@@ -208,9 +199,7 @@ const DataView = () => {
         <div className="space-y-4 mb-6">
           {isLoadingDocuments ? (
             // Loading skeletons
-            Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-48 w-full rounded-xl" />
-            ))
+            Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-48 w-full rounded-xl" />)
           ) : paginatedDocuments.length === 0 ? (
             // Empty state
             <div className="text-center py-16 bg-card/40 backdrop-blur-sm border border-border/40 rounded-xl">
@@ -245,7 +234,9 @@ const DataView = () => {
 
           <div className="text-center p-4 bg-card/40 backdrop-blur-sm border border-border/40 rounded-xl">
             <p className="text-sm text-muted-foreground">
-              Showing <span className="font-semibold text-foreground">{startIndex + 1}</span> - <span className="font-semibold text-foreground">{Math.min(endIndex, totalRecords)}</span> of <span className="font-semibold text-foreground">{totalRecords}</span> records
+              Showing <span className="font-semibold text-foreground">{startIndex + 1}</span> -{" "}
+              <span className="font-semibold text-foreground">{Math.min(endIndex, totalRecords)}</span> of{" "}
+              <span className="font-semibold text-foreground">{totalRecords}</span> records
             </p>
           </div>
         </div>
