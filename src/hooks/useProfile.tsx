@@ -17,7 +17,7 @@ export interface CounsellorProfile {
   denomination: string;
   will_attend_ymr: boolean;
   is_available_for_training: boolean;
-  picture_url?: string;
+  profile_image_url?: string;
   role?: string;
 }
 
