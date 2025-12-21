@@ -42,7 +42,7 @@ export const useProfile = () => {
 
   const updateProfileMutation = useMutation({
     mutationFn: async (updatedProfile: Partial<CounsellorProfile>) => {
-      const response = await apiClient.put('me', updatedProfile);
+      const response = await apiClient.put('counsellors/me', updatedProfile);
       return response.data;
     },
     onSuccess: () => {
@@ -63,7 +63,7 @@ export const useProfile = () => {
 
   const changePasswordMutation = useMutation({
     mutationFn: async ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) => {
-      const response = await apiClient.put('me/password', {
+      const response = await apiClient.put('counsellors/me/password', {
         current_password: currentPassword,
         new_password: newPassword,
       });
