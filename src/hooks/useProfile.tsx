@@ -17,7 +17,10 @@ export interface CounsellorProfile {
   denomination: string;
   will_attend_ymr: boolean;
   is_available_for_training: boolean;
+  /** Preferred field used across the app */
   profile_image?: string;
+  /** Some API responses may return this key instead */
+  profile_image_url?: string;
   role?: string;
 }
 
@@ -32,11 +35,25 @@ export const useProfile = () => {
   } = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
-      const response = await apiClient.get('counsellors/me');
+      const response = await apiClient.get("counsellors/me");
       if (response.data) {
-        return response.data as CounsellorProfile;
+        const data = response.data as any;
+
+        // Normalize profile image field (API may return `profile_image_url`)
+        const rawImage: unknown = data.profile_image ?? data.profile_image_url;
+        const normalizedImage =
+          typeof rawImage === "string" && rawImage.trim()
+            ? rawImage.startsWith("http")
+              ? rawImage.replace(/^http:\/\//, "https://")
+              : new URL(rawImage, apiClient.defaults.baseURL).toString()
+            : undefined;
+
+        return {
+          ...data,
+          profile_image: normalizedImage,
+        } as CounsellorProfile;
       }
-      throw new Error('Failed to fetch profile');
+      throw new Error("Failed to fetch profile");
     },
   });
 
