@@ -15,20 +15,17 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
           <FormField 
             label="Full Name"
             id="name" 
-            required 
             placeholder="Enter your full name"
           />
           <FormField 
             label="Email Address"
             id="email" 
             type="email" 
-            required 
             placeholder="your.email@example.com"
           />
           <FormField 
             label="Phone Number" 
             id="phone_number" 
-            required 
             placeholder="+234 *********"
             hint="WhatsApp enabled (include your country code)"
           />
@@ -36,12 +33,10 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
             label="Date of Birth" 
             id="date_of_birth" 
             type="date" 
-            required 
           />
           <SelectField
             label="Gender"
             id="gender"
-            required
             placeholder="Select gender"
             options={[
               { value: "male", label: "Male" },
@@ -51,7 +46,6 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
           <SelectField
             label="Age Group"
             id="age_group"
-            required
             placeholder="Select age group"
             options={[
               { value: "18-24", label: "18-24" },
@@ -72,26 +66,22 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
           <FormField 
             label="Country" 
             id="country" 
-            required 
             placeholder="Enter your country"
           />
           <FormField 
             label="State" 
             id="state" 
-            required 
             placeholder="Enter your state"
           />
           <FormField 
             label="Address" 
             id="address" 
-            required 
             placeholder="Enter your address"
             className="md:col-span-2"
           />
           <FormField 
             label="Nearest Bus Stop" 
             id="nearest_bus_stop" 
-            required 
             placeholder="Enter nearest bus stop"
           />
         </div>
@@ -106,7 +96,6 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
           <SelectField
             label="Relationship Status"
             id="relationship_status"
-            required
             placeholder="Select status"
             options={[
               { value: "single", label: "Single" },
@@ -117,7 +106,6 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
           <SelectField
             label="Are you a student?"
             id="is_student"
-            required
             placeholder="Select option"
             options={[
               { value: "true", label: "Yes" },
@@ -132,13 +120,11 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
           <FormField 
             label="Occupation" 
             id="occupation" 
-            required 
             placeholder="Enter your occupation"
           />
           <FormField 
             label="Denomination" 
             id="denomination" 
-            required 
             placeholder="Enter your denomination"
           />
         </div>
@@ -153,7 +139,6 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
           <SelectField
             label="Available for Follow-up"
             id="availability_for_follow_up"
-            required
             placeholder="Select option"
             options={[
               { value: "true", label: "Yes" },
@@ -163,7 +148,6 @@ export const ConvertFormFields = ({ isOnlineConvert }: { isOnlineConvert: boolea
           <SelectField
             label="Online Convert"
             id="online"
-            required
             placeholder="Select option"
             options={[
               { value: "true", label: "Yes" },

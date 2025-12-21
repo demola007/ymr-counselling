@@ -12,7 +12,7 @@ import { FormField as FormFieldUI, FormItem, FormLabel, FormControl, FormMessage
 export const SelectField = ({
   label,
   id,
-  required = true,
+  required = false,
   options,
   placeholder,
   defaultValue
