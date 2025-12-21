@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Eye, EyeOff, ShieldAlert, UserCog, ChevronDown, ChevronRight } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { toast } from "@/hooks/use-toast";
 
 interface EditCounsellorDialogProps {
   open: boolean;
@@ -31,6 +32,8 @@ export const EditCounsellorDialog = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showRoleSection, setShowRoleSection] = useState(false);
   const [showPasswordSection, setShowPasswordSection] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   if (!document) return null;
 
@@ -39,6 +42,39 @@ export const EditCounsellorDialog = ({
       ...document,
       [field]: value,
     });
+    
+    // Clear password error when password changes
+    if (field === "password") {
+      setPasswordError("");
+    }
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validate password if it's being changed
+    if (document.password) {
+      if (document.password.length < 8) {
+        setPasswordError("Password must be at least 8 characters");
+        toast({
+          title: "Validation Error",
+          description: "Password must be at least 8 characters",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (document.password !== confirmPassword) {
+        setPasswordError("Passwords do not match");
+        toast({
+          title: "Validation Error",
+          description: "Passwords do not match",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+    
+    onSubmit(e);
   };
 
   const counsellorFields = [
@@ -61,6 +97,12 @@ export const EditCounsellorDialog = ({
     { key: "has_certification", label: "Has Professional Counselling Certification" },
     { key: "will_attend_ymr_2024", label: "Will Attend YMR 2024 - FLOODGATES" },
     { key: "is_available_for_training", label: "Available for Training" }
+  ];
+
+  const roleOptions = [
+    { value: "user", label: "User", description: "Standard user access" },
+    { value: "admin", label: "Admin", description: "Administrative privileges" },
+    { value: "super_admin", label: "Super Admin", description: "Full system access" }
   ];
 
   const renderField = (field: any) => {
@@ -99,7 +141,7 @@ export const EditCounsellorDialog = ({
         <DialogHeader>
           <DialogTitle>Edit Counsellor</DialogTitle>
         </DialogHeader>
-        <form onSubmit={onSubmit} className="space-y-6">
+        <form onSubmit={handleFormSubmit} className="space-y-6">
           {/* Account Status Card */}
           <Card className="border-2 border-dashed">
             <CardHeader className="pb-3">
@@ -132,7 +174,7 @@ export const EditCounsellorDialog = ({
             </CardContent>
           </Card>
 
-          {/* Role Management - Collapsible */}
+          {/* Role Management - Collapsible with Radio Buttons */}
           {isSuperAdmin && (
             <Collapsible open={showRoleSection} onOpenChange={setShowRoleSection}>
               <Card className="border border-blue-200">
@@ -150,27 +192,37 @@ export const EditCounsellorDialog = ({
                       )}
                     </div>
                     <CardDescription className="text-blue-700">
-                      Click to change the counsellor's system role
+                      Click to change the user's system role
                     </CardDescription>
                   </CardHeader>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent className="pt-0">
-                    <div className="space-y-2 p-4 bg-blue-50/50 rounded-lg">
-                      <Label htmlFor="role">System Role</Label>
-                      <Select
-                        value={document.role || "counsellor"}
+                    <div className="p-4 bg-blue-50/50 rounded-lg">
+                      <Label className="text-sm font-medium mb-3 block">System Role</Label>
+                      <RadioGroup
+                        value={document.role || "user"}
                         onValueChange={(value) => handleChange("role", value)}
+                        className="space-y-3"
                       >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="counsellor">Counsellor</SelectItem>
-                          <SelectItem value="admin">Admin</SelectItem>
-                          <SelectItem value="super_admin">Super Admin</SelectItem>
-                        </SelectContent>
-                      </Select>
+                        {roleOptions.map((option) => (
+                          <div
+                            key={option.value}
+                            className="flex items-center space-x-3 p-3 rounded-md border bg-background hover:bg-muted/50 transition-colors"
+                          >
+                            <RadioGroupItem value={option.value} id={`role-${option.value}`} />
+                            <div className="flex-1">
+                              <Label
+                                htmlFor={`role-${option.value}`}
+                                className="font-medium cursor-pointer"
+                              >
+                                {option.label}
+                              </Label>
+                              <p className="text-xs text-muted-foreground">{option.description}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </RadioGroup>
                     </div>
                   </CardContent>
                 </CollapsibleContent>
@@ -210,7 +262,7 @@ export const EditCounsellorDialog = ({
             </CardContent>
           </Card>
 
-          {/* Password Change - Collapsible */}
+          {/* Password Change - Collapsible with Confirm Field */}
           {isSuperAdmin && (
             <Collapsible open={showPasswordSection} onOpenChange={setShowPasswordSection}>
               <Card className="border border-amber-200">
@@ -254,10 +306,26 @@ export const EditCounsellorDialog = ({
                             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                           </button>
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                          Password must be at least 8 characters
-                        </p>
                       </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="confirm_password">Confirm Password</Label>
+                        <Input
+                          id="confirm_password"
+                          type={showPassword ? "text" : "password"}
+                          value={confirmPassword}
+                          onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                            setPasswordError("");
+                          }}
+                          placeholder="Confirm new password"
+                        />
+                      </div>
+                      {passwordError && (
+                        <p className="text-sm text-destructive">{passwordError}</p>
+                      )}
+                      <p className="text-xs text-muted-foreground">
+                        Password must be at least 8 characters
+                      </p>
                     </div>
                   </CardContent>
                 </CollapsibleContent>
