@@ -55,14 +55,27 @@ const Login = () => {
           className: "bg-red-500 text-white border-none",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Login error:", error);
+      
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      
+      if (error?.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (error?.code === "ERR_NETWORK") {
+        errorMessage = "Network error. Please check your connection.";
+      }
+      
       toast({
         title: "Login failed",
-        description: `${error?.response?.data?.detail}`,
+        description: errorMessage,
         variant: "destructive",
         className: "bg-red-500 text-white border-none",
       });
-      console.error("Login failed:", error?.response?.data?.detail);
     } finally {
       setLoading(false);
     }
