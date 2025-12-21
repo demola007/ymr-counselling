@@ -32,16 +32,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setIsAuthenticated(true);
           setUserRole(role);
         } else {
-          // Token has expired, log out and navigate to index
+          // Token has expired, clear storage and navigate to login
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("userRole");
+          localStorage.removeItem("isAuthenticated");
           setIsAuthenticated(false);
           setUserRole(null);
-          navigate("/", { replace: true });
+          navigate("/login", { replace: true });
         }
       } catch (error) {
         console.error("Error decoding token:", error);
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("isAuthenticated");
         setIsAuthenticated(false);
-          setUserRole(null);
-        navigate("/", { replace: true }); // In case of any error, treat it as an invalid token
+        setUserRole(null);
+        navigate("/login", { replace: true });
       }
       // Set token for future API calls
       // apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
