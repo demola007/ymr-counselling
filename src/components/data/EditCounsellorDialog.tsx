@@ -3,10 +3,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Loader2, Eye, EyeOff, ShieldAlert, UserCog } from "lucide-react";
+import { Loader2, Eye, EyeOff, ShieldAlert, UserCog, ChevronDown, ChevronRight } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface EditCounsellorDialogProps {
   open: boolean;
@@ -28,6 +29,8 @@ export const EditCounsellorDialog = ({
   isSuperAdmin = true,
 }: EditCounsellorDialogProps) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showRoleSection, setShowRoleSection] = useState(false);
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
 
   if (!document) return null;
 
@@ -129,37 +132,50 @@ export const EditCounsellorDialog = ({
             </CardContent>
           </Card>
 
-          {/* Role Management - Super Admin Only */}
+          {/* Role Management - Collapsible */}
           {isSuperAdmin && (
-            <Card className="border-2 border-blue-200 bg-blue-50/50">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center gap-2 text-blue-800">
-                  <UserCog className="h-4 w-4" />
-                  Role Management
-                </CardTitle>
-                <CardDescription className="text-blue-700">
-                  Assign or change the counsellor's system role
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <Label htmlFor="role">System Role</Label>
-                  <Select
-                    value={document.role || "counsellor"}
-                    onValueChange={(value) => handleChange("role", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="counsellor">Counsellor</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
-                      <SelectItem value="super_admin">Super Admin</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </CardContent>
-            </Card>
+            <Collapsible open={showRoleSection} onOpenChange={setShowRoleSection}>
+              <Card className="border border-blue-200">
+                <CollapsibleTrigger asChild>
+                  <CardHeader className="pb-3 cursor-pointer hover:bg-muted/30 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <UserCog className="h-4 w-4 text-blue-600" />
+                        <CardTitle className="text-base text-blue-800">Update Role</CardTitle>
+                      </div>
+                      {showRoleSection ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </div>
+                    <CardDescription className="text-blue-700">
+                      Click to change the counsellor's system role
+                    </CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="pt-0">
+                    <div className="space-y-2 p-4 bg-blue-50/50 rounded-lg">
+                      <Label htmlFor="role">System Role</Label>
+                      <Select
+                        value={document.role || "counsellor"}
+                        onValueChange={(value) => handleChange("role", value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="counsellor">Counsellor</SelectItem>
+                          <SelectItem value="admin">Admin</SelectItem>
+                          <SelectItem value="super_admin">Super Admin</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
           )}
 
           <Card>
@@ -194,44 +210,59 @@ export const EditCounsellorDialog = ({
             </CardContent>
           </Card>
 
-          {/* Password Change Section - Super Admin Only */}
+          {/* Password Change - Collapsible */}
           {isSuperAdmin && (
-            <Card className="border-amber-200 bg-amber-50/50">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center gap-2 text-amber-800">
-                  <ShieldAlert className="h-4 w-4" />
-                  Reset Password
-                </CardTitle>
-                <CardDescription className="text-amber-700">
-                  Leave blank to keep the current password
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="password">New Password</Label>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      value={document.password || ""}
-                      onChange={(e) => handleChange("password", e.target.value)}
-                      placeholder="Enter new password (min 8 characters)"
-                      className="pr-10"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Password must be at least 8 characters
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <Collapsible open={showPasswordSection} onOpenChange={setShowPasswordSection}>
+              <Card className="border border-amber-200">
+                <CollapsibleTrigger asChild>
+                  <CardHeader className="pb-3 cursor-pointer hover:bg-muted/30 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <ShieldAlert className="h-4 w-4 text-amber-600" />
+                        <CardTitle className="text-base text-amber-800">Reset Password</CardTitle>
+                      </div>
+                      {showPasswordSection ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </div>
+                    <CardDescription className="text-amber-700">
+                      Click to set a new password for this counsellor
+                    </CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="pt-0">
+                    <div className="space-y-4 p-4 bg-amber-50/50 rounded-lg">
+                      <div className="space-y-2">
+                        <Label htmlFor="password">New Password</Label>
+                        <div className="relative">
+                          <Input
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            value={document.password || ""}
+                            onChange={(e) => handleChange("password", e.target.value)}
+                            placeholder="Enter new password (min 8 characters)"
+                            className="pr-10"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                          >
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </button>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Password must be at least 8 characters
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
           )}
 
           <DialogFooter className="flex justify-end space-x-2">
