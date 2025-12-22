@@ -68,9 +68,19 @@ const AddCounsellee = () => {
         throw new Error(response.data?.detail || "Failed to register counsellee");
       }
     } catch (error: any) {
+      const detail = error?.response?.data?.detail;
+      let errorMessage = "There was an error registering the counsellee.";
+      
+      if (typeof detail === 'string') {
+        errorMessage = detail;
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        // Handle Pydantic validation errors
+        errorMessage = detail.map((err: any) => err.msg || err.message || String(err)).join(', ');
+      }
+      
       toast({
         title: "Error",
-        description: error?.response?.data?.detail || "There was an error registering the counsellee.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
