@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { MainNavigation } from "@/components/MainNavigation";
-import { PageHeader } from "@/components/PageHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RecipientSelector } from "@/components/notifications/RecipientSelector";
 import { MessageComposer } from "@/components/notifications/MessageComposer";
 import { NotificationResult } from "@/components/notifications/NotificationResult";
+import { NotificationsHeader } from "@/components/notifications/NotificationsHeader";
 import { useNotifications } from "@/hooks/useNotifications";
 import { MessageSquare, Phone, Send, Sparkles, Zap } from "lucide-react";
 
@@ -53,29 +52,15 @@ const Notifications = () => {
   const result = activeTab === "sms" ? smsResult : whatsappResult;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-army-green/5 to-army-gold/5">
-      {/* Decorative elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-army-green/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-army-gold/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-army-green/5 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-army-black/5 to-background relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.02]" style={{
+        backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(var(--army-green)) 1px, transparent 0)',
+        backgroundSize: '40px 40px'
+      }} />
 
-      <div className="relative container px-4 py-6 mx-auto max-w-7xl">
-        <MainNavigation />
-
-        {/* Header Section */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-army-green/20 to-army-gold/20 border border-army-green/30">
-              <Send className="h-6 w-6 text-army-green-light" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">Notifications</h1>
-              <p className="text-muted-foreground">Send SMS and WhatsApp messages to your contacts</p>
-            </div>
-          </div>
-        </div>
+      <div className="container px-4 py-4 md:py-6 mx-auto max-w-7xl relative z-10">
+        <NotificationsHeader />
 
         {/* Feature Cards */}
         <div className="grid md:grid-cols-3 gap-4 mb-8">
