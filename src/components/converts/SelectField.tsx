@@ -42,7 +42,7 @@ export const SelectField = ({
               defaultValue={defaultValue}
             >
               <SelectTrigger 
-                className="w-full h-11 bg-card/50 backdrop-blur-sm border-army-green/30 text-foreground transition-all duration-200 focus:border-army-green focus:ring-2 focus:ring-army-green/20 focus:bg-card/70"
+                className="w-full h-11 bg-card/50 backdrop-blur-sm border border-army-green/30 text-foreground transition-all duration-200 focus:border-army-green focus:ring-2 focus:ring-army-green/20 focus:bg-card/70 data-[state=open]:border-army-green data-[state=open]:ring-2 data-[state=open]:ring-army-green/20"
               >
                 <SelectValue placeholder={placeholder} className="text-muted-foreground/60" />
               </SelectTrigger>
