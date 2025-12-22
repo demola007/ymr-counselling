@@ -215,20 +215,49 @@ export const RecipientSelector = ({
 
       {/* Category Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4 bg-card/50 border border-border/30">
-          <TabsTrigger value="all" className="text-xs data-[state=active]:bg-army-green/20">
-            All ({counts.all})
-          </TabsTrigger>
-          <TabsTrigger value="convert" className="text-xs data-[state=active]:bg-emerald-500/20">
-            Converts ({counts.convert})
-          </TabsTrigger>
-          <TabsTrigger value="counsellor" className="text-xs data-[state=active]:bg-blue-500/20">
-            Counsellors ({counts.counsellor})
-          </TabsTrigger>
-          <TabsTrigger value="counsellee" className="text-xs data-[state=active]:bg-amber-500/20">
-            Counsellees ({counts.counsellee})
-          </TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto pb-2 -mx-1 px-1">
+          <TabsList className="inline-flex w-auto min-w-full sm:grid sm:grid-cols-4 bg-card/50 border border-border/30 p-1 gap-1">
+            <TabsTrigger 
+              value="all" 
+              className="flex-shrink-0 px-3 sm:px-2 text-xs whitespace-nowrap data-[state=active]:bg-army-green/20 rounded-md"
+            >
+              All
+              <Badge variant="secondary" className="ml-1.5 h-5 min-w-[20px] text-[10px] bg-background/50">
+                {counts.all}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="convert" 
+              className="flex-shrink-0 px-3 sm:px-2 text-xs whitespace-nowrap data-[state=active]:bg-emerald-500/20 rounded-md"
+            >
+              <UserPlus className="h-3 w-3 mr-1 hidden sm:inline" />
+              Converts
+              <Badge variant="secondary" className="ml-1.5 h-5 min-w-[20px] text-[10px] bg-background/50">
+                {counts.convert}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="counsellor" 
+              className="flex-shrink-0 px-3 sm:px-2 text-xs whitespace-nowrap data-[state=active]:bg-blue-500/20 rounded-md"
+            >
+              <UserCheck className="h-3 w-3 mr-1 hidden sm:inline" />
+              Counsellors
+              <Badge variant="secondary" className="ml-1.5 h-5 min-w-[20px] text-[10px] bg-background/50">
+                {counts.counsellor}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="counsellee" 
+              className="flex-shrink-0 px-3 sm:px-2 text-xs whitespace-nowrap data-[state=active]:bg-amber-500/20 rounded-md"
+            >
+              <Users className="h-3 w-3 mr-1 hidden sm:inline" />
+              Counsellees
+              <Badge variant="secondary" className="ml-1.5 h-5 min-w-[20px] text-[10px] bg-background/50">
+                {counts.counsellee}
+              </Badge>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value={activeTab} className="mt-4">
           <ScrollArea className="h-[300px] rounded-lg border border-border/30 bg-card/30 p-2">
