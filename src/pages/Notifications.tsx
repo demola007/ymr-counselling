@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RecipientSelector } from "@/components/notifications/RecipientSelector";
-import { MessageComposer } from "@/components/notifications/MessageComposer";
+import { MessageComposer, SMSChannel } from "@/components/notifications/MessageComposer";
 import { NotificationResult } from "@/components/notifications/NotificationResult";
 import { NotificationsHeader } from "@/components/notifications/NotificationsHeader";
 import { useNotifications } from "@/hooks/useNotifications";
@@ -23,10 +23,10 @@ const Notifications = () => {
 
   const { sendSMS, sendWhatsApp, isSendingSMS, isSendingWhatsApp, smsResult, whatsappResult } = useNotifications();
 
-  const handleSendSMS = (message: string) => {
+  const handleSendSMS = (message: string, channel?: SMSChannel) => {
     const phoneNumbers = selectedRecipients.map((r) => r.phone);
     sendSMS(
-      { to: phoneNumbers, message, channel: "dnd", type: "plain" },
+      { to: phoneNumbers, message, channel: channel || "generic", type: "plain" },
       {
         onSuccess: (data) => {
           setLastResult(data);
