@@ -3,10 +3,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Send, Loader2, MessageSquare, Phone } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Send, Loader2, MessageSquare, Phone, Radio } from "lucide-react";
+
+export type SMSChannel = "generic" | "dnd" | "voice";
 
 interface MessageComposerProps {
-  onSend: (message: string) => void;
+  onSend: (message: string, channel?: SMSChannel) => void;
   isSending: boolean;
   recipientCount: number;
   type: "sms" | "whatsapp";
@@ -21,10 +24,11 @@ export const MessageComposer = ({
   maxLength = 160,
 }: MessageComposerProps) => {
   const [message, setMessage] = useState("");
+  const [channel, setChannel] = useState<SMSChannel>("generic");
 
   const handleSend = () => {
     if (message.trim() && recipientCount > 0) {
-      onSend(message);
+      onSend(message, type === "sms" ? channel : undefined);
     }
   };
 
@@ -81,6 +85,31 @@ export const MessageComposer = ({
             )}
           </div>
         </div>
+
+        {/* SMS Channel Selector */}
+        {type === "sms" && (
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-card/50 border border-border/30">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Radio className="h-4 w-4" />
+              <span>Channel:</span>
+            </div>
+            <Select value={channel} onValueChange={(v) => setChannel(v as SMSChannel)}>
+              <SelectTrigger className="w-[140px] h-8 bg-card/50 border-border/50">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="generic">Generic</SelectItem>
+                <SelectItem value="dnd">DND</SelectItem>
+                <SelectItem value="voice">Voice</SelectItem>
+              </SelectContent>
+            </Select>
+            <span className="text-xs text-muted-foreground hidden sm:inline">
+              {channel === "generic" && "Standard route"}
+              {channel === "dnd" && "Do Not Disturb bypass"}
+              {channel === "voice" && "Voice message"}
+            </span>
+          </div>
+        )}
 
         <div className="flex items-center justify-between pt-2">
           <p className="text-xs text-muted-foreground">
