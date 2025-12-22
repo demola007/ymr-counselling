@@ -103,7 +103,7 @@ export const EditCounsellorDialog = ({
   const roleOptions = [
     { value: "user", label: "User", description: "Standard user access" },
     { value: "admin", label: "Admin", description: "Administrative privileges" },
-    { value: "super_admin", label: "Super Admin", description: "Full system access" }
+    { value: "super-admin", label: "Super Admin", description: "Full system access" }
   ];
 
   const renderField = (field: any) => {
