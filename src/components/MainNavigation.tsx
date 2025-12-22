@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export const MainNavigation = () => {
@@ -47,6 +47,15 @@ export const MainNavigation = () => {
                   className={`${isActive('/counsellee') ? 'bg-purple-100' : 'bg-white'} w-full sm:w-auto text-[#1A1F2C] hover:bg-gray-100`}
                 >
                   Counsellee Portal
+                </Button>
+              </Link>
+              <Link to="/notifications" className="w-full sm:w-auto">
+                <Button 
+                  variant="secondary" 
+                  className={`${isActive('/notifications') ? 'bg-purple-100' : 'bg-white'} w-full sm:w-auto text-[#1A1F2C] hover:bg-gray-100`}
+                >
+                  <Bell className="w-4 h-4 mr-2" />
+                  Notifications
                 </Button>
               </Link>
             </>
