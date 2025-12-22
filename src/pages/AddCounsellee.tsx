@@ -38,7 +38,7 @@ const AddCounsellee = () => {
 
   const handleBack = () => {
     if (isAuthenticated) {
-      navigate("/counsellee/");
+      navigate("/counsellee");
     } else {
       navigate("/");
     }
@@ -47,7 +47,7 @@ const AddCounsellee = () => {
   const onSubmit = async (data: CounselleeFormData) => {
     setIsLoading(true);
     try {
-      const response = await apiClient.post("/counsellee", {
+      const response = await apiClient.post("/counsellee/", {
         ...data,
         is_student: data.is_student === "true",
         counsellor_name: "",
