@@ -42,7 +42,6 @@ export const CounselleeFormFields = () => {
             label="Date of Birth" 
             id="date_of_birth" 
             type="date" 
-            required 
             className="bg-background/50 border-border/40 focus:border-army-gold/50"
           />
           <SelectField
@@ -58,7 +57,6 @@ export const CounselleeFormFields = () => {
           <SelectField
             label="Relationship Status"
             id="relationship_status"
-            required
             placeholder="Select status"
             options={[
               { value: "single", label: "Single" },
@@ -79,25 +77,21 @@ export const CounselleeFormFields = () => {
           <FormField 
             label="Country" 
             id="country" 
-            required 
             className="bg-background/50 border-border/40 focus:border-army-gold/50"
           />
           <FormField 
             label="State" 
             id="state" 
-            required 
             className="bg-background/50 border-border/40 focus:border-army-gold/50"
           />
           <FormField 
             label="Address" 
             id="address" 
-            required 
             className="bg-background/50 border-border/40 focus:border-army-gold/50"
           />
           <FormField 
             label="Nearest Bus Stop" 
             id="nearest_bus_stop" 
-            required 
             className="bg-background/50 border-border/40 focus:border-army-gold/50"
           />
         </div>
@@ -113,7 +107,6 @@ export const CounselleeFormFields = () => {
           <SelectField
             label="Are you a student?"
             id="is_student"
-            required
             placeholder="Select option"
             options={[
               { value: "true", label: "Yes" },
@@ -123,9 +116,9 @@ export const CounselleeFormFields = () => {
           <SelectField
             label="Age Group"
             id="age_group"
-            required
             placeholder="Select age group"
             options={[
+              { value: "under-18", label: "Under 18" },
               { value: "18-24", label: "18-24" },
               { value: "25-34", label: "25-34" },
               { value: "35-44", label: "35-44" },
@@ -140,13 +133,11 @@ export const CounselleeFormFields = () => {
           <FormField 
             label="Occupation" 
             id="occupation" 
-            required 
             className="bg-background/50 border-border/40 focus:border-army-gold/50"
           />
           <FormField 
             label="Denomination" 
             id="denomination" 
-            required 
             className="bg-background/50 border-border/40 focus:border-army-gold/50"
           />
         </div>
