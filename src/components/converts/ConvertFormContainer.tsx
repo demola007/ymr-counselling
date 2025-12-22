@@ -107,11 +107,11 @@ export const ConvertFormContainer = ({ isOnlineConvert = true }: { isOnlineConve
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-army-black to-background relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-card/80 via-background to-card/60 relative overflow-hidden">
       {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-5" style={{
-        backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(120 100% 50%) 1px, transparent 0)',
-        backgroundSize: '40px 40px'
+      <div className="absolute inset-0 opacity-[0.03]" style={{
+        backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(var(--army-green)) 1px, transparent 0)',
+        backgroundSize: '50px 50px'
       }} />
       
       {(isFromDataPage || isFromIndexPage) && (

@@ -19,6 +19,7 @@ import Counsellee from "./pages/Counsellee";
 import CounselleeDetail from "./pages/CounselleeDetail";
 import AddCounsellor from "./pages/AddCounsellor";
 import AddCounsellee from "./pages/AddCounsellee";
+import Notifications from "./pages/Notifications";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -85,6 +86,11 @@ const App = () => {
               <Route path="/new-convert-manual" element={
                 <ProtectedRoute allowedRoles={["admin", "super-admin"]}>
                   <NewConvertManual />
+                </ProtectedRoute>
+              } />
+              <Route path="/notifications" element={
+                <ProtectedRoute allowedRoles={["super-admin"]}>
+                  <Notifications />
                 </ProtectedRoute>
               } />
               <Route path="*" element={<Navigate to="/" replace />} />

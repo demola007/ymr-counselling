@@ -132,7 +132,7 @@ export const CounselorFormFields = () => {
         </h3>
         <div className="grid grid-cols-1 gap-4">
           <SelectField
-            label="Will you be present at YMR 2024 - FLOODGATES?"
+            label="Will you be present at YMR 2025 - THE NEW ARMY?"
             id="will_attend_ymr_2024"
             required
             placeholder="Select option"
