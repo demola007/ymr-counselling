@@ -10,10 +10,10 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { MessageSquare, Phone, Send, Sparkles, Zap } from "lucide-react";
 
 interface Recipient {
-  id: number;
+  id: number | string;
   name: string;
   phone: string;
-  type: "convert" | "counsellor" | "counsellee";
+  type: "convert" | "counsellor" | "counsellee" | "custom";
 }
 
 const Notifications = () => {
