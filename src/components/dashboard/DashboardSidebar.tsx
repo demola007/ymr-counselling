@@ -25,6 +25,7 @@ export function DashboardSidebar() {
 
   const isActive = (path: string) => currentPath === path;
   const isAdmin = userRole === "admin" || userRole === "super-admin";
+  const isSuperAdmin = userRole === "super-admin";
 
   const mainItems = [
     { title: "Dashboard", url: "/upload", icon: Home },
@@ -37,10 +38,11 @@ export function DashboardSidebar() {
     { title: "Counsellee Portal", url: "/counsellee", icon: UserCheck },
   ] : [];
 
+  // System items - Notifications is enabled for super-admins only
   const systemItems = [
-    { title: "Activity Logs", url: "/logs", icon: Activity },
-    { title: "Notifications", url: "/notifications", icon: Bell },
-    { title: "Settings", url: "/settings", icon: Settings },
+    { title: "Activity Logs", url: "/logs", icon: Activity, enabled: false },
+    { title: "Notifications", url: "/notifications", icon: Bell, enabled: isSuperAdmin },
+    { title: "Settings", url: "/settings", icon: Settings, enabled: false },
   ];
 
   return (
@@ -110,22 +112,31 @@ export function DashboardSidebar() {
           </SidebarGroup>
         )}
 
-        {/* System - Coming Soon */}
+        {/* System */}
         <SidebarGroup>
           <SidebarGroupLabel className={isCollapsed ? "sr-only" : ""}>System</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {systemItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton disabled className="opacity-50 cursor-not-allowed">
-                    <item.icon className="h-5 w-5 text-muted-foreground" />
-                    {!isCollapsed && (
-                      <span className="flex items-center justify-between w-full">
-                        {item.title}
-                        <span className="text-xs text-muted-foreground">Soon</span>
-                      </span>
-                    )}
-                  </SidebarMenuButton>
+                  {item.enabled ? (
+                    <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                      <Link to={item.url} className="group">
+                        <item.icon className={`h-5 w-5 transition-colors ${isActive(item.url) ? "text-army-gold" : "text-muted-foreground group-hover:text-foreground"}`} />
+                        {!isCollapsed && <span>{item.title}</span>}
+                      </Link>
+                    </SidebarMenuButton>
+                  ) : (
+                    <SidebarMenuButton disabled className="opacity-50 cursor-not-allowed">
+                      <item.icon className="h-5 w-5 text-muted-foreground" />
+                      {!isCollapsed && (
+                        <span className="flex items-center justify-between w-full">
+                          {item.title}
+                          <span className="text-xs text-muted-foreground">Soon</span>
+                        </span>
+                      )}
+                    </SidebarMenuButton>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
