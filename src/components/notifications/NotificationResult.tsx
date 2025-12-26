@@ -12,7 +12,7 @@ interface NotificationResultProps {
     message_id: string;
     cost: string;
   } | null;
-  type: "sms" | "whatsapp";
+  type: "sms" | "email";
 }
 
 export const NotificationResult = ({ result, type }: NotificationResultProps) => {
@@ -36,7 +36,7 @@ export const NotificationResult = ({ result, type }: NotificationResultProps) =>
               <XCircle className="h-5 w-5 text-red-400" />
             )}
             <CardTitle className="text-lg">
-              {type === "sms" ? "SMS" : "WhatsApp"} Delivery Report
+              {type === "sms" ? "SMS" : "Email"} Delivery Report
             </CardTitle>
           </div>
           <Badge 

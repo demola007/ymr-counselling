@@ -4,24 +4,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { RecipientSelector } from "@/components/notifications/RecipientSelector";
 import { MessageComposer, SMSChannel } from "@/components/notifications/MessageComposer";
+import { EmailComposer } from "@/components/notifications/EmailComposer";
 import { NotificationResult } from "@/components/notifications/NotificationResult";
 import { NotificationsHeader } from "@/components/notifications/NotificationsHeader";
 import { useNotifications } from "@/hooks/useNotifications";
-import { MessageSquare, Phone, Send, Sparkles, Zap } from "lucide-react";
+import { Phone, Send, Sparkles, Zap, Mail } from "lucide-react";
 
 interface Recipient {
   id: number | string;
   name: string;
   phone: string;
+  email?: string;
   type: "convert" | "counsellor" | "counsellee" | "custom";
 }
 
 const Notifications = () => {
-  const [activeTab, setActiveTab] = useState<"sms" | "whatsapp">("sms");
+  const [activeTab, setActiveTab] = useState<"sms" | "email">("sms");
   const [selectedRecipients, setSelectedRecipients] = useState<Recipient[]>([]);
   const [lastResult, setLastResult] = useState<any>(null);
 
-  const { sendSMS, sendWhatsApp, isSendingSMS, isSendingWhatsApp, smsResult, whatsappResult } = useNotifications();
+  const { 
+    sendSMS, 
+    sendEmail, 
+    isSendingSMS, 
+    isSendingEmail, 
+    smsResult, 
+    emailResult,
+    emailTemplates,
+    isLoadingTemplates 
+  } = useNotifications();
 
   const handleSendSMS = (message: string, channel?: SMSChannel) => {
     const phoneNumbers = selectedRecipients.map((r) => r.phone);
@@ -36,10 +47,13 @@ const Notifications = () => {
     );
   };
 
-  const handleSendWhatsApp = (message: string) => {
-    const phoneNumbers = selectedRecipients.map((r) => r.phone);
-    sendWhatsApp(
-      { to: phoneNumbers, message },
+  const handleSendEmail = (subject: string, templateKey: string) => {
+    const emails = selectedRecipients
+      .map((r) => r.email)
+      .filter((email): email is string => !!email);
+    
+    sendEmail(
+      { to: emails, subject, template_key: templateKey },
       {
         onSuccess: (data) => {
           setLastResult(data);
@@ -49,7 +63,7 @@ const Notifications = () => {
     );
   };
 
-  const result = activeTab === "sms" ? smsResult : whatsappResult;
+  const result = activeTab === "sms" ? smsResult : emailResult;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-army-black/5 to-background relative overflow-hidden">
@@ -82,11 +96,11 @@ const Notifications = () => {
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-blue-500/20">
-                  <MessageSquare className="h-5 w-5 text-blue-400" />
+                  <Mail className="h-5 w-5 text-blue-400" />
                 </div>
                 <div>
                   <p className="font-semibold">Multi-Channel</p>
-                  <p className="text-xs text-muted-foreground">SMS & WhatsApp support</p>
+                  <p className="text-xs text-muted-foreground">SMS & Email support</p>
                 </div>
               </div>
             </CardContent>
@@ -108,7 +122,7 @@ const Notifications = () => {
         </div>
 
         {/* Main Content */}
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "sms" | "whatsapp")}>
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "sms" | "email")}>
           <TabsList className="grid w-full max-w-md grid-cols-2 bg-card/50 border border-border/30 mb-6">
             <TabsTrigger 
               value="sms" 
@@ -118,11 +132,11 @@ const Notifications = () => {
               SMS
             </TabsTrigger>
             <TabsTrigger 
-              value="whatsapp"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500/20 data-[state=active]:to-emerald-400/20 data-[state=active]:text-emerald-400"
+              value="email"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/20 data-[state=active]:to-blue-400/20 data-[state=active]:text-blue-400"
             >
-              <MessageSquare className="h-4 w-4 mr-2" />
-              WhatsApp
+              <Mail className="h-4 w-4 mr-2" />
+              Email
             </TabsTrigger>
           </TabsList>
 
@@ -137,7 +151,7 @@ const Notifications = () => {
                   Select Recipients
                 </CardTitle>
                 <CardDescription>
-                  Choose who you want to send the message to
+                  Choose who you want to send the {activeTab === "sms" ? "message" : "email"} to
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -148,7 +162,7 @@ const Notifications = () => {
               </CardContent>
             </Card>
 
-            {/* Right Column - Message Composer */}
+            {/* Right Column - Message/Email Composer */}
             <div className="space-y-6">
               <TabsContent value="sms" className="mt-0">
                 <MessageComposer
@@ -160,13 +174,13 @@ const Notifications = () => {
                 />
               </TabsContent>
 
-              <TabsContent value="whatsapp" className="mt-0">
-                <MessageComposer
-                  type="whatsapp"
-                  onSend={handleSendWhatsApp}
-                  isSending={isSendingWhatsApp}
-                  recipientCount={selectedRecipients.length}
-                  maxLength={4096}
+              <TabsContent value="email" className="mt-0">
+                <EmailComposer
+                  onSend={handleSendEmail}
+                  isSending={isSendingEmail}
+                  recipientCount={selectedRecipients.filter(r => r.email).length}
+                  templates={emailTemplates}
+                  isLoadingTemplates={isLoadingTemplates}
                 />
               </TabsContent>
 

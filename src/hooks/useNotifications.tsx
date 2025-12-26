@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import apiClient from "@/utils/apiClient";
 
@@ -9,13 +9,20 @@ interface SMSRequest {
   type?: "plain" | "unicode";
 }
 
-interface WhatsAppRequest {
+interface EmailRequest {
   to: string[];
-  message: string;
-  media?: {
-    url: string;
-    caption?: string;
-  };
+  subject: string;
+  template_key: string;
+}
+
+interface EmailTemplate {
+  key: string;
+  description: string;
+  auto_variables: string[];
+}
+
+interface EmailTemplatesResponse {
+  templates: Record<string, EmailTemplate>;
 }
 
 interface NotificationResponse {
@@ -30,6 +37,15 @@ interface NotificationResponse {
 
 export const useNotifications = () => {
   const { toast } = useToast();
+
+  // Fetch email templates
+  const templatesQuery = useQuery({
+    queryKey: ["email-templates"],
+    queryFn: async (): Promise<EmailTemplatesResponse> => {
+      const response = await apiClient.get("notifications/email/templates/");
+      return response.data;
+    },
+  });
 
   const smsMutation = useMutation({
     mutationFn: async (data: SMSRequest): Promise<NotificationResponse> => {
@@ -58,20 +74,20 @@ export const useNotifications = () => {
     },
   });
 
-  const whatsappMutation = useMutation({
-    mutationFn: async (data: WhatsAppRequest): Promise<NotificationResponse> => {
-      const response = await apiClient.post("notifications/whatsapp", data);
+  const emailMutation = useMutation({
+    mutationFn: async (data: EmailRequest): Promise<NotificationResponse> => {
+      const response = await apiClient.post("notifications/email", data);
       return response.data;
     },
     onSuccess: (data) => {
       toast({
-        title: "WhatsApp Message Sent",
+        title: "Email Sent Successfully",
         description: `Sent to ${data.successful_count} of ${data.total_recipients} recipients`,
       });
     },
     onError: (error: any) => {
       const errorMessage = error?.response?.data?.detail;
-      let message = "Failed to send WhatsApp message";
+      let message = "Failed to send email";
       if (Array.isArray(errorMessage)) {
         message = errorMessage.map((e: any) => e.msg || e.message || String(e)).join(", ");
       } else if (typeof errorMessage === "string") {
@@ -87,10 +103,12 @@ export const useNotifications = () => {
 
   return {
     sendSMS: smsMutation.mutate,
-    sendWhatsApp: whatsappMutation.mutate,
+    sendEmail: emailMutation.mutate,
     isSendingSMS: smsMutation.isPending,
-    isSendingWhatsApp: whatsappMutation.isPending,
+    isSendingEmail: emailMutation.isPending,
     smsResult: smsMutation.data,
-    whatsappResult: whatsappMutation.data,
+    emailResult: emailMutation.data,
+    emailTemplates: templatesQuery.data?.templates || {},
+    isLoadingTemplates: templatesQuery.isLoading,
   };
 };
