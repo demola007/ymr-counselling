@@ -299,37 +299,52 @@ export const EditProfileDialog = ({
 
           {/* Toggle Fields */}
           <div className="space-y-4 p-4 bg-white/5 rounded-lg">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
                 <Label className="text-white">Has Certification</Label>
                 <p className="text-xs text-gray-400">You have counselling certification</p>
               </div>
-              <Switch
-                checked={formData.has_certification || false}
-                onCheckedChange={(checked) => handleChange("has_certification", checked)}
-              />
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-medium ${formData.has_certification ? 'text-green-400' : 'text-gray-500'}`}>
+                  {formData.has_certification ? 'Yes' : 'No'}
+                </span>
+                <Switch
+                  checked={formData.has_certification || false}
+                  onCheckedChange={(checked) => handleChange("has_certification", checked)}
+                />
+              </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
                 <Label className="text-white">Will Attend YMR</Label>
                 <p className="text-xs text-gray-400">You will be attending YMR</p>
               </div>
-              <Switch
-                checked={formData.will_attend_ymr || false}
-                onCheckedChange={(checked) => handleChange("will_attend_ymr", checked)}
-              />
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-medium ${formData.will_attend_ymr ? 'text-green-400' : 'text-gray-500'}`}>
+                  {formData.will_attend_ymr ? 'Yes' : 'No'}
+                </span>
+                <Switch
+                  checked={formData.will_attend_ymr || false}
+                  onCheckedChange={(checked) => handleChange("will_attend_ymr", checked)}
+                />
+              </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
                 <Label className="text-white">Available for Training</Label>
                 <p className="text-xs text-gray-400">You are available for counsellor training</p>
               </div>
-              <Switch
-                checked={formData.is_available_for_training || false}
-                onCheckedChange={(checked) => handleChange("is_available_for_training", checked)}
-              />
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-medium ${formData.is_available_for_training ? 'text-green-400' : 'text-gray-500'}`}>
+                  {formData.is_available_for_training ? 'Yes' : 'No'}
+                </span>
+                <Switch
+                  checked={formData.is_available_for_training || false}
+                  onCheckedChange={(checked) => handleChange("is_available_for_training", checked)}
+                />
+              </div>
             </div>
           </div>
 
