@@ -58,8 +58,11 @@ export const useProfile = () => {
   });
 
   const updateProfileMutation = useMutation({
-    mutationFn: async (updatedProfile: Partial<CounsellorProfile>) => {
-      const response = await apiClient.put('counsellors/me', updatedProfile);
+    mutationFn: async (data: Partial<CounsellorProfile> | FormData) => {
+      const isFormData = data instanceof FormData;
+      const response = await apiClient.put('counsellors/me', data, {
+        headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
+      });
       return response.data;
     },
     onSuccess: () => {

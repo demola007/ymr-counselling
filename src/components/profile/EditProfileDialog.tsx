@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -17,14 +17,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Loader2, Camera, X } from "lucide-react";
 import { CounsellorProfile } from "@/hooks/useProfile";
 
 interface EditProfileDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   profile: CounsellorProfile | null;
-  onSubmit: (profile: Partial<CounsellorProfile>) => void;
+  onSubmit: (profile: Partial<CounsellorProfile> | FormData) => void;
   isLoading: boolean;
 }
 
@@ -36,22 +37,80 @@ export const EditProfileDialog = ({
   isLoading,
 }: EditProfileDialogProps) => {
   const [formData, setFormData] = useState<Partial<CounsellorProfile>>({});
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (profile) {
+    if (profile && open) {
       setFormData(profile);
+      setSelectedImage(null);
+      setImagePreview(null);
     }
-  }, [profile]);
+  }, [profile, open]);
 
   const handleChange = (field: keyof CounsellorProfile, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
-    onOpenChange(false);
+    
+    // Build FormData for the update
+    const submitData = new FormData();
+    
+    // Add all changed fields
+    const fieldsToSubmit: (keyof CounsellorProfile)[] = [
+      'name', 'phone_number', 'gender', 'date_of_birth', 'country', 
+      'state', 'address', 'years_of_experience', 'denomination',
+      'has_certification', 'will_attend_ymr', 'is_available_for_training'
+    ];
+    
+    fieldsToSubmit.forEach(field => {
+      const value = formData[field];
+      if (value !== undefined && value !== null) {
+        submitData.append(field, String(value));
+      }
+    });
+    
+    // Add profile image if selected
+    if (selectedImage) {
+      submitData.append('profile_image', selectedImage);
+    }
+    
+    onSubmit(submitData);
   };
+
+  const getInitials = (name?: string) => {
+    return name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "U";
+  };
+
+  const currentImage = imagePreview || formData.profile_image || formData.profile_image_url;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -63,6 +122,61 @@ export const EditProfileDialog = ({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Profile Image Upload */}
+          <div className="flex flex-col items-center space-y-4">
+            <div className="relative group">
+              <Avatar className="h-24 w-24 border-2 border-white/20">
+                <AvatarImage
+                  src={currentImage}
+                  alt="Profile"
+                  className="object-cover"
+                />
+                <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold text-xl">
+                  {getInitials(formData.name)}
+                </AvatarFallback>
+              </Avatar>
+              
+              {/* Camera overlay */}
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <Camera className="h-6 w-6 text-white" />
+              </button>
+              
+              {/* Remove image button */}
+              {(selectedImage || currentImage) && (
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="absolute -top-1 -right-1 p-1 bg-red-500 rounded-full hover:bg-red-600 transition-colors"
+                >
+                  <X className="h-3 w-3 text-white" />
+                </button>
+              )}
+            </div>
+            
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelect}
+              className="hidden"
+            />
+            
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              className="border-white/20 text-white hover:bg-white/10"
+            >
+              <Camera className="h-4 w-4 mr-2" />
+              {currentImage ? "Change Photo" : "Upload Photo"}
+            </Button>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Name */}
             <div className="space-y-2">
@@ -185,37 +299,52 @@ export const EditProfileDialog = ({
 
           {/* Toggle Fields */}
           <div className="space-y-4 p-4 bg-white/5 rounded-lg">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
                 <Label className="text-white">Has Certification</Label>
                 <p className="text-xs text-gray-400">You have counselling certification</p>
               </div>
-              <Switch
-                checked={formData.has_certification || false}
-                onCheckedChange={(checked) => handleChange("has_certification", checked)}
-              />
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-medium ${formData.has_certification ? 'text-green-400' : 'text-gray-500'}`}>
+                  {formData.has_certification ? 'Yes' : 'No'}
+                </span>
+                <Switch
+                  checked={formData.has_certification || false}
+                  onCheckedChange={(checked) => handleChange("has_certification", checked)}
+                />
+              </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
                 <Label className="text-white">Will Attend YMR</Label>
                 <p className="text-xs text-gray-400">You will be attending YMR</p>
               </div>
-              <Switch
-                checked={formData.will_attend_ymr || false}
-                onCheckedChange={(checked) => handleChange("will_attend_ymr", checked)}
-              />
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-medium ${formData.will_attend_ymr ? 'text-green-400' : 'text-gray-500'}`}>
+                  {formData.will_attend_ymr ? 'Yes' : 'No'}
+                </span>
+                <Switch
+                  checked={formData.will_attend_ymr || false}
+                  onCheckedChange={(checked) => handleChange("will_attend_ymr", checked)}
+                />
+              </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
                 <Label className="text-white">Available for Training</Label>
                 <p className="text-xs text-gray-400">You are available for counsellor training</p>
               </div>
-              <Switch
-                checked={formData.is_available_for_training || false}
-                onCheckedChange={(checked) => handleChange("is_available_for_training", checked)}
-              />
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-medium ${formData.is_available_for_training ? 'text-green-400' : 'text-gray-500'}`}>
+                  {formData.is_available_for_training ? 'Yes' : 'No'}
+                </span>
+                <Switch
+                  checked={formData.is_available_for_training || false}
+                  onCheckedChange={(checked) => handleChange("is_available_for_training", checked)}
+                />
+              </div>
             </div>
           </div>
 
