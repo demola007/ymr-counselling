@@ -1,15 +1,32 @@
-import { FileText, Users, UserCheck } from "lucide-react";
+import { FileText, Users, UserCheck, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import apiClient from "@/utils/apiClient";
+
+interface StatsCountsResponse {
+  converts: number;
+  counsellees: number;
+  counsellors: number;
+  total: number;
+}
 
 export const StatsCards = () => {
   const { userRole } = useAuth();
   const isAdmin = userRole === "admin" || userRole === "super-admin";
 
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ["stats-counts"],
+    queryFn: async (): Promise<StatsCountsResponse> => {
+      const response = await apiClient.get("stats/counts");
+      return response.data;
+    },
+  });
+
   const allStats = [
     {
       title: "Total Converts",
-      value: "0",
+      value: isLoading ? "..." : (stats?.converts ?? 0).toLocaleString(),
       icon: FileText,
       color: "text-blue-500",
       bgColor: "bg-blue-500/10",
@@ -17,7 +34,7 @@ export const StatsCards = () => {
     },
     {
       title: "Counsellors",
-      value: "0",
+      value: isLoading ? "..." : (stats?.counsellors ?? 0).toLocaleString(),
       icon: Users,
       color: "text-green-500",
       bgColor: "bg-green-500/10",
@@ -25,7 +42,7 @@ export const StatsCards = () => {
     },
     {
       title: "Counsellees",
-      value: "0",
+      value: isLoading ? "..." : (stats?.counsellees ?? 0).toLocaleString(),
       icon: UserCheck,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
@@ -33,11 +50,11 @@ export const StatsCards = () => {
     },
   ];
 
-  const stats = allStats.filter(stat => !stat.adminOnly || isAdmin);
+  const displayStats = allStats.filter(stat => !stat.adminOnly || isAdmin);
 
   return (
-    <div className={`grid grid-cols-1 ${stats.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 mb-6`}>
-      {stats.map((stat, index) => (
+    <div className={`grid grid-cols-1 ${displayStats.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 mb-6`}>
+      {displayStats.map((stat, index) => (
         <Card
           key={stat.title}
           className="relative overflow-hidden bg-card/40 backdrop-blur-sm border-border/40 hover:border-border/60 transition-all duration-300 hover:shadow-lg group animate-fade-in"
@@ -54,7 +71,11 @@ export const StatsCards = () => {
                 </h3>
               </div>
               <div className={`${stat.bgColor} ${stat.color} p-3 rounded-xl group-hover:scale-110 transition-transform duration-300`}>
-                <stat.icon className="h-6 w-6" />
+                {isLoading ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  <stat.icon className="h-6 w-6" />
+                )}
               </div>
             </div>
           </CardContent>
