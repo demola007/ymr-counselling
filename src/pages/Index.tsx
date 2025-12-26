@@ -3,7 +3,7 @@ import { HeroSection } from "@/components/landing/HeroSection";
 import { ActionButtons } from "@/components/landing/ActionButtons";
 import { Footer } from "@/components/landing/Footer";
 import { Shield, Swords, Users, Calendar, Play, Pause, Volume2, VolumeX } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import theNewArmyImage from "@/assets/the-new-army.jpeg";
 import ymrMinistersImage from "@/assets/ymr-ministers.jpeg";
 import {
@@ -12,35 +12,106 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 
 const Landing = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [imageApi, setImageApi] = useState<CarouselApi>();
+  const [videoApi, setVideoApi] = useState<CarouselApi>();
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const images = [
     { src: theNewArmyImage, alt: "The New Army - YMR 2025" },
     { src: ymrMinistersImage, alt: "YMR 2025 Ministers Lineup" },
   ];
 
-  const togglePlay = () => {
-    if (videoRef.current) {
+  const videos = [
+    { src: "/videos/ymr-promo.mp4", title: "YMR 2025 Promo" },
+    { src: "/videos/ymr-promo-2.mp4", title: "YMR 2025 Highlights" },
+  ];
+
+  // Auto-rotate image carousel every 4 seconds
+  useEffect(() => {
+    if (!imageApi) return;
+    
+    const interval = setInterval(() => {
+      imageApi.scrollNext();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [imageApi]);
+
+  // Auto-rotate video carousel every 5 seconds (when not playing)
+  useEffect(() => {
+    if (!videoApi || isPlaying) return;
+    
+    const interval = setInterval(() => {
+      videoApi.scrollNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [videoApi, isPlaying]);
+
+  // Track current image index
+  useEffect(() => {
+    if (!imageApi) return;
+
+    const onSelect = () => {
+      setCurrentImageIndex(imageApi.selectedScrollSnap());
+    };
+
+    imageApi.on("select", onSelect);
+    return () => {
+      imageApi.off("select", onSelect);
+    };
+  }, [imageApi]);
+
+  // Track current video index and pause videos when switching
+  useEffect(() => {
+    if (!videoApi) return;
+
+    const onSelect = () => {
+      const newIndex = videoApi.selectedScrollSnap();
+      // Pause all videos when switching
+      videoRefs.current.forEach((video) => {
+        if (video) {
+          video.pause();
+        }
+      });
+      setIsPlaying(false);
+      setCurrentVideoIndex(newIndex);
+    };
+
+    videoApi.on("select", onSelect);
+    return () => {
+      videoApi.off("select", onSelect);
+    };
+  }, [videoApi]);
+
+  const togglePlay = useCallback(() => {
+    const currentVideo = videoRefs.current[currentVideoIndex];
+    if (currentVideo) {
       if (isPlaying) {
-        videoRef.current.pause();
+        currentVideo.pause();
       } else {
-        videoRef.current.play();
+        currentVideo.play();
       }
       setIsPlaying(!isPlaying);
     }
-  };
+  }, [currentVideoIndex, isPlaying]);
 
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
+  const toggleMute = useCallback(() => {
+    videoRefs.current.forEach((video) => {
+      if (video) {
+        video.muted = !isMuted;
+      }
+    });
+    setIsMuted(!isMuted);
+  }, [isMuted]);
 
   return (
     <div className="min-h-screen flex flex-col bg-black relative overflow-hidden">
@@ -91,7 +162,7 @@ const Landing = () => {
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-army-green via-army-green-light to-army-green rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-500 animate-glow-pulse"></div>
               <div className="relative">
-                <Carousel className="w-full" opts={{ loop: true }}>
+                <Carousel className="w-full" opts={{ loop: true }} setApi={setImageApi}>
                   <CarouselContent>
                     {images.map((image, index) => (
                       <CarouselItem key={index}>
@@ -115,9 +186,14 @@ const Landing = () => {
                 {/* Carousel Indicators */}
                 <div className="flex justify-center gap-2 mt-4">
                   {images.map((_, index) => (
-                    <div 
+                    <button 
                       key={index}
-                      className="w-2 h-2 rounded-full bg-army-green/50 transition-all"
+                      onClick={() => imageApi?.scrollTo(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        currentImageIndex === index 
+                          ? 'bg-army-green w-6' 
+                          : 'bg-army-green/50 hover:bg-army-green/70'
+                      }`}
                     />
                   ))}
                 </div>
@@ -143,60 +219,83 @@ const Landing = () => {
               {/* Video Glow Effect */}
               <div className="absolute -inset-2 bg-gradient-to-r from-army-green via-army-green-light to-army-green rounded-3xl blur-lg opacity-20 group-hover:opacity-40 transition-all duration-500"></div>
               
-              {/* Video Container */}
+              {/* Video Carousel Container */}
               <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-army-green/30 overflow-hidden">
-                <div className="relative aspect-video">
-                  <video
-                    ref={videoRef}
-                    className="w-full h-full object-cover"
-                    poster={theNewArmyImage}
-                    muted={isMuted}
-                    loop
-                    playsInline
-                    onEnded={() => setIsPlaying(false)}
-                  >
-                    <source src="/videos/ymr-promo.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                  
-                  {/* Video Overlay */}
-                  <div className={`absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity duration-300 ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
-                    {/* Play Button */}
-                    <button
-                      onClick={togglePlay}
-                      className="group/btn relative"
-                    >
-                      <div className="absolute inset-0 bg-army-green rounded-full blur-xl opacity-50 group-hover/btn:opacity-75 transition-opacity scale-150"></div>
-                      <div className="relative w-20 h-20 md:w-24 md:h-24 bg-army-green/90 hover:bg-army-green rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-2xl">
-                        {isPlaying ? (
-                          <Pause className="w-8 h-8 md:w-10 md:h-10 text-black" />
-                        ) : (
-                          <Play className="w-8 h-8 md:w-10 md:h-10 text-black ml-1" />
-                        )}
-                      </div>
-                    </button>
-                  </div>
+                <Carousel className="w-full" opts={{ loop: true }} setApi={setVideoApi}>
+                  <CarouselContent>
+                    {videos.map((video, index) => (
+                      <CarouselItem key={index}>
+                        <div className="relative aspect-video">
+                          <video
+                            ref={(el) => {videoRefs.current[index] = el}}
+                            className="w-full h-full object-cover"
+                            poster={theNewArmyImage}
+                            muted={isMuted}
+                            loop
+                            playsInline
+                            onEnded={() => setIsPlaying(false)}
+                          >
+                            <source src={video.src} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                          
+                          {/* Video Overlay */}
+                          <div className={`absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity duration-300 ${isPlaying && currentVideoIndex === index ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+                            {/* Play Button */}
+                            <button
+                              onClick={togglePlay}
+                              className="group/btn relative"
+                            >
+                              <div className="absolute inset-0 bg-army-green rounded-full blur-xl opacity-50 group-hover/btn:opacity-75 transition-opacity scale-150"></div>
+                              <div className="relative w-20 h-20 md:w-24 md:h-24 bg-army-green/90 hover:bg-army-green rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-2xl">
+                                {isPlaying && currentVideoIndex === index ? (
+                                  <Pause className="w-8 h-8 md:w-10 md:h-10 text-black" />
+                                ) : (
+                                  <Play className="w-8 h-8 md:w-10 md:h-10 text-black ml-1" />
+                                )}
+                              </div>
+                            </button>
+                          </div>
 
-                  {/* Video Controls */}
-                  <div className="absolute bottom-4 right-4 flex gap-2">
-                    <button
-                      onClick={toggleMute}
-                      className="w-10 h-10 bg-black/60 hover:bg-black/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-army-green/30 transition-all hover:border-army-green"
-                    >
-                      {isMuted ? (
-                        <VolumeX className="w-5 h-5 text-army-green" />
-                      ) : (
-                        <Volume2 className="w-5 h-5 text-army-green" />
-                      )}
-                    </button>
-                  </div>
-                </div>
+                          {/* Video Controls */}
+                          <div className="absolute bottom-4 right-4 flex gap-2">
+                            <button
+                              onClick={toggleMute}
+                              className="w-10 h-10 bg-black/60 hover:bg-black/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-army-green/30 transition-all hover:border-army-green"
+                            >
+                              {isMuted ? (
+                                <VolumeX className="w-5 h-5 text-army-green" />
+                              ) : (
+                                <Volume2 className="w-5 h-5 text-army-green" />
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-4 bg-black/60 border-army-green/50 text-army-green hover:bg-army-green hover:text-black transition-all" />
+                  <CarouselNext className="right-4 bg-black/60 border-army-green/50 text-army-green hover:bg-army-green hover:text-black transition-all" />
+                </Carousel>
                 
-                {/* Video Caption */}
+                {/* Video Caption & Indicators */}
                 <div className="p-4 bg-gradient-to-r from-army-green-dark/20 via-transparent to-army-green-dark/20 border-t border-army-green/20">
-                  <p className="text-center text-sm text-muted-foreground">
-                    <span className="text-army-green font-semibold">YMR 2025</span> • The New Army Rises
+                  <p className="text-center text-sm text-muted-foreground mb-3">
+                    <span className="text-army-green font-semibold">YMR 2025</span> • {videos[currentVideoIndex]?.title || "The New Army Rises"}
                   </p>
+                  <div className="flex justify-center gap-2">
+                    {videos.map((_, index) => (
+                      <button 
+                        key={index}
+                        onClick={() => videoApi?.scrollTo(index)}
+                        className={`w-2 h-2 rounded-full transition-all ${
+                          currentVideoIndex === index 
+                            ? 'bg-army-green w-6' 
+                            : 'bg-army-green/50 hover:bg-army-green/70'
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
