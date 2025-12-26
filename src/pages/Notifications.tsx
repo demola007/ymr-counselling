@@ -155,9 +155,10 @@ const Notifications = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <RecipientSelector
+              <RecipientSelector
                   selectedRecipients={selectedRecipients}
                   onSelectionChange={setSelectedRecipients}
+                  mode={activeTab}
                 />
               </CardContent>
             </Card>
