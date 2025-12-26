@@ -42,7 +42,7 @@ export const useNotifications = () => {
   const templatesQuery = useQuery({
     queryKey: ["email-templates"],
     queryFn: async (): Promise<EmailTemplatesResponse> => {
-      const response = await apiClient.get("notifications/email/templates/");
+      const response = await apiClient.get("notifications/email/templates");
       return response.data;
     },
   });
