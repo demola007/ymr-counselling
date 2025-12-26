@@ -24,6 +24,14 @@ const Profile = () => {
     isChangingPassword,
   } = useProfile();
 
+  const handleUpdateProfile = (data: any) => {
+    updateProfile(data, {
+      onSuccess: () => {
+        setIsEditDialogOpen(false);
+      },
+    });
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen w-full flex bg-background">
@@ -99,7 +107,7 @@ const Profile = () => {
                   open={isEditDialogOpen}
                   onOpenChange={setIsEditDialogOpen}
                   profile={profile}
-                  onSubmit={updateProfile}
+                  onSubmit={handleUpdateProfile}
                   isLoading={isUpdating}
                 />
 
