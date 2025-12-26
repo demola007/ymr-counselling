@@ -30,8 +30,8 @@ const Landing = () => {
   ];
 
   const videos = [
-    { src: "/videos/ymr-promo.mp4", title: "YMR 2025 Promo" },
-    { src: "/videos/ymr-promo-2.mp4", title: "YMR 2025 Highlights" },
+    { src: "/videos/ymr-promo.mp4", title: "The New Army Rises" },
+    { src: "/videos/ymr-promo-2.mp4", title: "YMR Global 2025" },
   ];
 
   // Auto-rotate image carousel every 4 seconds
