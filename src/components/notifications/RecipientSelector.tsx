@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Users, UserCheck, UserPlus, CheckCircle2, XCircle, Plus, Phone, X } from "lucide-react";
+import { Search, Users, UserCheck, UserPlus, CheckCircle2, XCircle, Plus, Phone, Mail, X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import apiClient from "@/utils/apiClient";
 
@@ -14,22 +14,26 @@ interface Recipient {
   id: number | string;
   name: string;
   phone: string;
+  email?: string;
   type: "convert" | "counsellor" | "counsellee" | "custom";
 }
 
 interface RecipientSelectorProps {
   selectedRecipients: Recipient[];
   onSelectionChange: (recipients: Recipient[]) => void;
+  mode?: "sms" | "email";
 }
 
 export const RecipientSelector = ({
   selectedRecipients,
   onSelectionChange,
+  mode = "sms",
 }: RecipientSelectorProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
-  const [customNumber, setCustomNumber] = useState("");
+  const [customInput, setCustomInput] = useState("");
   const { toast } = useToast();
+
   // Fetch converts
   const { data: convertsData, isLoading: isLoadingConverts } = useQuery({
     queryKey: ["converts-for-notifications"],
@@ -68,6 +72,7 @@ export const RecipientSelector = ({
       id: c.id,
       name: c.name || `${c.first_name || ""} ${c.last_name || ""}`.trim(),
       phone: c.phone_number || c.phone || "",
+      email: c.email || "",
       type: "convert" as const,
     }));
 
@@ -75,6 +80,7 @@ export const RecipientSelector = ({
       id: c.id,
       name: c.name || `${c.first_name || ""} ${c.last_name || ""}`.trim(),
       phone: c.phone_number || c.phone || "",
+      email: c.email || "",
       type: "counsellor" as const,
     }));
 
@@ -82,11 +88,18 @@ export const RecipientSelector = ({
       id: c.id,
       name: c.name || `${c.first_name || ""} ${c.last_name || ""}`.trim(),
       phone: c.phone_number || c.phone || "",
+      email: c.email || "",
       type: "counsellee" as const,
     }));
 
-    return [...converts, ...counsellors, ...counsellees].filter((r) => r.phone);
-  }, [convertsData, counsellorsData, counselleesData]);
+    const all = [...converts, ...counsellors, ...counsellees];
+    
+    // Filter based on mode - SMS needs phone, Email needs email
+    if (mode === "email") {
+      return all.filter((r) => r.email);
+    }
+    return all.filter((r) => r.phone);
+  }, [convertsData, counsellorsData, counselleesData, mode]);
 
   const filteredRecipients = useMemo(() => {
     let filtered = allRecipients;
@@ -100,12 +113,12 @@ export const RecipientSelector = ({
       filtered = filtered.filter(
         (r) =>
           r.name.toLowerCase().includes(query) ||
-          r.phone.includes(query)
+          (mode === "email" ? r.email?.includes(query) : r.phone.includes(query))
       );
     }
 
     return filtered;
-  }, [allRecipients, activeTab, searchQuery]);
+  }, [allRecipients, activeTab, searchQuery, mode]);
 
   const isSelected = (recipient: Recipient) => {
     return selectedRecipients.some(
@@ -141,47 +154,87 @@ export const RecipientSelector = ({
 
   const isLoading = isLoadingConverts || isLoadingCounsellors || isLoadingCounsellees;
 
-  // Validate and add custom phone number
-  const handleAddCustomNumber = () => {
-    const cleaned = customNumber.replace(/\s+/g, "").trim();
+  // Validate and add custom phone/email
+  const handleAddCustomInput = () => {
+    const cleaned = customInput.trim();
     
-    // Basic phone validation - must be digits, optionally starting with +
-    const phoneRegex = /^\+?[0-9]{10,15}$/;
-    if (!phoneRegex.test(cleaned)) {
+    if (mode === "email") {
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(cleaned)) {
+        toast({
+          title: "Invalid Email",
+          description: "Please enter a valid email address",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Check if already added
+      const alreadyExists = selectedRecipients.some((r) => r.email === cleaned);
+      if (alreadyExists) {
+        toast({
+          title: "Already Added",
+          description: "This email is already in your recipients list",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const newRecipient: Recipient = {
+        id: `custom-${Date.now()}`,
+        name: cleaned,
+        phone: "",
+        email: cleaned,
+        type: "custom",
+      };
+
+      onSelectionChange([...selectedRecipients, newRecipient]);
+      setCustomInput("");
       toast({
-        title: "Invalid Phone Number",
-        description: "Please enter a valid phone number (10-15 digits)",
-        variant: "destructive",
+        title: "Email Added",
+        description: `${cleaned} added to recipients`,
       });
-      return;
-    }
+    } else {
+      // Phone validation
+      const phoneClean = cleaned.replace(/\s+/g, "");
+      const phoneRegex = /^\+?[0-9]{10,15}$/;
+      if (!phoneRegex.test(phoneClean)) {
+        toast({
+          title: "Invalid Phone Number",
+          description: "Please enter a valid phone number (10-15 digits)",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    // Check if already added
-    const alreadyExists = selectedRecipients.some(
-      (r) => r.phone === cleaned || r.phone === cleaned.replace(/^\+/, "")
-    );
-    if (alreadyExists) {
+      // Check if already added
+      const alreadyExists = selectedRecipients.some(
+        (r) => r.phone === phoneClean || r.phone === phoneClean.replace(/^\+/, "")
+      );
+      if (alreadyExists) {
+        toast({
+          title: "Already Added",
+          description: "This number is already in your recipients list",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const newRecipient: Recipient = {
+        id: `custom-${Date.now()}`,
+        name: phoneClean,
+        phone: phoneClean,
+        type: "custom",
+      };
+
+      onSelectionChange([...selectedRecipients, newRecipient]);
+      setCustomInput("");
       toast({
-        title: "Already Added",
-        description: "This number is already in your recipients list",
-        variant: "destructive",
+        title: "Number Added",
+        description: `${phoneClean} added to recipients`,
       });
-      return;
     }
-
-    const newRecipient: Recipient = {
-      id: `custom-${Date.now()}`,
-      name: cleaned,
-      phone: cleaned,
-      type: "custom",
-    };
-
-    onSelectionChange([...selectedRecipients, newRecipient]);
-    setCustomNumber("");
-    toast({
-      title: "Number Added",
-      description: `${cleaned} added to recipients`,
-    });
   };
 
   const getTypeIcon = (type: string) => {
@@ -193,7 +246,7 @@ export const RecipientSelector = ({
       case "counsellee":
         return <Users className="h-3 w-3" />;
       case "custom":
-        return <Phone className="h-3 w-3" />;
+        return mode === "email" ? <Mail className="h-3 w-3" /> : <Phone className="h-3 w-3" />;
       default:
         return null;
     }
@@ -258,36 +311,45 @@ export const RecipientSelector = ({
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search by name or phone..."
+          placeholder={mode === "email" ? "Search by name or email..." : "Search by name or phone..."}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10 bg-card/50 border-border/50"
         />
       </div>
 
-      {/* Add Custom Number */}
+      {/* Add Custom Input */}
       <div className="p-3 rounded-lg border border-dashed border-purple-500/30 bg-purple-500/5">
         <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
-          <Phone className="h-3 w-3" />
-          Add custom phone number
+          {mode === "email" ? (
+            <>
+              <Mail className="h-3 w-3" />
+              Add custom email address
+            </>
+          ) : (
+            <>
+              <Phone className="h-3 w-3" />
+              Add custom phone number
+            </>
+          )}
         </p>
         <div className="flex gap-2">
           <Input
-            placeholder="e.g. 2349012345678"
-            value={customNumber}
-            onChange={(e) => setCustomNumber(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddCustomNumber()}
+            placeholder={mode === "email" ? "e.g. user@example.com" : "e.g. 2349012345678"}
+            value={customInput}
+            onChange={(e) => setCustomInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAddCustomInput()}
             className="flex-1 bg-card/50 border-border/50 text-sm"
           />
           <Button
             size="sm"
-            onClick={handleAddCustomNumber}
+            onClick={handleAddCustomInput}
             className="bg-purple-600 hover:bg-purple-700 text-white"
           >
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-        {/* Show custom numbers added */}
+        {/* Show custom entries added */}
         {customRecipients.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-2">
             {customRecipients.map((r) => (
@@ -296,8 +358,8 @@ export const RecipientSelector = ({
                 variant="outline"
                 className="bg-purple-500/20 text-purple-400 border-purple-500/30 pr-1"
               >
-                <Phone className="h-2.5 w-2.5 mr-1" />
-                {r.phone}
+                {mode === "email" ? <Mail className="h-2.5 w-2.5 mr-1" /> : <Phone className="h-2.5 w-2.5 mr-1" />}
+                {mode === "email" ? r.email : r.phone}
                 <button
                   onClick={() => onSelectionChange(selectedRecipients.filter((sr) => sr.id !== r.id))}
                   className="ml-1 hover:bg-purple-500/30 rounded p-0.5"
@@ -364,6 +426,9 @@ export const RecipientSelector = ({
               <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                 <XCircle className="h-8 w-8 mb-2 opacity-50" />
                 <p>No recipients found</p>
+                {mode === "email" && (
+                  <p className="text-xs mt-1">Only showing recipients with email addresses</p>
+                )}
               </div>
             ) : (
               <div className="space-y-1">
@@ -384,7 +449,9 @@ export const RecipientSelector = ({
                     />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate">{recipient.name}</p>
-                      <p className="text-xs text-muted-foreground">{recipient.phone}</p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {mode === "email" ? recipient.email : recipient.phone}
+                      </p>
                     </div>
                     <Badge
                       variant="outline"
