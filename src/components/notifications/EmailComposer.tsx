@@ -31,8 +31,8 @@ export const EmailComposer = ({
   const [subject, setSubject] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
 
-  const templateList = Object.values(templates);
-  const currentTemplate = selectedTemplate ? templates[selectedTemplate] : null;
+  const templateList = templates ? Object.values(templates) : [];
+  const currentTemplate = selectedTemplate ? templates?.[selectedTemplate] : null;
 
   const handleSend = () => {
     if (subject.trim() && selectedTemplate && recipientCount > 0) {
@@ -45,7 +45,7 @@ export const EmailComposer = ({
     if (templateList.length > 0 && !selectedTemplate) {
       setSelectedTemplate(templateList[0].key);
     }
-  }, [templates, selectedTemplate, templateList.length]);
+  }, [templateList, selectedTemplate]);
 
   return (
     <Card className="bg-card/40 backdrop-blur-sm border-border/40">
