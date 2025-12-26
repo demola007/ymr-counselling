@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 interface EmailTemplate {
   key: string;
   description: string;
-  auto_variables: string[];
+  auto_variables?: string[];
 }
 
 interface EmailComposerProps {
@@ -31,8 +31,9 @@ export const EmailComposer = ({
   const [subject, setSubject] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
 
-  const templateList = Object.values(templates);
-  const currentTemplate = selectedTemplate ? templates[selectedTemplate] : null;
+  const templateList = templates ? Object.values(templates) : [];
+  const currentTemplate = selectedTemplate ? templates?.[selectedTemplate] : null;
+  const autoVariables = currentTemplate?.auto_variables ?? [];
 
   const handleSend = () => {
     if (subject.trim() && selectedTemplate && recipientCount > 0) {
@@ -45,7 +46,7 @@ export const EmailComposer = ({
     if (templateList.length > 0 && !selectedTemplate) {
       setSelectedTemplate(templateList[0].key);
     }
-  }, [templates, selectedTemplate, templateList.length]);
+  }, [templateList, selectedTemplate]);
 
   return (
     <Card className="bg-card/40 backdrop-blur-sm border-border/40">
@@ -96,13 +97,13 @@ export const EmailComposer = ({
                 <Info className="h-4 w-4 text-blue-400 mt-0.5 shrink-0" />
                 <div className="space-y-1">
                   <p className="text-sm text-blue-300">{currentTemplate.description}</p>
-                  {currentTemplate.auto_variables.length > 0 && (
+                  {autoVariables.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                       <span className="text-xs text-muted-foreground">Auto-filled:</span>
-                      {currentTemplate.auto_variables.map((variable) => (
-                        <Badge 
-                          key={variable} 
-                          variant="outline" 
+                      {autoVariables.map((variable) => (
+                        <Badge
+                          key={variable}
+                          variant="outline"
                           className="text-xs bg-blue-500/20 text-blue-300 border-blue-500/30"
                         >
                           {variable}
