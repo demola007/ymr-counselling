@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataViewHeader } from "@/components/data/DataViewHeader";
-import { DataViewFilters } from "@/components/data/DataViewFilters";
+import { DataViewFilters, FilterState } from "@/components/data/DataViewFilters";
 import { DataStats } from "@/components/data/DataStats";
 import { ConvertCard } from "@/components/data/ConvertCard";
 import { EditConvertDialog } from "@/components/data/EditConvertDialog";
 import { DeleteConfirmDialog } from "@/components/data/DeleteConfirmDialog";
 import { DataViewActions } from "@/components/data/DataViewActions";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
+import { DownloadDialog } from "@/components/data/DownloadDialog";
 import { useAuth } from "@/hooks/useAuth";
 import { ClipLoader } from "react-spinners";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,9 +20,12 @@ import "../contexts/loader.css";
 const ITEMS_PER_PAGE = 20;
 
 const DataView = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [studentFilter, setStudentFilter] = useState("all");
-  const [genderFilter, setGenderFilter] = useState("all");
+  const [filters, setFilters] = useState<FilterState>({
+    searchQuery: "",
+    state: "",
+    country: "",
+    address: "",
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingDocument, setEditingDocument] = useState<any>(null);
@@ -36,15 +40,19 @@ const DataView = () => {
   const queryClient = useQueryClient();
 
   const { data: filteredDocuments = [], isLoading: isLoadingDocuments } = useQuery({
-    queryKey: ["converts", searchQuery, studentFilter, genderFilter, currentPage],
+    queryKey: ["converts", filters, currentPage],
     queryFn: async () => {
-      const response = await apiClient.get("converts/", {
-        params: {
-          searchQuery,
-          limit: ITEMS_PER_PAGE,
-          skip: (currentPage - 1) * ITEMS_PER_PAGE,
-        },
-      });
+      const params: Record<string, any> = {
+        limit: ITEMS_PER_PAGE,
+        skip: (currentPage - 1) * ITEMS_PER_PAGE,
+      };
+      
+      if (filters.searchQuery) params.searchQuery = filters.searchQuery;
+      if (filters.state) params.state = filters.state;
+      if (filters.country) params.country = filters.country;
+      if (filters.address) params.address = filters.address;
+
+      const response = await apiClient.get("converts/", { params });
       if (response.data.status === "success") {
         return response.data;
       }
@@ -183,7 +191,14 @@ const DataView = () => {
           studentCount={studentCount}
         />
 
-        <DataViewFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+          <div className="flex-1 w-full">
+            <DataViewFilters filters={filters} onFiltersChange={setFilters} />
+          </div>
+          <div className="flex-shrink-0">
+            <DownloadDialog filters={filters} totalRecords={totalRecords} />
+          </div>
+        </div>
 
         {userRole === "super-admin" && (
           <DataViewActions

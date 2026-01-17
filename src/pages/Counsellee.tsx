@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CounselleeViewHeader } from "@/components/data/CounselleeViewHeader";
-import { DataViewFilters } from "@/components/data/DataViewFilters";
+import { SimpleSearchFilter } from "@/components/data/SimpleSearchFilter";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { CounselleeCard } from "@/components/data/CounselleeCard";
 import { CounselleeStats } from "@/components/data/CounselleeStats";
@@ -129,7 +129,7 @@ const Counsellee = () => {
           studentCount={studentCount}
         />
 
-        <DataViewFilters
+        <SimpleSearchFilter
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
