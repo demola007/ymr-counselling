@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { PageHeader } from "@/components/PageHeader";
-import { DataViewFilters } from "@/components/data/DataViewFilters";
+import { SimpleSearchFilter } from "@/components/data/SimpleSearchFilter";
 import { DocumentTable } from "@/components/data/DocumentTable";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { EditCounsellorDialog } from "@/components/data/EditCounsellorDialog";
@@ -108,7 +108,7 @@ const Counselors = () => {
           description="View and manage counselor applications"
         />
         
-        <DataViewFilters
+        <SimpleSearchFilter
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />

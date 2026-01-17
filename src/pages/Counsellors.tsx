@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CounsellorViewHeader } from "@/components/data/CounsellorViewHeader";
-import { DataViewFilters } from "@/components/data/DataViewFilters";
+import { SimpleSearchFilter } from "@/components/data/SimpleSearchFilter";
 import { DocumentPagination } from "@/components/data/DocumentPagination";
 import { CounsellorStats } from "@/components/data/CounsellorStats";
 import { CounsellorCard } from "@/components/data/CounsellorCard";
@@ -136,7 +136,7 @@ const Counsellors = () => {
           availableForYmr={ymrCount}
         />
         
-        <DataViewFilters
+        <SimpleSearchFilter
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
