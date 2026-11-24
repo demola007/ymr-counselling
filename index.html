@@ -1,34 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YMR COUNSELLING DATA PORTAL</title>
-    <meta name="description" content="Ademola Sobaki" />
-    <meta name="author" content="Ademola Sobaki" />
-    <meta property="og:image" content="" />
-    
-    <!-- Preload critical images -->
-    <link 
-      rel="preload" 
-      as="image" 
-      href="/lovable-uploads/7d495cc3-bdc8-42d6-ab11-263a4b0a731a.png"
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>YMR Counselling · City Takers 2026</title>
+    <meta name="description" content="Counselling & Follow-up for Young Ministers Retreat 2026 — City Takers. Book a counselling session, register as a new believer, or join the counselling team. Dec 26–30, Old Auditorium, Redemption City of God." />
+    <meta name="theme-color" content="#0e0b09" />
+    <meta property="og:title" content="YMR Counselling · City Takers 2026" />
+    <meta property="og:description" content="Ten years of fire. Dec 26–30, 2026 · Redemption City of God." />
+    <meta property="og:image" content="/brand/ymr-2026-city-takers-flyer.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/png" href="/brand/ymr-favicon-64.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,400&display=swap"
+      rel="stylesheet"
     />
-    <link 
-      rel="preload" 
-      as="image" 
-      href="/lovable-uploads/c07ff30e-bbf7-4646-9939-5661fa0ccacb.png"
-    />
-    <link 
-      rel="preload" 
-      as="image" 
-      href="/lovable-uploads/c7337a42-2b96-45b9-b377-8e15df75f694.png"
-    />
+    <script>
+      // Apply the saved theme before first paint to avoid a flash.
+      try {
+        var t = localStorage.getItem("ymr-theme");
+        if (t === "light") document.documentElement.classList.remove("dark");
+      } catch (e) {}
+    </script>
   </head>
-
   <body>
     <div id="root"></div>
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -2,39 +2,305 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * City Takers design tokens.
+ * Brand: ink #211d1a / ember #f68b1e / gold #fbaa1a (ymrglobal.org),
+ * the flyer's metallic gold wordmark, and the burst of nations' flags.
+ * Dark is the default; the portal can switch to light.
+ */
 @layer base {
   :root {
-    /* Army Theme - The New Army */
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-    --card: 120 20% 8%;
-    --card-foreground: 0 0% 100%;
-    --border: 120 30% 20%;
-    --input: 120 30% 15%;
-    --ring: 120 100% 50%;
-    
-    /* Army Green Palette */
-    --army-green: 120 100% 40%;
-    --army-green-light: 120 100% 50%;
-    --army-green-dark: 120 80% 20%;
-    --army-gold: 45 100% 50%;
-    --army-black: 0 0% 5%;
-    
-    /* Gradients */
-    --gradient-army: linear-gradient(135deg, hsl(120 100% 25%), hsl(120 100% 40%));
-    --gradient-dark: linear-gradient(180deg, hsl(0 0% 0%), hsl(120 30% 5%));
-    
-    /* Shadows */
-    --shadow-army: 0 0 40px hsl(120 100% 50% / 0.3);
-    --shadow-gold: 0 0 30px hsl(45 100% 50% / 0.2);
+    --radius: 0.85rem;
+
+    /* light */
+    --background: 37 40% 97%;
+    --foreground: 26 12% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 26 12% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 26 12% 12%;
+    --primary: 30 92% 54%;
+    --primary-foreground: 24 60% 7%;
+    --secondary: 34 30% 93%;
+    --secondary-foreground: 26 12% 14%;
+    --muted: 34 25% 93%;
+    --muted-foreground: 28 8% 40%;
+    --accent: 34 40% 92%;
+    --accent-foreground: 26 12% 12%;
+    --destructive: 0 62% 52%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 18% 87%;
+    --input: 30 18% 84%;
+    --ring: 30 92% 54%;
+    --ember-text: 26 100% 34%;
+
+    --sidebar-background: 37 40% 97%;
+    --sidebar-foreground: 26 12% 20%;
+    --sidebar-primary: 30 92% 54%;
+    --sidebar-primary-foreground: 24 60% 7%;
+    --sidebar-accent: 34 40% 92%;
+    --sidebar-accent-foreground: 26 12% 12%;
+    --sidebar-border: 30 18% 87%;
+    --sidebar-ring: 30 92% 54%;
+
+    /* chart chrome + categorical slots (validated: dataviz palette, light) */
+    --chart-surface: #ffffff;
+    --chart-grid: #ece6dc;
+    --chart-axis: #8a8178;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --series-4: #eda100;
+    --series-5: #e87ba4;
+    --series-6: #008300;
+    --series-7: #6250d6;
+    --series-8: #e34948;
+    --series-brand: #e26700;
+    --series-muted: #d8cfc3;
+
+    /* public site — light is "the city at dawn" */
+    --canvas: 38 45% 96%;
+    --canvas-2: 35 38% 91%;
+    --fg: 26 14% 12%;
+    --brand: 28 100% 34%;
+    --rays-opacity: 0.2;
+    --sky-top: #e2cfb3;
+    --sky-bottom: #f3ebdf;
+    --sky-window: #d07a12;
+    --sky-window-cool: #6f97c9;
+  }
+
+  .dark {
+    --background: 24 22% 5%;
+    --foreground: 34 50% 93%;
+    --card: 23 20% 8%;
+    --card-foreground: 34 50% 93%;
+    --popover: 23 20% 9%;
+    --popover-foreground: 34 50% 93%;
+    --primary: 30 92% 54%;
+    --primary-foreground: 24 60% 7%;
+    --secondary: 24 14% 13%;
+    --secondary-foreground: 34 40% 92%;
+    --muted: 24 12% 12%;
+    --muted-foreground: 30 10% 62%;
+    --accent: 24 14% 14%;
+    --accent-foreground: 34 50% 93%;
+    --destructive: 0 62% 52%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 24 12% 15%;
+    --input: 24 12% 18%;
+    --ring: 30 92% 54%;
+    --ember-text: 39 96% 60%;
+
+    --sidebar-background: 24 22% 6%;
+    --sidebar-foreground: 34 30% 85%;
+    --sidebar-primary: 30 92% 54%;
+    --sidebar-primary-foreground: 24 60% 7%;
+    --sidebar-accent: 24 14% 12%;
+    --sidebar-accent-foreground: 34 50% 93%;
+    --sidebar-border: 24 12% 13%;
+    --sidebar-ring: 30 92% 54%;
+
+    --chart-surface: #17120f;
+    --chart-grid: #2a231e;
+    --chart-axis: #8a8178;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
+    --series-6: #0ca30c;
+    --series-7: #9085e9;
+    --series-8: #e66767;
+    --series-brand: #f68b1e;
+    --series-muted: #3a312a;
+
+    /* public site — the city at night */
+    --canvas: 24 22% 5%;
+    --canvas-2: 0 0% 0%;
+    --fg: 34 50% 93%;
+    --brand: 39 96% 54%;
+    --rays-opacity: 0.3;
+    --sky-top: #1d1611;
+    --sky-bottom: #0e0b09;
+    --sky-window: #ffc35a;
+    --sky-window-cool: #cfe2ff;
   }
 
   * {
     @apply border-border;
   }
 
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(246, 139, 30, 0.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* The flyer's metallic gold lettering — deep bronze on light, bright gold on dark */
+  .text-metal {
+    background-image: linear-gradient(175deg, #c46a0b 0%, #e88a17 30%, #9a4a00 58%, #d67a10 80%, #b65a00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .dark .text-metal {
+    background-image: linear-gradient(
+      175deg,
+      #fff6d8 0%,
+      #ffd77a 22%,
+      #fbaa1a 45%,
+      #c46a0b 62%,
+      #ffcf6b 78%,
+      #fff1c9 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-gold-shimmer {
+    background-image: linear-gradient(100deg, #8a4200 0%, #d67a10 20%, #f0a33a 30%, #d67a10 40%, #8a4200 60%, #d67a10 80%, #f0a33a 90%, #8a4200 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    @apply animate-shimmer;
+  }
+  .dark .text-gold-shimmer {
+    background-image: linear-gradient(
+      100deg,
+      #c46a0b 0%,
+      #fbaa1a 20%,
+      #fff1c9 30%,
+      #fbaa1a 40%,
+      #c46a0b 60%,
+      #fbaa1a 80%,
+      #fff1c9 90%,
+      #c46a0b 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    @apply animate-shimmer;
+  }
+
+  .text-ember {
+    color: hsl(var(--ember-text));
+  }
+
+  .btn-ember {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-ink transition-all duration-300;
+    background-image: linear-gradient(135deg, #ffd27a 0%, #fbaa1a 35%, #f68b1e 70%, #e26700 100%);
+    box-shadow:
+      0 10px 30px -10px rgba(246, 139, 30, 0.7),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+  .btn-ember:hover {
+    @apply -translate-y-0.5;
+    box-shadow:
+      0 16px 40px -12px rgba(246, 139, 30, 0.9),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  .btn-ghost-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-brand/40 bg-white/60 px-6 py-3 text-sm font-semibold text-brand backdrop-blur transition-all duration-300 hover:border-brand hover:bg-gold/10;
+  }
+  .dark .btn-ghost-gold {
+    @apply border-gold/40 bg-white/[0.03] text-gold-pale hover:border-gold;
+  }
+
+  .glass {
+    @apply border border-black/10 bg-white/60 backdrop-blur-xl;
+  }
+  .dark .glass {
+    @apply border-white/10 bg-white/[0.04];
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.28em];
+  }
+
+  .hairline-gold {
+    background: linear-gradient(90deg, transparent, rgba(251, 170, 26, 0.6), transparent);
+    height: 1px;
+  }
+
+  /* Radiating flags of the nations — the flyer's backdrop, abstracted */
+  .nations-rays {
+    background: repeating-conic-gradient(
+      from 0deg,
+      #c8102e 0deg 6deg,
+      #f6f1e7 6deg 8deg,
+      #1f4fbf 8deg 15deg,
+      #0f8a3c 15deg 21deg,
+      #fbaa1a 21deg 26deg,
+      #0e0b09 26deg 28deg,
+      #e23b3b 28deg 33deg,
+      #2a78d6 33deg 40deg,
+      #f68b1e 40deg 45deg
+    );
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  .outline-text {
+    -webkit-text-stroke: 1px rgba(182, 90, 0, 0.45);
+    color: transparent;
+  }
+  .dark .outline-text {
+    -webkit-text-stroke-color: rgba(251, 170, 26, 0.45);
+  }
+
+  /* Portal surfaces */
+  .panel {
+    @apply rounded-2xl border bg-card text-card-foreground;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  }
+  .dark .panel {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 40%);
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
 }
 
@@ -42,41 +308,29 @@
   .text-balance {
     text-wrap: balance;
   }
-}
-
-.glass-panel {
-  @apply bg-white bg-opacity-90 backdrop-blur-lg border border-purple-100 shadow-sm;
-}
-
-.hover-scale {
-  @apply transition-transform duration-300 hover:scale-[1.02];
-}
-
-.button-hover {
-  @apply transition-all duration-300 hover:bg-opacity-90;
-}
-
-/* Form styling */
-.form-grid {
-  @apply grid gap-6 md:grid-cols-2;
-}
-
-.form-field {
-  @apply flex flex-col space-y-2;
-}
-
-/* Pagination styles */
-.pagination-link {
-  @apply cursor-pointer;
-}
-
-/* Mobile-first responsive styles */
-@media (max-width: 640px) {
-  .container {
-    @apply px-4;
+  .text-pretty {
+    text-wrap: pretty;
   }
-  
-  .glass-panel {
-    @apply p-4;
+  .mask-fade-x {
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   }
+  .mask-radial {
+    mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Native select menus inherit the dark surface */
+.dark select option {
+  background: #17120f;
+  color: #f6efe6;
+}
+
+/* Smooth the switch between night and dawn */
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease !important;
 }
